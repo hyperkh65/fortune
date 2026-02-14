@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="AI가 당신의 운세를 알려드립니다. 오늘의 행운, 사랑, 금전 운세를 확인하세요." />
+  <meta property="og:title" content="AI Fortune - 오늘의 운세" />
+  <meta property="og:description" content="AI가 분석한 나만의 맞춤 운세를 확인하세요." />
+  <meta property="og:image" content="https://aifortune.live/og-image.jpg" />
+  <title>AI Fortune ✨ 오늘의 운세</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Cinzel:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Stars Background -->
+  <div class="stars-container" id="starsContainer"></div>
+  <div class="nebula"></div>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="header-inner">
+      <div class="logo">
+        <span class="logo-icon">🔮</span>
+        <span class="logo-text">AI Fortune</span>
+      </div>
+      <nav class="header-nav">
+        <a href="#fortune" class="nav-link">운세보기</a>
+        <a href="#about" class="nav-link">소개</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero" id="hero">
+    <div class="hero-content">
+      <p class="hero-badge">✨ AI 기반 맞춤 운세</p>
+      <h1 class="hero-title">
+        오늘의 운명을<br/>
+        <span class="gradient-text">AI가 알려드립니다</span>
+      </h1>
+      <p class="hero-subtitle">
+        인공지능이 분석한 나만의 특별한 운세.<br/>
+        사랑, 금전, 건강, 행운 모두 확인하세요.
+      </p>
+      <button class="btn-primary" id="startBtn" onclick="scrollToFortune()">
+        <span>내 운세 보기</span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+
+    <!-- Crystal Ball -->
+    <div class="crystal-ball-wrapper">
+      <div class="crystal-ball" id="crystalBall">
+        <div class="crystal-inner">
+          <div class="crystal-glow"></div>
+          <div class="crystal-shimmer"></div>
+          <div class="crystal-stars">
+            <span>⭐</span><span>✨</span><span>🌟</span>
+            <span>💫</span><span>⭐</span><span>✨</span>
+          </div>
+        </div>
+        <div class="crystal-shadow"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Instagram Media Section (shown when media_id param exists) -->
+  <section class="media-section" id="mediaSection" style="display:none;">
+    <div class="container">
+      <div class="media-card">
+        <div class="media-header">
+          <div class="media-avatar" id="mediaAvatar"></div>
+          <div class="media-info">
+            <span class="media-username" id="mediaUsername">@instagram_user</span>
+            <span class="media-label">이 게시물의 운세</span>
+          </div>
+        </div>
+        <div class="media-image-wrap" id="mediaImageWrap">
+          <div class="media-placeholder">
+            <span>📸</span>
+            <p>Instagram 미디어를 불러오는 중...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Fortune Section -->
+  <section class="fortune-section" id="fortune">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">🔮 AI 운세 분석</h2>
+        <p class="section-desc">생년월일을 입력하고 오늘의 운세를 확인하세요</p>
+      </div>
+
+      <!-- Fortune Form -->
+      <div class="fortune-form-card" id="fortuneFormCard">
+        <div class="form-group">
+          <label class="form-label">이름</label>
+          <input type="text" class="form-input" id="nameInput" placeholder="이름을 입력하세요" maxlength="20" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">생년월일</label>
+          <input type="date" class="form-input" id="birthInput" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">성별</label>
+          <div class="gender-options">
+            <button class="gender-btn active" data-gender="female" onclick="selectGender(this)">
+              <span>👩</span> 여성
+            </button>
+            <button class="gender-btn" data-gender="male" onclick="selectGender(this)">
+              <span>👨</span> 남성
+            </button>
+          </div>
+        </div>
+        <button class="btn-fortune" id="fortuneBtn" onclick="generateFortune()">
+          <span class="btn-text">✨ 운세 보기</span>
+          <span class="btn-loading" style="display:none;">
+            <span class="spinner"></span> 분석 중...
+          </span>
+        </button>
+      </div>
+
+      <!-- Fortune Result -->
+      <div class="fortune-result" id="fortuneResult" style="display:none;">
+        <!-- Overall Score -->
+        <div class="fortune-overall">
+          <div class="fortune-score-ring">
+            <svg viewBox="0 0 120 120" class="score-svg">
+              <circle cx="60" cy="60" r="54" class="score-bg"/>
+              <circle cx="60" cy="60" r="54" class="score-fill" id="scoreFill"/>
+            </svg>
+            <div class="score-center">
+              <span class="score-number" id="overallScore">0</span>
+              <span class="score-label">오늘의 운</span>
+            </div>
+          </div>
+          <div class="fortune-summary">
+            <h3 class="fortune-name" id="fortuneName"></h3>
+            <p class="fortune-date" id="fortuneDate"></p>
+            <p class="fortune-message" id="fortuneMessage"></p>
+          </div>
+        </div>
+
+        <!-- Category Cards -->
+        <div class="fortune-categories">
+          <div class="category-card" id="catLove">
+            <div class="cat-icon">💕</div>
+            <div class="cat-info">
+              <span class="cat-name">사랑운</span>
+              <div class="cat-bar"><div class="cat-bar-fill" id="loveBar"></div></div>
+              <span class="cat-score" id="loveScore"></span>
+            </div>
+          </div>
+          <div class="category-card" id="catMoney">
+            <div class="cat-icon">💰</div>
+            <div class="cat-info">
+              <span class="cat-name">금전운</span>
+              <div class="cat-bar"><div class="cat-bar-fill" id="moneyBar"></div></div>
+              <span class="cat-score" id="moneyScore"></span>
+            </div>
+          </div>
+          <div class="category-card" id="catHealth">
+            <div class="cat-icon">💚</div>
+            <div class="cat-info">
+              <span class="cat-name">건강운</span>
+              <div class="cat-bar"><div class="cat-bar-fill" id="healthBar"></div></div>
+              <span class="cat-score" id="healthScore"></span>
+            </div>
+          </div>
+          <div class="category-card" id="catLuck">
+            <div class="cat-icon">🍀</div>
+            <div class="cat-info">
+              <span class="cat-name">행운지수</span>
+              <div class="cat-bar"><div class="cat-bar-fill" id="luckBar"></div></div>
+              <span class="cat-score" id="luckScore"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Detailed Fortune -->
+        <div class="fortune-detail-card">
+          <h4 class="detail-title">📖 오늘의 상세 운세</h4>
+          <p class="detail-text" id="detailText"></p>
+        </div>
+
+        <!-- Lucky Items -->
+        <div class="lucky-items">
+          <h4 class="lucky-title">🎯 오늘의 행운 아이템</h4>
+          <div class="lucky-grid">
+            <div class="lucky-item">
+              <span class="lucky-emoji" id="luckyColor">🎨</span>
+              <span class="lucky-label">행운의 색</span>
+              <span class="lucky-value" id="luckyColorVal"></span>
+            </div>
+            <div class="lucky-item">
+              <span class="lucky-emoji" id="luckyNumber">🔢</span>
+              <span class="lucky-label">행운의 숫자</span>
+              <span class="lucky-value" id="luckyNumberVal"></span>
+            </div>
+            <div class="lucky-item">
+              <span class="lucky-emoji">🧭</span>
+              <span class="lucky-label">행운의 방향</span>
+              <span class="lucky-value" id="luckyDirection"></span>
+            </div>
+            <div class="lucky-item">
+              <span class="lucky-emoji">💎</span>
+              <span class="lucky-label">행운의 돌</span>
+              <span class="lucky-value" id="luckyStone"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Share Buttons -->
+        <div class="share-section">
+          <p class="share-title">친구에게 공유하기</p>
+          <div class="share-buttons">
+            <button class="share-btn kakao" onclick="shareKakao()">
+              <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0OCA0OCI+PGNpcmNsZSBjeD0iMjQiIGN5PSIyNCIgcj0iMjQiIGZpbGw9IiNGRUUzMDAiLz48cGF0aCBkPSJNMjQgMTFjLTcuMTggMC0xMyA0LjQ3LTEzIDkuOTggMCAzLjQzIDIuMTcgNi40NCA1LjQ3IDguMjFsLTEuNCA1LjE4IDYuMDYtNC4wMWMuOTIuMTMgMS44Ny4yIDIuODcuMiA3LjE4IDAgMTMtNC40NyAxMy05Ljk4UzMxLjE4IDExIDI0IDExeiIgZmlsbD0iIzM5MUEwMSIvPjwvc3ZnPg==" alt="카카오" width="20" height="20"/>
+              카카오톡
+            </button>
+            <button class="share-btn instagram" onclick="shareInstagram()">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+              인스타그램
+            </button>
+            <button class="share-btn link" onclick="copyLink()">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+              링크 복사
+            </button>
+          </div>
+        </div>
+
+        <!-- Re-read Button -->
+        <button class="btn-retry" onclick="resetFortune()">🔄 다시 보기</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Tarot Cards Section -->
+  <section class="tarot-section" id="tarot">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">🃏 오늘의 타로 카드</h2>
+        <p class="section-desc">세 장의 카드를 선택하여 운명을 확인하세요</p>
+      </div>
+      <div class="tarot-cards" id="tarotCards">
+        <!-- Cards generated by JS -->
+      </div>
+      <p class="tarot-hint">카드를 클릭하여 선택하세요</p>
+      <button class="btn-tarot" id="tarotBtn" onclick="revealTarot()" style="display:none;">
+        ✨ 타로 카드 공개
+      </button>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section class="about-section" id="about">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">AI Fortune 소개</h2>
+      </div>
+      <div class="about-grid">
+        <div class="about-card">
+          <div class="about-icon">🤖</div>
+          <h3>AI 기반 분석</h3>
+          <p>최첨단 인공지능이 수천만 개의 운세 데이터를 분석하여 개인화된 운세를 제공합니다.</p>
+        </div>
+        <div class="about-card">
+          <div class="about-icon">🔒</div>
+          <h3>개인정보 보호</h3>
+          <p>입력된 정보는 운세 계산에만 사용되며, 서버에 저장되지 않습니다.</p>
+        </div>
+        <div class="about-card">
+          <div class="about-icon">📱</div>
+          <h3>언제 어디서나</h3>
+          <p>PC, 태블릿, 스마트폰 어디서나 최적화된 경험을 제공합니다.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-logo">
+          <span>🔮</span> AI Fortune
+        </div>
+        <p class="footer-desc">AI가 분석하는 나만의 맞춤 운세 서비스</p>
+        <div class="footer-links">
+          <a href="#">이용약관</a>
+          <a href="#">개인정보처리방침</a>
+          <a href="#">문의하기</a>
+        </div>
+        <p class="footer-copy">© 2025 AI Fortune. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Toast Notification -->
+  <div class="toast" id="toast"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>

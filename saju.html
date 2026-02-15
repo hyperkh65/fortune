@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="정확한 사주팔자 계산으로 나만의 맞춤 운세를 확인하세요. 년주·월주·일주·시주 분석, 오행 분포, 용신 분석." />
+  <meta name="theme-color" content="#0a0a0a" />
+  <title>사주팔자 — AI Wellness</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&family=Noto+Serif+KR:wght@700;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <canvas id="starsBg"></canvas>
+
+  <!-- ── HEADER ── -->
+  <header class="site-header">
+    <div class="header-inner hub-header-inner">
+      <a href="index.html" class="page-back-nav">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+        AI Wellness
+      </a>
+      <span class="page-title-badge">사주팔자</span>
+      <nav class="hub-nav">
+        <a href="tarot.html"      class="hn-link">타로</a>
+        <a href="meditation.html" class="hn-link">명상</a>
+        <a href="yoga.html"       class="hn-link">요가</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ══════════════════ FORM SECTION ══════════════════ -->
+  <section id="formSection">
+    <div class="form-wrap">
+      <p class="form-eyebrow">✦ 사주팔자 분석</p>
+      <h1 class="form-title">생년월일시를 입력해주세요</h1>
+
+      <div class="form-card">
+
+        <!-- 이름 + 성별 -->
+        <div class="field-row">
+          <div class="field-group fg-name">
+            <label class="field-label">이름</label>
+            <input id="nameInput" type="text" class="text-inp" placeholder="홍길동" maxlength="10" autocomplete="off" />
+          </div>
+          <div class="field-group fg-gender">
+            <label class="field-label">성별</label>
+            <div class="toggle-wrap" id="genderBtns">
+              <button class="tog-btn active" data-v="male">남성</button>
+              <button class="tog-btn" data-v="female">여성</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 양력/음력 -->
+        <div class="field-group">
+          <label class="field-label">생년월일</label>
+          <div class="toggle-wrap" id="calBtns">
+            <button class="tog-btn active" data-v="solar">양력</button>
+            <button class="tog-btn" data-v="lunar">음력</button>
+          </div>
+          <p id="lunarNote" class="sub-note" style="display:none">⚠ 음력은 양력으로 근사 변환됩니다 (윤달은 평달 처리)</p>
+        </div>
+
+        <!-- 년/월/일 -->
+        <div class="sel-row three-col">
+          <div class="sel-box"><select id="yearSel" class="csel"></select></div>
+          <div class="sel-box"><select id="monthSel" class="csel"></select></div>
+          <div class="sel-box"><select id="daySel" class="csel"></select></div>
+        </div>
+
+        <!-- 시간 -->
+        <div class="field-group">
+          <label class="field-label">
+            태어난 시간
+            <span class="tip-badge" data-tip="시간을 모르시면 12시 0분으로 설정하세요">?</span>
+          </label>
+          <div class="sel-row two-col">
+            <div class="sel-box"><select id="hourSel" class="csel"></select></div>
+            <div class="sel-box"><select id="minSel" class="csel"></select></div>
+          </div>
+        </div>
+
+        <!-- 지역 -->
+        <div class="field-group">
+          <label class="field-label">
+            태어난 지역 (동경시 보정)
+            <span class="tip-badge" data-tip="사주는 태양시(지방 평균시)를 기준으로 합니다. 서울은 동경 135° 표준시 대비 약 32분 느립니다.">?</span>
+          </label>
+          <div class="sel-box sel-full"><select id="locSel" class="csel"></select></div>
+          <p class="sub-note">출생지 기준으로 시간이 <strong id="offsetTxt">−32분</strong> 보정됩니다</p>
+        </div>
+
+        <!-- 분석 버튼 -->
+        <button class="analyze-btn" id="analyzeBtn">
+          사주 분석 시작
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+
+      </div><!-- /form-card -->
+    </div><!-- /form-wrap -->
+  </section>
+
+  <!-- ══════════════════ RESULT SECTION ══════════════════ -->
+  <section id="resultSection" style="display:none">
+
+    <!-- 결과 헤더 -->
+    <div class="res-header">
+      <button class="back-btn" id="backBtn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      </button>
+      <div class="res-user" id="resUser"></div>
+      <div style="width:40px"></div>
+    </div>
+
+    <!-- 탭 네비게이션 -->
+    <div class="tab-bar-wrap">
+      <nav class="tab-bar" id="tabBar">
+        <button class="tb active" data-tab="overview">사주 총평</button>
+        <button class="tb" data-tab="ohaeng">오행 분포</button>
+        <button class="tb" data-tab="flow">운세 흐름</button>
+        <button class="tb" data-tab="personality">기질 분석</button>
+      </nav>
+    </div>
+
+    <!-- ── TAB: 사주 총평 ── -->
+    <div id="tabOverview" class="tab-pane active">
+      <div class="cw">
+        <div class="sec-head">
+          <h2 class="sec-title">만세력 및 사주 총평</h2>
+          <p class="sec-desc">당신의 사주 팔자와 전체적인 기운의 흐름을 분석합니다.</p>
+        </div>
+        <div class="pillars-scroller">
+          <div class="pillars-track" id="pillarsTrack"></div>
+        </div>
+        <div class="strength-row" id="strengthRow"></div>
+        <div class="ov-card" id="ovCard">
+          <h3 class="ov-headline" id="ovHeadline"></h3>
+          <ul class="ov-bullets" id="ovBullets"></ul>
+        </div>
+        <div class="yong-row" id="yongRow"></div>
+        <div class="sipsung-wrap" id="sipsungWrap">
+          <h3 class="sub-section-title">십성 분석</h3>
+          <div class="sipsung-grid" id="sipsungGrid"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── TAB: 오행 분포 ── -->
+    <div id="tabOhaeng" class="tab-pane">
+      <div class="cw">
+        <div class="sec-head">
+          <h2 class="sec-title">오행 분포</h2>
+          <p class="sec-desc">나를 구성하는 5가지 원소(목·화·토·금·수)의 균형 상태를 시각화했습니다.</p>
+        </div>
+        <div class="ohaeng-viz-row">
+          <div class="radar-container">
+            <svg id="radarSvg" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg"></svg>
+          </div>
+          <div class="ohaeng-bar-col" id="ohaengBarCol"></div>
+        </div>
+        <div class="ohaeng-desc-grid" id="ohaengDescGrid"></div>
+      </div>
+    </div>
+
+    <!-- ── TAB: 운세 흐름 ── -->
+    <div id="tabFlow" class="tab-pane">
+      <div class="cw">
+        <div class="sec-head">
+          <h2 class="sec-title">운세 흐름</h2>
+          <p class="sec-desc">인생의 기운 흐름을 한눈에 파악할 수 있는 그래프입니다.</p>
+        </div>
+        <div class="flow-card">
+          <div class="flow-card-top">
+            <span class="flow-card-label">운세 그래프</span>
+            <nav class="flow-tabs" id="flowTabs">
+              <button class="ft active" data-p="today">오늘</button>
+              <button class="ft" data-p="week">일간</button>
+              <button class="ft" data-p="month">월간</button>
+              <button class="ft" data-p="year">연간</button>
+            </nav>
+          </div>
+          <div class="flow-chart-box">
+            <svg id="flowSvg" viewBox="0 0 600 220" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet"></svg>
+          </div>
+          <div class="flow-legend">
+            <span class="leg-item"><span class="leg-dot" style="background:var(--wood)"></span>木</span>
+            <span class="leg-item"><span class="leg-dot" style="background:var(--fire)"></span>火</span>
+            <span class="leg-item"><span class="leg-dot" style="background:var(--earth)"></span>土</span>
+            <span class="leg-item"><span class="leg-dot" style="background:var(--metal)"></span>金</span>
+            <span class="leg-item"><span class="leg-dot" style="background:var(--water)"></span>水</span>
+            <span class="leg-item"><span class="leg-star">★</span>용신운</span>
+            <span class="leg-item"><span class="leg-warn">！</span>기신운</span>
+          </div>
+        </div>
+        <div class="sec-head" style="margin-top:28px">
+          <h2 class="sec-title">심층 운세 분석</h2>
+        </div>
+        <nav class="deep-tab-bar" id="deepTabBar">
+          <button class="dtb" data-d="daeun">대운 (10년)</button>
+          <button class="dtb active" data-d="seun">세운 (1년)</button>
+          <button class="dtb" data-d="wolun">월운 (1달)</button>
+          <button class="dtb" data-d="ilun">일운 (오늘)</button>
+        </nav>
+        <div class="deep-card" id="deepCard"></div>
+        <div class="lucky-section" id="luckySection"></div>
+      </div>
+    </div>
+
+    <!-- ── TAB: 기질 분석 ── -->
+    <div id="tabPersonality" class="tab-pane">
+      <div class="cw">
+        <div class="sec-head">
+          <h2 class="sec-title">기질 분석</h2>
+          <p class="sec-desc">일간(日干)을 중심으로 당신의 타고난 기질과 성향을 분석합니다.</p>
+        </div>
+        <div id="personalityContent"></div>
+      </div>
+    </div>
+
+  </section><!-- /resultSection -->
+
+  <div class="toast" id="toast"></div>
+  <div class="tooltip" id="tooltip"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>

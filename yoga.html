@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="몸과 마음을 연결하는 요가 포즈 가이드. 초급부터 고급까지 단계별 지침을 제공합니다." />
+  <title>요가 — AI Wellness</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&family=Noto+Serif+KR:wght@700;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="yoga-page">
+  <canvas id="starsBg"></canvas>
+
+  <header class="site-header">
+    <div class="header-inner hub-header-inner">
+      <a href="index.html" class="page-back-nav">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+        AI Wellness
+      </a>
+      <span class="page-title-badge">요가</span>
+      <nav class="hub-nav">
+        <a href="saju.html"       class="hn-link">사주</a>
+        <a href="tarot.html"      class="hn-link">타로</a>
+        <a href="meditation.html" class="hn-link">명상</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Header -->
+  <div class="yoga-header-section">
+    <p class="yoga-eyebrow">✦ 요가 포즈 가이드</p>
+    <h1 class="yoga-title">몸과 마음을 연결하세요</h1>
+    <p class="yoga-sub">단계별 지침으로 안전하게 요가를 시작하세요</p>
+  </div>
+
+  <!-- Filters -->
+  <div class="yoga-filter-section">
+    <p class="yoga-filter-label">난이도</p>
+    <div class="yoga-filter-row" id="levelFilter">
+      <button class="yoga-filter-btn active" data-level="all">전체</button>
+      <button class="yoga-filter-btn" data-level="beginner">초급</button>
+      <button class="yoga-filter-btn" data-level="middle">중급</button>
+      <button class="yoga-filter-btn" data-level="advanced">고급</button>
+    </div>
+
+    <p class="yoga-filter-label">효과</p>
+    <div class="yoga-filter-row" id="benefitFilter">
+      <button class="yoga-filter-btn active" data-benefit="all">전체</button>
+      <button class="yoga-filter-btn" data-benefit="flexibility">유연성</button>
+      <button class="yoga-filter-btn" data-benefit="strength">근력</button>
+      <button class="yoga-filter-btn" data-benefit="balance">균형</button>
+      <button class="yoga-filter-btn" data-benefit="stress">스트레스 해소</button>
+    </div>
+  </div>
+
+  <!-- Grid -->
+  <div class="yoga-grid-wrap">
+    <div class="yoga-grid" id="yogaGrid"></div>
+  </div>
+
+  <script src="stars.js"></script>
+  <script src="yoga.js"></script>
+</body>
+</html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="호흡과 마음챙김으로 내면의 평화를 찾아가는 명상 타이머. 다양한 호흡법과 명상 유형을 안내합니다." />
+  <title>명상 — AI Wellness</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&family=Noto+Serif+KR:wght@700;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="med-page">
+  <canvas id="starsBg"></canvas>
+
+  <header class="site-header">
+    <div class="header-inner hub-header-inner">
+      <a href="index.html" class="page-back-nav">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+        AI Wellness
+      </a>
+      <span class="page-title-badge">명상</span>
+      <nav class="hub-nav">
+        <a href="saju.html"  class="hn-link">사주</a>
+        <a href="tarot.html" class="hn-link">타로</a>
+        <a href="yoga.html"  class="hn-link">요가</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="med-wrap">
+    <p class="med-eyebrow">✦ 명상 타이머</p>
+    <h1 class="med-title">지금 이 순간에 머무세요</h1>
+
+    <!-- Session type -->
+    <div class="med-type-grid" id="typeGrid">
+      <button class="med-type-btn active" data-type="breath">
+        <div class="med-type-icon">🌬️</div>
+        <div class="med-type-name">호흡 명상</div>
+        <div class="med-type-sub">4-4 리듬 호흡</div>
+      </button>
+      <button class="med-type-btn" data-type="box">
+        <div class="med-type-icon">📦</div>
+        <div class="med-type-name">박스 호흡</div>
+        <div class="med-type-sub">4-4-4-4 사각 호흡</div>
+      </button>
+      <button class="med-type-btn" data-type="478">
+        <div class="med-type-icon">🌙</div>
+        <div class="med-type-name">4-7-8 호흡</div>
+        <div class="med-type-sub">수면·이완 호흡법</div>
+      </button>
+      <button class="med-type-btn" data-type="open">
+        <div class="med-type-icon">🧘</div>
+        <div class="med-type-name">자유 명상</div>
+        <div class="med-type-sub">호흡 안내 없음</div>
+      </button>
+    </div>
+
+    <!-- Duration -->
+    <div class="med-duration-row" id="durRow">
+      <button class="med-dur-btn" data-min="5">5분</button>
+      <button class="med-dur-btn active" data-min="10">10분</button>
+      <button class="med-dur-btn" data-min="15">15분</button>
+      <button class="med-dur-btn" data-min="20">20분</button>
+    </div>
+
+    <!-- Timer -->
+    <div class="med-timer-area">
+      <div class="med-ring-wrap">
+        <svg class="med-ring-svg" viewBox="0 0 100 100">
+          <circle class="med-ring-bg" cx="50" cy="50" r="44"/>
+          <circle class="med-ring-fill" id="ringFill" cx="50" cy="50" r="44"
+            stroke-dasharray="276.46" stroke-dashoffset="0"/>
+        </svg>
+        <div class="med-ring-center">
+          <div class="med-time-display" id="timeDisplay">10:00</div>
+          <div class="med-phase-label" id="phaseLabel">준비</div>
+        </div>
+      </div>
+
+      <!-- Breathing circle -->
+      <div class="med-breath-wrap" id="breathWrap">
+        <div class="med-breath-ring" id="breathRing"></div>
+        <div class="med-breath-core" id="breathCore"></div>
+      </div>
+      <p class="med-breath-text" id="breathText">시작 버튼을 눌러 명상을 시작하세요</p>
+
+      <!-- Controls -->
+      <div class="med-ctrl-row">
+        <button class="med-reset-btn" id="resetBtn" title="초기화">↺</button>
+        <button class="med-start-btn" id="startBtn">▶</button>
+        <button class="med-reset-btn" id="skipBtn" title="건너뛰기">⏭</button>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="med-stats">
+      <div class="med-stat-card">
+        <div class="med-stat-val" id="statSessions">0</div>
+        <div class="med-stat-label">오늘 세션</div>
+      </div>
+      <div class="med-stat-card">
+        <div class="med-stat-val" id="statMinutes">0</div>
+        <div class="med-stat-label">총 명상 분</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="stars.js"></script>
+  <script src="meditation.js"></script>
+</body>
+</html>

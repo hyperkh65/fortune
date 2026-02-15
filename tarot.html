@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="타로 카드로 현재와 미래의 흐름을 읽어보세요. 메이저 아르카나 22장, 다양한 스프레드 제공." />
+  <title>타로 리딩 — AI Wellness</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&family=Noto+Serif+KR:wght@700;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="tarot-page">
+  <canvas id="starsBg"></canvas>
+
+  <header class="site-header">
+    <div class="header-inner hub-header-inner">
+      <a href="index.html" class="page-back-nav">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+        AI Wellness
+      </a>
+      <span class="page-title-badge">타로 리딩</span>
+      <nav class="hub-nav">
+        <a href="saju.html"       class="hn-link">사주</a>
+        <a href="meditation.html" class="hn-link">명상</a>
+        <a href="yoga.html"       class="hn-link">요가</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Intro -->
+  <div class="tarot-intro">
+    <p class="tarot-eyebrow">✦ 타로 리딩</p>
+    <h1 class="tarot-title">카드가 전하는 메시지</h1>
+
+    <!-- Spread type -->
+    <div class="spread-selector" id="spreadSelector">
+      <button class="spread-btn active" data-spread="1">한 장 뽑기</button>
+      <button class="spread-btn" data-spread="3">과거·현재·미래</button>
+      <button class="spread-btn" data-spread="5">다섯 장 스프레드</button>
+    </div>
+  </div>
+
+  <!-- Question input -->
+  <div class="tarot-question-wrap">
+    <input id="questionInput" class="tarot-question-input"
+      type="text" placeholder="질문을 입력하세요 (선택사항)" maxlength="60" autocomplete="off" />
+    <button class="tarot-draw-btn" id="drawBtn">카드 뽑기</button>
+  </div>
+
+  <!-- Phase: deck -->
+  <div id="phaseDeck" style="display:none">
+    <div class="deck-area">
+      <div class="deck-stack" id="deckStack" title="카드를 클릭하여 공개">
+        <div class="deck-card-layer">✦</div>
+        <div class="deck-card-layer">✦</div>
+        <div class="deck-card-layer">✦</div>
+      </div>
+    </div>
+    <p style="text-align:center;font-size:13px;color:var(--txt-muted);margin-top:8px">카드를 클릭하여 한 장씩 공개하세요</p>
+  </div>
+
+  <!-- Phase: spread (cards) -->
+  <div id="phaseSpread" style="display:none">
+    <div class="card-spread" id="cardSpread"></div>
+  </div>
+
+  <!-- Phase: meaning -->
+  <div id="phaseMeaning" style="display:none">
+    <div class="card-meaning-panel" id="meaningPanel"></div>
+    <button class="tarot-again-btn" id="againBtn">↺ 다시 뽑기</button>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="stars.js"></script>
+  <script src="tarot.js"></script>
+</body>
+</html>

@@ -1048,6 +1048,896 @@ ul { list-style:none; }
   opacity: 1;
 }
 
+/* ════════════════════════════
+   HUB PAGE
+════════════════════════════ */
+.hub-header-inner {
+  max-width: 960px;
+  justify-content: space-between;
+}
+.hub-nav {
+  display: flex;
+  gap: 2px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.hub-nav::-webkit-scrollbar { display: none; }
+.hn-link {
+  padding: 7px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--txt-muted);
+  border-radius: var(--r-sm);
+  white-space: nowrap;
+  transition: background var(--t), color var(--t);
+}
+.hn-link:hover { background: var(--bg-card2); color: var(--txt); }
+.hn-link.active { background: var(--accent-dim); color: var(--accent); }
+
+.hub-main {
+  position: relative;
+  z-index: 1;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: calc(var(--hdr) + 56px) 24px 80px;
+}
+.hub-hero {
+  text-align: center;
+  margin-bottom: 52px;
+}
+.hub-eyebrow {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+.hub-title {
+  font-family: var(--serif);
+  font-size: clamp(32px, 8vw, 52px);
+  font-weight: 900;
+  line-height: 1.2;
+  margin-bottom: 18px;
+  background: linear-gradient(135deg, #fff 40%, var(--accent) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.hub-sub {
+  font-size: 15px;
+  color: var(--txt-muted);
+  line-height: 1.8;
+}
+
+/* Services Grid */
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 14px;
+}
+.svc-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-xl);
+  padding: 24px 20px;
+  text-decoration: none;
+  color: var(--txt);
+  transition: border-color var(--t), transform var(--t), box-shadow var(--t);
+  position: relative;
+  overflow: hidden;
+}
+a.svc-card:hover {
+  border-color: var(--border-hi);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.3);
+}
+.svc-card.svc-soon { cursor: default; opacity: 0.55; }
+.svc-soon-badge {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: var(--bg-card2);
+  border: 1px solid var(--border-hi);
+  color: var(--txt-muted);
+  letter-spacing: 0.04em;
+}
+.svc-icon-wrap {
+  width: 52px;
+  height: 52px;
+  flex-shrink: 0;
+  border-radius: var(--r-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+}
+.svc-body { flex: 1; }
+.svc-name {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+.svc-desc {
+  font-size: 13px;
+  color: var(--txt-muted);
+  line-height: 1.65;
+  margin-bottom: 12px;
+}
+.svc-cta {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* Inner page back nav */
+.page-back-nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--txt-muted);
+  text-decoration: none;
+  padding: 5px 10px;
+  border-radius: var(--r-sm);
+  transition: background var(--t), color var(--t);
+  margin-right: auto;
+}
+.page-back-nav:hover { background: var(--bg-card2); color: var(--txt); }
+.page-back-nav svg { flex-shrink: 0; }
+.page-title-badge {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--txt-muted);
+  padding: 5px 12px;
+  border-radius: var(--r-sm);
+  background: var(--bg-card2);
+  border: 1px solid var(--border);
+}
+
+/* ════════════════════════════
+   TAROT PAGE
+════════════════════════════ */
+.tarot-page { --tarot-accent: #a855f7; }
+
+.tarot-intro {
+  text-align: center;
+  padding: calc(var(--hdr) + 32px) 20px 0;
+}
+.tarot-eyebrow {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--tarot-accent);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+.tarot-title {
+  font-family: var(--serif);
+  font-size: clamp(22px, 5vw, 30px);
+  font-weight: 900;
+  margin-bottom: 8px;
+}
+
+/* Spread selector */
+.spread-selector {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 24px 0;
+}
+.spread-btn {
+  padding: 10px 18px;
+  border-radius: var(--r-md);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--txt-muted);
+  transition: all var(--t);
+}
+.spread-btn.active {
+  background: rgba(168,85,247,0.15);
+  border-color: #a855f7;
+  color: #c084fc;
+}
+
+/* Question area */
+.tarot-question-wrap {
+  max-width: 480px;
+  margin: 0 auto 28px;
+  padding: 0 20px;
+}
+.tarot-question-input {
+  width: 100%;
+  background: var(--bg-card);
+  border: 1px solid var(--border-hi);
+  border-radius: var(--r-md);
+  padding: 13px 16px;
+  color: var(--txt);
+  font-size: 14px;
+  font-family: var(--font);
+  outline: none;
+  text-align: center;
+  transition: border-color var(--t), box-shadow var(--t);
+}
+.tarot-question-input::placeholder { color: var(--txt-dim); }
+.tarot-question-input:focus {
+  border-color: #a855f7;
+  box-shadow: 0 0 0 3px rgba(168,85,247,0.12);
+}
+.tarot-draw-btn {
+  width: 100%;
+  padding: 15px;
+  border-radius: var(--r-lg);
+  background: #a855f7;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  font-family: var(--font);
+  margin-top: 12px;
+  transition: transform var(--t), box-shadow var(--t), opacity var(--t);
+  box-shadow: 0 4px 24px rgba(168,85,247,0.3);
+}
+.tarot-draw-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(168,85,247,0.4);
+}
+.tarot-draw-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+/* Deck shuffle area */
+.deck-area {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  padding: 20px;
+}
+.deck-stack {
+  position: relative;
+  width: 120px;
+  height: 200px;
+  cursor: pointer;
+  transition: transform var(--t);
+}
+.deck-stack:hover { transform: scale(1.04); }
+.deck-card-layer {
+  position: absolute;
+  width: 120px;
+  height: 200px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #1a0533 0%, #2d1066 50%, #1a0533 100%);
+  border: 1px solid rgba(168,85,247,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+}
+.deck-card-layer:nth-child(1) { transform: rotate(-4deg); top: -4px; left: -4px; }
+.deck-card-layer:nth-child(2) { transform: rotate(-2deg); top: -2px; left: -2px; }
+.deck-card-layer:nth-child(3) { transform: rotate(0deg); }
+
+/* Card spread */
+.card-spread {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  padding: 20px 20px 32px;
+}
+.tarot-slot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+.tarot-slot-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--txt-muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* Card flip */
+.tarot-card-wrap {
+  perspective: 1000px;
+  width: 130px;
+  height: 220px;
+  cursor: pointer;
+}
+.tarot-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.75s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.tarot-card-wrap.revealed .tarot-card-inner {
+  transform: rotateY(180deg);
+}
+.tarot-card-face {
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.tarot-card-back-face {
+  background: linear-gradient(135deg, #1a0533 0%, #2d1066 50%, #1a0533 100%);
+  border: 1px solid rgba(168,85,247,0.3);
+  font-size: 40px;
+}
+.tarot-back-pattern {
+  position: absolute;
+  inset: 6px;
+  border: 1px solid rgba(168,85,247,0.2);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 44px;
+  opacity: 0.7;
+}
+.tarot-card-front-face {
+  transform: rotateY(180deg);
+  flex-direction: column;
+  padding: 10px;
+  gap: 6px;
+}
+.tarot-card-num {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  opacity: 0.7;
+  align-self: flex-start;
+}
+.tarot-card-sym {
+  font-size: 42px;
+  line-height: 1;
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+.tarot-card-name-kr {
+  font-family: var(--serif);
+  font-size: 14px;
+  font-weight: 700;
+}
+.tarot-card-name-en {
+  font-size: 9px;
+  opacity: 0.6;
+  letter-spacing: 0.03em;
+}
+.tarot-reversed-label {
+  font-size: 9px;
+  color: #ef4444;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+/* Card meaning panel */
+.card-meaning-panel {
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 0 20px 60px;
+}
+.card-meaning-item {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 20px;
+  margin-bottom: 12px;
+  animation: fadeUp 0.4s var(--ease) both;
+}
+.cmi-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.cmi-sym { font-size: 32px; line-height: 1; }
+.cmi-names { flex: 1; }
+.cmi-name-kr { font-family: var(--serif); font-size: 16px; font-weight: 700; }
+.cmi-name-en { font-size: 11px; color: var(--txt-muted); margin-top: 2px; }
+.cmi-position {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--txt-muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--bg-card2);
+  border: 1px solid var(--border);
+}
+.cmi-keyword-row {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+.cmi-keyword {
+  font-size: 11px;
+  font-weight: 500;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(168,85,247,0.12);
+  border: 1px solid rgba(168,85,247,0.3);
+  color: #c084fc;
+}
+.cmi-keyword.reversed-kw {
+  background: rgba(239,68,68,0.1);
+  border-color: rgba(239,68,68,0.3);
+  color: #f87171;
+}
+.cmi-detail { font-size: 13px; color: var(--txt-muted); line-height: 1.8; }
+
+.tarot-again-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: calc(100% - 40px);
+  margin: 0 20px 60px;
+  padding: 14px;
+  border-radius: var(--r-lg);
+  background: var(--bg-card);
+  border: 1px solid rgba(168,85,247,0.3);
+  color: #c084fc;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: var(--font);
+  transition: background var(--t), border-color var(--t);
+}
+.tarot-again-btn:hover { background: rgba(168,85,247,0.1); border-color: #a855f7; }
+
+/* ════════════════════════════
+   MEDITATION PAGE
+════════════════════════════ */
+.med-page { --med-accent: #60a5fa; }
+
+.med-wrap {
+  max-width: 520px;
+  margin: 0 auto;
+  padding: calc(var(--hdr) + 32px) 20px 80px;
+  position: relative;
+  z-index: 1;
+}
+.med-eyebrow {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--med-accent);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-align: center;
+  margin-bottom: 10px;
+}
+.med-title {
+  font-family: var(--serif);
+  font-size: clamp(22px, 5vw, 28px);
+  font-weight: 900;
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+/* Session type selector */
+.med-type-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.med-type-btn {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  padding: 14px 12px;
+  text-align: center;
+  transition: all var(--t);
+  cursor: pointer;
+}
+.med-type-btn.active {
+  border-color: var(--med-accent);
+  background: rgba(96,165,250,0.1);
+}
+.med-type-icon { font-size: 24px; margin-bottom: 6px; }
+.med-type-name { font-size: 13px; font-weight: 600; color: var(--txt); margin-bottom: 2px; }
+.med-type-sub { font-size: 11px; color: var(--txt-muted); }
+
+/* Duration selector */
+.med-duration-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+.med-dur-btn {
+  flex: 1;
+  min-width: 60px;
+  padding: 9px 8px;
+  border-radius: var(--r-md);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--txt-muted);
+  text-align: center;
+  transition: all var(--t);
+}
+.med-dur-btn.active {
+  border-color: var(--med-accent);
+  color: var(--med-accent);
+  background: rgba(96,165,250,0.1);
+}
+
+/* Timer area */
+.med-timer-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 0 24px;
+}
+.med-ring-wrap {
+  position: relative;
+  width: 220px;
+  height: 220px;
+  margin-bottom: 20px;
+}
+.med-ring-svg {
+  transform: rotate(-90deg);
+  width: 100%;
+  height: 100%;
+}
+.med-ring-bg { fill: none; stroke: var(--bg-card2); stroke-width: 6; }
+.med-ring-fill {
+  fill: none;
+  stroke: var(--med-accent);
+  stroke-width: 6;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 1s linear;
+}
+.med-ring-center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+.med-time-display {
+  font-size: 40px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+.med-phase-label {
+  font-size: 13px;
+  color: var(--med-accent);
+  font-weight: 600;
+  transition: opacity 0.3s;
+}
+
+/* Breathing animation */
+.med-breath-wrap {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+.med-breath-ring {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 2px solid rgba(96,165,250,0.3);
+  animation: none;
+}
+.med-breath-core {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--med-accent);
+  opacity: 0.8;
+  animation: none;
+}
+@keyframes breathIn {
+  from { transform: scale(1); opacity: 0.5; }
+  to   { transform: scale(1.6); opacity: 1; }
+}
+@keyframes breathOut {
+  from { transform: scale(1.6); opacity: 1; }
+  to   { transform: scale(1); opacity: 0.5; }
+}
+@keyframes breathHold {
+  from, to { transform: scale(1.6); opacity: 1; }
+}
+@keyframes breathHoldSmall {
+  from, to { transform: scale(1); opacity: 0.5; }
+}
+
+.med-breath-text {
+  font-size: 14px;
+  color: var(--txt-muted);
+  text-align: center;
+  min-height: 20px;
+  margin-bottom: 20px;
+}
+
+/* Timer controls */
+.med-ctrl-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+.med-start-btn {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--med-accent);
+  color: #fff;
+  font-size: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform var(--t), box-shadow var(--t);
+  box-shadow: 0 4px 20px rgba(96,165,250,0.3);
+}
+.med-start-btn:hover { transform: scale(1.06); box-shadow: 0 6px 28px rgba(96,165,250,0.4); }
+.med-reset-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--bg-card);
+  border: 1px solid var(--border-hi);
+  color: var(--txt-muted);
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background var(--t), color var(--t);
+}
+.med-reset-btn:hover { background: var(--bg-hover); color: var(--txt); }
+
+/* Med stats */
+.med-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 24px;
+}
+.med-stat-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  padding: 14px;
+  text-align: center;
+}
+.med-stat-val {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--med-accent);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.med-stat-label { font-size: 11px; color: var(--txt-muted); }
+
+/* ════════════════════════════
+   YOGA PAGE
+════════════════════════════ */
+.yoga-page { --yoga-accent: #fb923c; }
+
+.yoga-header-section {
+  text-align: center;
+  padding: calc(var(--hdr) + 32px) 20px 0;
+}
+.yoga-eyebrow {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--yoga-accent);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.yoga-title {
+  font-family: var(--serif);
+  font-size: clamp(22px, 5vw, 30px);
+  font-weight: 900;
+  margin-bottom: 6px;
+}
+.yoga-sub {
+  font-size: 13px;
+  color: var(--txt-muted);
+  line-height: 1.7;
+  margin-bottom: 24px;
+}
+
+/* Filters */
+.yoga-filter-section {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 0 20px 20px;
+}
+.yoga-filter-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--txt-muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.yoga-filter-row {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+.yoga-filter-btn {
+  padding: 7px 14px;
+  border-radius: 999px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--txt-muted);
+  transition: all var(--t);
+}
+.yoga-filter-btn.active {
+  border-color: var(--yoga-accent);
+  color: var(--yoga-accent);
+  background: rgba(251,146,60,0.1);
+}
+
+/* Yoga grid */
+.yoga-grid-wrap {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 20px 80px;
+}
+.yoga-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 14px;
+}
+.yoga-pose-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color var(--t), transform var(--t), box-shadow var(--t);
+}
+.yoga-pose-card:hover {
+  border-color: var(--border-hi);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+}
+.yoga-pose-card.expanded {
+  border-color: rgba(251,146,60,0.4);
+}
+.yoga-card-top {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px 16px;
+}
+.yoga-pose-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: var(--r-sm);
+  background: rgba(251,146,60,0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  flex-shrink: 0;
+}
+.yoga-pose-info { flex: 1; min-width: 0; }
+.yoga-pose-name { font-size: 15px; font-weight: 700; margin-bottom: 2px; }
+.yoga-pose-sanskrit { font-size: 11px; color: var(--txt-muted); margin-bottom: 6px; }
+.yoga-level-badge {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 999px;
+  letter-spacing: 0.03em;
+}
+.level-beginner  { background: rgba(74,222,128,0.15); color: #4ade80; border: 1px solid rgba(74,222,128,0.3); }
+.level-middle    { background: rgba(234,179,8,0.15);  color: #eab308; border: 1px solid rgba(234,179,8,0.3); }
+.level-advanced  { background: rgba(239,68,68,0.15);  color: #ef4444; border: 1px solid rgba(239,68,68,0.3); }
+
+.yoga-benefit-tags {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  padding: 0 16px 16px;
+}
+.yoga-benefit-tag {
+  font-size: 10px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: var(--bg-card2);
+  border: 1px solid var(--border);
+  color: var(--txt-muted);
+}
+
+/* Expanded pose detail */
+.yoga-expand-body {
+  display: none;
+  padding: 0 16px 20px;
+  border-top: 1px solid var(--border);
+  animation: fadeUp 0.25s var(--ease) both;
+}
+.yoga-pose-card.expanded .yoga-expand-body { display: block; }
+.yoga-expand-desc {
+  font-size: 13px;
+  color: var(--txt-muted);
+  line-height: 1.75;
+  margin: 14px 0 12px;
+}
+.yoga-steps-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--txt);
+  letter-spacing: 0.04em;
+  margin-bottom: 10px;
+}
+.yoga-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.yoga-step {
+  display: flex;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--txt-muted);
+  line-height: 1.6;
+}
+.yoga-step-num {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(251,146,60,0.15);
+  border: 1px solid rgba(251,146,60,0.3);
+  color: var(--yoga-accent);
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.yoga-duration-info {
+  display: flex;
+  gap: 16px;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+.yoga-dur-item { font-size: 12px; color: var(--txt-muted); }
+.yoga-dur-val { font-weight: 700; color: var(--yoga-accent); }
+
 /* ── Responsive ── */
 
 /* Tablet (521px – 768px) */

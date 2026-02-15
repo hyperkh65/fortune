@@ -235,6 +235,10 @@ function buildCard(pose) {
      </div>`
   ).join('');
 
+  // YouTube search query for this pose
+  const ytQuery = encodeURIComponent(`${pose.sanskrit} ${pose.name} yoga tutorial`);
+  const ytUrl   = `https://www.youtube.com/results?search_query=${ytQuery}`;
+
   const card = document.createElement('div');
   card.className = 'yoga-pose-card';
   card.dataset.level   = pose.level;
@@ -257,9 +261,16 @@ function buildCard(pose) {
         <div class="yoga-dur-item">유지 시간 <span class="yoga-dur-val">${pose.hold}</span></div>
         <div class="yoga-dur-item">반복 <span class="yoga-dur-val">${pose.repeat}</span></div>
       </div>
+      <a class="yoga-video-btn" href="${ytUrl}" target="_blank" rel="noopener">
+        <span class="yoga-video-play">▶</span>
+        <span>YouTube에서 동영상 보기</span>
+        <span class="yoga-video-ext">↗</span>
+      </a>
     </div>`;
 
-  card.addEventListener('click', () => {
+  card.addEventListener('click', e => {
+    // Don't toggle card when clicking the video link
+    if (e.target.closest('.yoga-video-btn')) return;
     const isOpen = card.classList.contains('expanded');
     if (expandedCard && expandedCard !== card) {
       expandedCard.classList.remove('expanded');

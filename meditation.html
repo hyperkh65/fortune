@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="호흡과 마음챙김으로 내면의 평화를 찾아가는 명상 타이머. 다양한 호흡법과 명상 유형을 안내합니다." />
+  <meta name="description" content="호흡과 마음챙김으로 내면의 평화를 찾아가는 명상 타이머. 다양한 호흡법과 배경음으로 깊은 명상을 도와드립니다." />
   <title>명상 — AI Wellness</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -32,7 +32,7 @@
     <p class="med-eyebrow">✦ 명상 타이머</p>
     <h1 class="med-title">지금 이 순간에 머무세요</h1>
 
-    <!-- Session type -->
+    <!-- Breathing type -->
     <div class="med-type-grid" id="typeGrid">
       <button class="med-type-btn active" data-type="breath">
         <div class="med-type-icon">🌬️</div>
@@ -64,13 +64,62 @@
       <button class="med-dur-btn" data-min="20">20분</button>
     </div>
 
+    <!-- Sound theme selector -->
+    <div class="med-sound-section">
+      <p class="med-sound-label">🎵 배경 소리</p>
+      <div class="med-sound-grid" id="soundGrid">
+        <button class="med-sound-btn active" data-sound="none">
+          <span class="med-sound-icon">🔇</span>
+          <span class="med-sound-name">없음</span>
+        </button>
+        <button class="med-sound-btn" data-sound="ocean">
+          <span class="med-sound-icon">🌊</span>
+          <span class="med-sound-name">바다</span>
+        </button>
+        <button class="med-sound-btn" data-sound="forest">
+          <span class="med-sound-icon">🌲</span>
+          <span class="med-sound-name">산속</span>
+        </button>
+        <button class="med-sound-btn" data-sound="rain">
+          <span class="med-sound-icon">🌧️</span>
+          <span class="med-sound-name">빗소리</span>
+        </button>
+        <button class="med-sound-btn" data-sound="temple">
+          <span class="med-sound-icon">🏯</span>
+          <span class="med-sound-name">사찰</span>
+        </button>
+        <button class="med-sound-btn" data-sound="fire">
+          <span class="med-sound-icon">🔥</span>
+          <span class="med-sound-name">벽난로</span>
+        </button>
+        <button class="med-sound-btn" data-sound="wind">
+          <span class="med-sound-icon">💨</span>
+          <span class="med-sound-name">바람</span>
+        </button>
+        <button class="med-sound-btn" data-sound="healing">
+          <span class="med-sound-icon">✨</span>
+          <span class="med-sound-name">치유·432Hz</span>
+        </button>
+        <button class="med-sound-btn" data-sound="white">
+          <span class="med-sound-icon">📻</span>
+          <span class="med-sound-name">백색소음</span>
+        </button>
+      </div>
+      <div class="med-volume-row">
+        <span class="med-vol-icon">🔈</span>
+        <input type="range" id="volumeSlider" class="med-volume-slider"
+               min="0" max="1" step="0.05" value="0.5" />
+        <span class="med-vol-icon">🔊</span>
+      </div>
+    </div>
+
     <!-- Timer -->
     <div class="med-timer-area">
       <div class="med-ring-wrap">
         <svg class="med-ring-svg" viewBox="0 0 100 100">
           <defs>
             <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stop-color="#60a5fa"/>
+              <stop offset="0%"   stop-color="#60a5fa"/>
               <stop offset="100%" stop-color="#818cf8"/>
             </linearGradient>
           </defs>

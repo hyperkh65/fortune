@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="타로 카드로 현재와 미래의 흐름을 읽어보세요. 메이저 아르카나 22장, 다양한 스프레드 제공." />
   <title>타로 리딩 — AI Wellness</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -21,58 +20,75 @@
       </a>
       <span class="page-title-badge">타로 리딩</span>
       <nav class="hub-nav">
-        <a href="saju.html"       class="hn-link">사주</a>
+        <a href="saju.html" class="hn-link">사주</a>
         <a href="meditation.html" class="hn-link">명상</a>
-        <a href="yoga.html"       class="hn-link">요가</a>
+        <a href="yoga.html" class="hn-link">요가</a>
       </nav>
     </div>
   </header>
 
-  <!-- Intro -->
-  <div class="tarot-intro">
+  <div class="tarot-intro" id="tarotIntro">
     <p class="tarot-eyebrow">✦ 타로 리딩</p>
     <h1 class="tarot-title">카드가 전하는 메시지</h1>
+    <p style="font-size:14px;color:var(--txt-muted);margin-bottom:24px">마음속 질문을 떠올리고 카드를 선택하세요</p>
 
-    <!-- Spread type -->
     <div class="spread-selector" id="spreadSelector">
-      <button class="spread-btn active" data-spread="1">한 장 뽑기</button>
-      <button class="spread-btn" data-spread="3">과거·현재·미래</button>
-      <button class="spread-btn" data-spread="5">다섯 장 스프레드</button>
+      <button class="spread-btn active" data-spread="1">
+        <span class="spread-btn-icon">🔮</span>
+        <span class="spread-btn-name">오늘의 한 장</span>
+        <span class="spread-btn-sub">빠른 통찰</span>
+      </button>
+      <button class="spread-btn" data-spread="3">
+        <span class="spread-btn-icon">🃏</span>
+        <span class="spread-btn-name">과거·현재·미래</span>
+        <span class="spread-btn-sub">3장 스프레드</span>
+      </button>
+      <button class="spread-btn" data-spread="7">
+        <span class="spread-btn-icon">🌟</span>
+        <span class="spread-btn-name">말굽 스프레드</span>
+        <span class="spread-btn-sub">7장 심층 분석</span>
+      </button>
+      <button class="spread-btn" data-spread="10">
+        <span class="spread-btn-icon">✨</span>
+        <span class="spread-btn-name">켈틱 십자가</span>
+        <span class="spread-btn-sub">10장 완전 분석</span>
+      </button>
     </div>
   </div>
 
-  <!-- Question input -->
-  <div class="tarot-question-wrap">
+  <div class="tarot-question-wrap" id="tarotQWrap">
     <input id="questionInput" class="tarot-question-input"
-      type="text" placeholder="질문을 입력하세요 (선택사항)" maxlength="60" autocomplete="off" />
-    <button class="tarot-draw-btn" id="drawBtn">카드 뽑기</button>
+      type="text" placeholder="마음속 질문을 입력하세요 (선택사항)" maxlength="80" autocomplete="off" />
+    <button class="tarot-draw-btn" id="drawBtn">카드 뽑기 시작</button>
   </div>
 
-  <!-- Phase: deck -->
   <div id="phaseDeck" style="display:none">
+    <p class="deck-hint">아래 덱을 클릭하여 카드를 펼치세요</p>
     <div class="deck-area">
-      <div class="deck-stack" id="deckStack" title="카드를 클릭하여 공개">
+      <div class="deck-stack" id="deckStack">
         <div class="deck-card-layer">✦</div>
         <div class="deck-card-layer">✦</div>
         <div class="deck-card-layer">✦</div>
       </div>
     </div>
-    <p style="text-align:center;font-size:13px;color:var(--txt-muted);margin-top:8px">카드를 클릭하여 한 장씩 공개하세요</p>
   </div>
 
-  <!-- Phase: spread (cards) -->
   <div id="phaseSpread" style="display:none">
-    <div class="card-spread" id="cardSpread"></div>
+    <p class="deck-hint" id="spreadHint">카드를 한 장씩 클릭하여 공개하세요</p>
+    <div id="cardSpread"></div>
   </div>
 
-  <!-- Phase: meaning -->
   <div id="phaseMeaning" style="display:none">
+    <div class="meaning-header">
+      <h2 class="meaning-title" id="meaningTitle">리딩 결과</h2>
+      <p class="meaning-question" id="meaningQuestion"></p>
+    </div>
     <div class="card-meaning-panel" id="meaningPanel"></div>
-    <button class="tarot-again-btn" id="againBtn">↺ 다시 뽑기</button>
+    <div class="overall-reading" id="overallReading"></div>
+    <button class="tarot-again-btn" id="againBtn">↺ 새로운 리딩</button>
   </div>
 
   <div class="toast" id="toast"></div>
-
   <script src="stars.js"></script>
   <script src="tarot.js"></script>
 </body>

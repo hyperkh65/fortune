@@ -510,13 +510,13 @@ function renderRadarChart(counts) {
     const r = R * level / 4;
     const pts = Array.from({length:5}, (_,i) => vertex(i, r));
     const d = pts.map((p,i) => (i===0?'M':'L')+p.x.toFixed(1)+','+p.y.toFixed(1)).join(' ')+'Z';
-    html += `<path d="${d}" fill="none" stroke="rgba(255,255,255,0.07)" stroke-width="1"/>`;
+    html += `<path d="${d}" fill="none" stroke="rgba(0,0,80,0.1)" stroke-width="1"/>`;
   }
 
   // Axis lines
   for (let i = 0; i < 5; i++) {
     const v = vertex(i, R);
-    html += `<line x1="${cx}" y1="${cy}" x2="${v.x.toFixed(1)}" y2="${v.y.toFixed(1)}" stroke="rgba(255,255,255,0.07)" stroke-width="1"/>`;
+    html += `<line x1="${cx}" y1="${cy}" x2="${v.x.toFixed(1)}" y2="${v.y.toFixed(1)}" stroke="rgba(0,0,80,0.1)" stroke-width="1"/>`;
   }
 
   // Data polygon
@@ -526,12 +526,12 @@ function renderRadarChart(counts) {
     return vertex(i, r);
   });
   const fill = pts.map((p,i) => (i===0?'M':'L')+p.x.toFixed(1)+','+p.y.toFixed(1)).join(' ')+'Z';
-  html += `<path d="${fill}" fill="rgba(61,220,132,0.18)" stroke="var(--accent)" stroke-width="2" stroke-linejoin="round"/>`;
+  html += `<path d="${fill}" fill="rgba(79,70,229,0.12)" stroke="var(--accent)" stroke-width="2" stroke-linejoin="round"/>`;
 
   // Data dots
   for (let i = 0; i < 5; i++) {
     const p = pts[i];
-    html += `<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="5" fill="${colors[i]}" stroke="#0a0a0a" stroke-width="1.5"/>`;
+    html += `<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="5" fill="${colors[i]}" stroke="#ffffff" stroke-width="1.5"/>`;
   }
 
   // Labels
@@ -540,7 +540,7 @@ function renderRadarChart(counts) {
     html += `<text x="${v.x.toFixed(1)}" y="${v.y.toFixed(1)}" text-anchor="middle" dominant-baseline="middle"
       fill="${colors[i]}" font-size="16" font-weight="700" font-family="var(--serif)">${labels[i]}</text>`;
     html += `<text x="${v.x.toFixed(1)}" y="${(v.y + 16).toFixed(1)}" text-anchor="middle"
-      fill="rgba(255,255,255,0.45)" font-size="10">${counts[i]}</text>`;
+      fill="rgba(0,0,80,0.45)" font-size="10">${counts[i]}</text>`;
   }
 
   svg.innerHTML = html;
@@ -564,8 +564,8 @@ function renderFlowChart(flowItems, analysis) {
   // Y axis labels
   for (let pct of [0, 25, 50, 75, 100]) {
     const y = padT + maxH * (1 - pct/100);
-    html += `<text x="${padL-4}" y="${y.toFixed(1)}" text-anchor="end" dominant-baseline="middle" fill="rgba(255,255,255,0.3)" font-size="9">${pct}</text>`;
-    html += `<line x1="${padL}" y1="${y.toFixed(1)}" x2="${W-padR}" y2="${y.toFixed(1)}" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>`;
+    html += `<text x="${padL-4}" y="${y.toFixed(1)}" text-anchor="end" dominant-baseline="middle" fill="rgba(0,0,80,0.35)" font-size="9">${pct}</text>`;
+    html += `<line x1="${padL}" y1="${y.toFixed(1)}" x2="${W-padR}" y2="${y.toFixed(1)}" stroke="rgba(0,0,80,0.07)" stroke-width="1"/>`;
   }
 
   // Bars
@@ -575,7 +575,7 @@ function renderFlowChart(flowItems, analysis) {
     const x = padL + i * bw + bw * 0.175;
     const barH = maxH * item.score / 100;
     const y = padT + maxH - barH;
-    const color = item.isNow ? '#ffffff' : (item.score > 0 ? elemColors[item.elem] : '#333');
+    const color = item.isNow ? 'var(--accent)' : (item.score > 0 ? elemColors[item.elem] : '#94a3b8');
     const opacity = item.isNow ? 1 : 0.8;
 
     // Bar
@@ -585,7 +585,7 @@ function renderFlowChart(flowItems, analysis) {
     // NOW label
     if (item.isNow) {
       html += `<text x="${(x + barW/2).toFixed(1)}" y="${(y - 8).toFixed(1)}" text-anchor="middle"
-        fill="#ffffff" font-size="9" font-weight="700">NOW</text>`;
+        fill="var(--accent)" font-size="9" font-weight="700">NOW</text>`;
     }
 
     // ★ for yongsin, ！for gishin
@@ -600,10 +600,10 @@ function renderFlowChart(flowItems, analysis) {
 
     // X label
     html += `<text x="${(x + barW/2).toFixed(1)}" y="${(H - padB + 10).toFixed(1)}" text-anchor="middle"
-      fill="rgba(255,255,255,0.5)" font-size="${n > 15 ? 7 : 9}">${item.label}</text>`;
+      fill="rgba(0,0,80,0.5)" font-size="${n > 15 ? 7 : 9}">${item.label}</text>`;
     if (item.sublabel && n <= 12) {
       html += `<text x="${(x + barW/2).toFixed(1)}" y="${(H - padB + 22).toFixed(1)}" text-anchor="middle"
-        fill="rgba(255,255,255,0.25)" font-size="7">${item.sublabel}</text>`;
+        fill="rgba(0,0,80,0.3)" font-size="7">${item.sublabel}</text>`;
     }
   }
 
@@ -1026,6 +1026,7 @@ function runAnalysis() {
       renderLucky(analysis.yongsin);
 
       renderPersonality(pillars.day.s);
+      renderDetail(pillars, analysis);
 
       // Switch sections
       document.getElementById('formSection').style.display = 'none';
@@ -1045,12 +1046,148 @@ function runAnalysis() {
   }, 600);
 }
 
+/* ──────────────────────────────────────
+   DETAIL TAB — 세부 분석 (연애·재물·건강·인간관계)
+────────────────────────────────────── */
+const LOVE_DATA = [
+  { // 甲木
+    love:'甲木 일간은 솔직하고 진취적인 연애를 합니다. 상대방에게 먼저 다가가는 적극성을 지니며, 한번 좋아하면 깊게 빠져듭니다. 강한 자존심이 있어 관계에서 리더십을 발휘하고 싶어하는 편입니다. 상대방이 자신의 의견을 무시하면 크게 상처받습니다. 이상적인 파트너는 자신을 인정해주고 성장을 함께하는 사람입니다.',
+    marriage:'결혼 후에도 독립적인 성향을 유지하려 합니다. 가정에서 가장 역할을 충실히 수행하지만, 자신만의 공간과 활동이 필요합니다. 배우자와의 조화를 위해 유연성을 키우는 것이 중요합니다.',
+    wealth:'재물운은 안정적이나 큰 부는 스스로 개척해야 합니다. 초년에는 고생이 있을 수 있으나 중년 이후 본격적인 재물 축적이 시작됩니다. 부동산이나 사업 투자가 유리하며, 조급함을 버리고 장기적 안목을 유지하세요.',
+    career:'사업, 경영, 정치, 법조, 교육 분야에서 두각을 나타냅니다. 독립적으로 일하는 것을 선호하며 창업 운도 있습니다. 조직에서는 빠르게 승진하지만 윗사람과의 마찰에 주의하세요.',
+    health:'간(肝)과 담(膽) 관련 질환에 주의가 필요합니다. 과도한 스트레스는 눈, 근육, 신경에 영향을 줄 수 있습니다. 규칙적인 운동과 충분한 수면이 건강을 지키는 열쇠입니다.',
+    relation:'주위에 사람이 많이 따르지만 자신의 뜻을 관철하려다 오해를 살 수 있습니다. 경청과 배려를 생활화하면 넓고 깊은 인간관계를 유지할 수 있습니다.',
+  },
+  { // 乙木
+    love:'乙木 일간은 감성적이고 섬세한 연애를 합니다. 직접적으로 감정을 표현하기보다 분위기와 행동으로 애정을 전합니다. 상대방의 감정 변화에 민감하게 반응하며 배려심이 깊습니다. 집착하는 경향이 있을 수 있으니 적절한 거리감 유지가 중요합니다.',
+    marriage:'가정을 소중히 여기고 안정적인 결혼생활을 추구합니다. 배우자와의 감정적 교류를 매우 중시합니다. 다소 의존적인 경향이 있으므로 자신의 주체성을 키워나가는 것이 필요합니다.',
+    wealth:'꾸준한 노력으로 안정적인 재물을 쌓아갑니다. 큰 모험보다 안정적인 저축과 투자가 적합합니다. 다른 사람을 위해 지출하는 경향이 있으니 재정 계획을 철저히 세우세요.',
+    career:'예술, 디자인, 상담, 의료, 교육 분야에서 능력을 발휘합니다. 협력 관계에서 빛을 발하며 팀 내 조화를 이끌어냅니다. 자신의 능력을 과소평가하지 말고 적극적으로 어필하세요.',
+    health:'폐(肺)와 피부 건강에 신경 쓰세요. 스트레스 관리가 특히 중요하며, 호흡기 관련 질환에도 주의가 필요합니다. 명상이나 요가 같은 마음을 안정시키는 활동이 도움이 됩니다.',
+    relation:'온화한 성격으로 대인관계가 원만합니다. 깊은 친밀감을 형성하지만 상처를 주는 말에 오래 상처받을 수 있습니다. 자신의 감정을 솔직하게 표현하는 연습을 하세요.',
+  },
+  { // 丙火
+    love:'丙火 일간은 열정적이고 화려한 연애를 즐깁니다. 적극적으로 감정을 표현하며 상대방을 밝게 만들어줍니다. 연애에 쉽게 불타오르지만 식을 수도 빠를 수 있으니 지속적인 관계 유지에 신경 써야 합니다.',
+    marriage:'결혼 후에도 활기찬 에너지로 가정을 이끕니다. 집안 분위기를 밝게 만드는 역할을 합니다. 배우자의 의견을 충분히 수렴하는 노력이 필요하며, 충동적 결정을 자제해야 합니다.',
+    wealth:'사업 수완이 좋고 재물 운이 활발합니다. 다양한 수입원을 가질 수 있지만 지출도 많은 편입니다. 장기 계획보다 단기 이익을 추구하는 경향이 있으니 재정 관리에 주의하세요.',
+    career:'방송, 연예, 세일즈, 마케팅, 경영 분야에서 탁월한 능력을 발휘합니다. 사람들을 이끄는 카리스마가 있으며 리더십이 뛰어납니다.',
+    health:'심장(心臟)과 혈관 건강에 특히 주의가 필요합니다. 과로와 스트레스는 심혈관 질환의 위험을 높입니다. 규칙적인 유산소 운동과 혈압 관리가 중요합니다.',
+    relation:'누구와도 쉽게 어울리는 사교성을 지녔습니다. 많은 친구를 두고 있으며 모임에서 분위기 메이커 역할을 합니다. 깊은 신뢰 관계를 구축하기 위해서는 말보다 실천이 더 중요합니다.',
+  },
+  { // 丁火
+    love:'丁火 일간은 섬세하고 감성적인 연애를 합니다. 한 사람에게 깊이 헌신하는 타입으로, 상대방을 진심으로 아끼고 세심하게 배려합니다. 상처받으면 오래 상처가 남을 수 있으므로 솔직한 소통이 중요합니다.',
+    marriage:'따뜻하고 안정적인 가정을 꿈꿉니다. 가족에 대한 헌신과 배려가 뛰어나지만, 지나친 희생으로 본인이 소진될 수 있습니다. 자신의 욕구도 적절히 표현하는 것이 건강한 관계를 유지하는 비결입니다.',
+    wealth:'꾸준하고 성실한 노력으로 재물을 쌓습니다. 큰 투기보다 안정적인 투자가 맞습니다. 타인을 위한 지출이 많은 편이므로 재정 계획을 세워 자신의 미래도 준비하세요.',
+    career:'예술, 음악, 문학, 상담, 교육 분야에서 빛을 발합니다. 섬세한 감각과 창의성이 작업의 질을 높입니다. 완벽주의 경향으로 마감 스트레스에 주의가 필요합니다.',
+    health:'심장과 소장(小腸) 기능에 주의하세요. 감정적 스트레스가 신체에 바로 영향을 미치므로 정서적 안정이 건강의 핵심입니다. 규칙적인 생활 습관과 충분한 수면이 필수입니다.',
+    relation:'깊고 의미 있는 관계를 추구합니다. 넓은 인맥보다 소수의 진실한 관계를 선호하며, 한번 맺은 인연은 오래 지속됩니다.',
+  },
+  { // 戊土
+    love:'戊土 일간은 신중하고 책임감 있는 연애를 합니다. 쉽게 감정을 표현하지 않지만 한번 사랑에 빠지면 충실하고 한결같습니다. 안정과 신뢰를 중시하며 갑작스러운 변화를 싫어합니다.',
+    marriage:'가정의 안정과 화목을 가장 중시합니다. 가장으로서의 책임을 성실히 이행합니다. 다소 고집스러운 면이 있으므로 배우자의 의견을 경청하는 태도가 필요합니다.',
+    wealth:'부동산, 금융, 안정적인 사업에서 재물을 쌓습니다. 급진적인 투자보다 장기적이고 안정적인 방식을 선호합니다. 중년 이후 재물이 크게 발전할 수 있는 구조입니다.',
+    career:'부동산, 건축, 금융, 농업, 공무원 분야에서 탁월합니다. 꾸준하고 성실한 업무 처리로 신뢰를 쌓습니다. 리더십보다는 실무 능력이 강점입니다.',
+    health:'비위(脾胃) — 소화기 계통에 주의가 필요합니다. 과식이나 불규칙한 식사는 건강을 해칩니다. 과도한 걱정과 스트레스도 소화기에 영향을 줄 수 있으니 마음의 여유를 가지세요.',
+    relation:'믿음직하고 듬직한 성격으로 주위에서 신뢰를 받습니다. 인간관계를 신중하게 맺지만 한번 맺으면 깊고 오래갑니다.',
+  },
+  { // 己土
+    love:'己土 일간은 성실하고 현실적인 연애를 합니다. 상대방을 세심하게 배려하며 관계의 지속성을 중시합니다. 감정 표현이 다소 서툴지만 행동으로 사랑을 보여주는 타입입니다.',
+    marriage:'가정을 꼼꼼하게 관리하는 능력이 뛰어납니다. 작은 것 하나도 소홀히 하지 않는 세심함으로 가족을 돌봅니다. 지나친 걱정과 불안을 버리고 신뢰를 키워나가는 것이 중요합니다.',
+    wealth:'꼼꼼한 재정 관리로 안정적인 부를 쌓습니다. 큰 수익보다는 안정적인 수입을 선호하며, 저축을 잘합니다. 과도한 걱정으로 좋은 기회를 놓치지 않도록 적절한 결단력을 키우세요.',
+    career:'교육, 회계, 행정, 의료, 연구 분야에서 두각을 나타냅니다. 세밀하고 정확한 업무 처리가 강점입니다. 꾸준한 노력으로 전문성을 쌓아가는 타입입니다.',
+    health:'소화기 및 비장(脾臟) 기능에 주의하세요. 지나친 걱정과 불안은 소화기 문제를 유발합니다. 규칙적인 식사와 가벼운 운동으로 건강을 유지하세요.',
+    relation:'성실하고 신뢰할 수 있는 사람으로 평가받습니다. 조화를 중시하여 갈등을 피하려 하지만, 자신의 의견도 적절히 표현하는 것이 좋습니다.',
+  },
+  { // 庚金
+    love:'庚金 일간은 솔직하고 원칙적인 연애를 합니다. 감정을 직접적으로 표현하며 상대방에게도 솔직함을 기대합니다. 강한 자존심으로 먼저 사과하기를 어려워하므로 유연성을 키우는 것이 필요합니다.',
+    marriage:'가정에서도 원칙과 규율을 중시합니다. 공정한 관계를 원하며 상호 존중을 가장 중요하게 여깁니다. 부드러운 감정 표현을 연습하면 더욱 풍성한 가정생활이 가능합니다.',
+    wealth:'원칙적인 방식으로 재물을 쌓습니다. 부정한 방법에는 절대 타협하지 않으며, 실력과 성실함으로 성공을 이룹니다. 투자 시 리스크 관리에 철저하며 안정성을 선호합니다.',
+    career:'법조, 군경, 의학, 엔지니어링, 금속·제조업에서 탁월합니다. 강한 리더십과 결단력이 강점입니다. 유연성을 높이면 더 넓은 분야에서 활약할 수 있습니다.',
+    health:'폐(肺)와 대장(大腸) 건강에 특히 주의하세요. 건조한 환경과 차가운 음식은 피하는 것이 좋습니다. 규칙적인 호흡 운동과 따뜻한 음식 섭취가 건강을 지킵니다.',
+    relation:'정의롭고 공정한 사람으로 인정받습니다. 불의를 보면 참지 못하는 성격으로 때로 갈등을 유발할 수 있습니다. 상대의 입장을 먼저 이해하는 노력이 관계를 원활하게 합니다.',
+  },
+  { // 辛金
+    love:'辛金 일간은 세련되고 낭만적인 연애를 합니다. 완벽한 사랑을 꿈꾸며 상대방에 대한 기준이 높습니다. 감정 표현이 섬세하고 아름다운 방식으로 나타나며, 상처받으면 내면 깊이 품는 경향이 있습니다.',
+    marriage:'미적 감각이 뛰어난 가정환경을 만드는 것을 좋아합니다. 완벽주의적 성향으로 가족에게 높은 기대를 할 수 있으니 현실적인 조율이 필요합니다.',
+    wealth:'심미적 가치가 있는 분야 — 보석, 패션, 예술품 등에서 재물 운이 강합니다. 섬세한 안목으로 좋은 투자 기회를 포착할 수 있습니다. 감정적 소비를 자제하고 계획적인 지출이 중요합니다.',
+    career:'보석·패션 디자인, 미용, 방송, 금융, 문학, 예술 분야에서 두각을 나타냅니다. 완벽한 결과물을 만들어내는 능력이 전문성의 핵심입니다.',
+    health:'폐와 피부, 대장 건강에 주의하세요. 완벽주의로 인한 스트레스가 피부 트러블을 유발할 수 있습니다. 스트레스 해소법을 찾고 자신에게 너그러워지는 것이 중요합니다.',
+    relation:'품격 있고 매력적인 성격으로 인기가 많습니다. 비판에 민감한 편이므로, 건설적인 피드백과 단순한 비판을 구분하는 능력을 키우세요.',
+  },
+  { // 壬水
+    love:'壬水 일간은 자유롭고 깊이 있는 연애를 즐깁니다. 지적인 교류를 즐기며 상대방과 함께 성장하는 관계를 원합니다. 자유로운 영혼으로 구속받기를 싫어하며, 상대방의 개성도 존중합니다.',
+    marriage:'결혼 후에도 독립적인 공간과 시간이 필요합니다. 배우자와의 지적 교류를 매우 중요하게 여깁니다. 감정 표현을 더 솔직하게 하면 더욱 깊은 유대감을 형성할 수 있습니다.',
+    wealth:'지식, 기술, 정보 관련 분야에서 재물 운이 강합니다. 창의적인 발상으로 새로운 사업 기회를 포착합니다. 경제적 계획을 세우고 실행하는 능력을 더 키우면 재물이 늘어납니다.',
+    career:'연구, 교육, IT, 철학, 금융, 외교 분야에서 빛을 발합니다. 넓은 시야와 통찰력이 강점이며, 복잡한 문제를 해결하는 능력이 뛰어납니다.',
+    health:'신장(腎臟)과 방광 기능에 주의하세요. 지나친 음주와 차가운 음식은 피하는 것이 좋습니다. 충분한 수분 섭취와 따뜻한 환경 유지가 건강에 도움이 됩니다.',
+    relation:'넓고 다양한 인간관계를 맺습니다. 누구와도 잘 어울리는 사교성이 있지만, 깊은 관계를 유지하기 위한 꾸준한 노력이 필요합니다.',
+  },
+  { // 癸水
+    love:'癸水 일간은 감수성이 풍부하고 직관적인 연애를 합니다. 상대방의 감정을 예리하게 포착하며 깊은 교감을 원합니다. 감정 기복이 있을 수 있으므로 안정적인 소통이 관계를 발전시킵니다.',
+    marriage:'정서적으로 안정된 가정을 원합니다. 배우자와의 깊은 감정적 유대를 중시하며, 서로를 진심으로 이해하는 관계를 꿈꿉니다. 현실적인 판단력도 함께 키워나가는 것이 좋습니다.',
+    wealth:'창의적이고 직관적인 분야에서 재물 운이 있습니다. 예술, 상담, 영적 분야 등에서 수익을 올릴 수 있습니다. 현실적인 재정 계획을 세우는 것이 장기적인 부의 축적에 도움이 됩니다.',
+    career:'상담, 의료, 예술, 영적 분야, 교육, 연구에서 두각을 나타냅니다. 강한 직관력과 공감 능력이 최대 강점입니다. 현실적인 판단력을 보완하면 더 넓은 분야에서 활약할 수 있습니다.',
+    health:'신장, 생식기, 면역 계통에 특히 주의하세요. 감정적 스트레스가 건강에 직접적인 영향을 줍니다. 충분한 수면과 정서적 안정이 건강을 지키는 핵심입니다.',
+    relation:'공감 능력이 뛰어나 사람들의 마음을 쉽게 이해합니다. 감정이입이 너무 강해 타인의 감정에 지나치게 영향받을 수 있으니 경계 설정이 필요합니다.',
+  },
+];
+
+function renderDetail(pillars, analysis) {
+  const container = document.getElementById('detailSections');
+  if (!container) return;
+  const dayS = pillars.day.s;
+  const d    = LOVE_DATA[dayS];
+  const ec   = ELEM_COLOR[STEM_ELEM[dayS]];
+  const ilganName = STEMS[dayS] + '(' + STEMS_KOR[dayS] + ')';
+
+  const sections = [
+    {
+      id: 'sec-love', icon: '💕', title: '연애·결혼운',
+      content: `<p>${d.love}</p><p class="detail-sub-head">💍 결혼 후</p><p>${d.marriage}</p>`,
+    },
+    {
+      id: 'sec-wealth', icon: '💰', title: '재물·직업운',
+      content: `<p>${d.wealth}</p><p class="detail-sub-head">🏢 적합한 직업</p><p>${d.career}</p>`,
+    },
+    {
+      id: 'sec-health', icon: '💪', title: '건강·체질',
+      content: `<p>${d.health}</p>`,
+    },
+    {
+      id: 'sec-relation', icon: '🤝', title: '인간관계',
+      content: `<p>${d.relation}</p>`,
+    },
+  ];
+
+  container.innerHTML = sections.map(s => `
+    <div class="detail-section" id="${s.id}">
+      <div class="detail-sec-head">
+        <span class="detail-sec-icon">${s.icon}</span>
+        <h3 class="detail-sec-title">${s.title}</h3>
+      </div>
+      <div class="detail-sec-body">
+        <div class="detail-ilgan-badge" style="color:${ec};border-color:${ec}44">${ilganName} 일간</div>
+        ${s.content}
+      </div>
+    </div>`).join('');
+
+  // Quick jump anchors at top
+  const jumpNav = `
+    <div class="detail-jump-nav">
+      ${sections.map(s => `<a href="#${s.id}" class="detail-jump-item">${s.icon} ${s.title}</a>`).join('')}
+    </div>`;
+  container.insertAdjacentHTML('afterbegin', jumpNav);
+}
+
 function switchTab(tabId) {
   document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.tb').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.saju-toc-item').forEach(a => a.classList.remove('active'));
+
   const pane = document.getElementById('tab' + tabId.charAt(0).toUpperCase() + tabId.slice(1));
   if (pane) pane.classList.add('active');
   document.querySelector(`.tb[data-tab="${tabId}"]`)?.classList.add('active');
+  document.querySelector(`.saju-toc-item[data-tab="${tabId}"]`)?.classList.add('active');
 
   // Re-render flow chart if switching to flow
   if (tabId === 'flow' && state.pillars) {
@@ -1097,5 +1234,14 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.dtb').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     if (state.pillars) renderDeepCard(btn.dataset.d);
+  });
+
+  // ToC navigation
+  document.getElementById('sajuToc')?.addEventListener('click', e => {
+    const link = e.target.closest('.saju-toc-item');
+    if (!link) return;
+    e.preventDefault();
+    switchTab(link.dataset.tab);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 });

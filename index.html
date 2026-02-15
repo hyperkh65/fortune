@@ -5,9 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="사주팔자·타로·명상·요가 — 당신의 내면을 탐구하는 AI Wellness 플랫폼" />
   <meta name="theme-color" content="#0a0a0a" />
-  <meta property="og:type" content="website" />
-  <meta property="og:title" content="AI Wellness — 사주·타로·명상·요가" />
-  <meta property="og:description" content="사주팔자·타로·명상·요가로 삶의 균형과 통찰을 찾아드립니다" />
   <title>AI Wellness — 사주·타로·명상·요가</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -16,6 +13,11 @@
 </head>
 <body>
   <canvas id="starsBg"></canvas>
+
+  <!-- Ambient orbs -->
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
 
   <header class="site-header">
     <div class="header-inner hub-header-inner">
@@ -36,62 +38,82 @@
 
     <!-- Hero -->
     <section class="hub-hero">
-      <p class="hub-eyebrow">✦ AI Wellness Platform</p>
+      <div class="hub-badge">✦ AI Wellness Platform</div>
       <h1 class="hub-title">당신의 내면을<br/>탐구하세요</h1>
-      <p class="hub-sub">사주팔자·타로·명상·요가로<br/>삶의 균형과 통찰을 찾아드립니다</p>
+      <p class="hub-sub">사주팔자 · 타로 · 명상 · 요가로<br/>삶의 균형과 깊은 통찰을 찾아드립니다</p>
+      <div class="hub-scroll-hint">
+        <span>서비스 둘러보기</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+      </div>
     </section>
 
-    <!-- Services -->
+    <!-- Services Grid -->
     <div class="services-grid">
 
-      <a href="saju.html" class="svc-card">
-        <div class="svc-icon-wrap" style="background:rgba(61,220,132,0.12);color:#3ddc84">☯</div>
+      <a href="saju.html" class="svc-card" style="--svc-c:#3ddc84;--svc-glow:rgba(61,220,132,0.18)">
+        <div class="svc-shimmer"></div>
+        <div class="svc-icon-wrap" style="background:rgba(61,220,132,0.12);color:#3ddc84;box-shadow:0 0 20px rgba(61,220,132,0.2)">☯</div>
         <div class="svc-body">
           <h2 class="svc-name">사주팔자</h2>
           <p class="svc-desc">생년월일시로 나의 타고난 기운과 운세를 분석합니다</p>
-          <span class="svc-cta" style="color:#3ddc84">분석 시작 →</span>
+          <div class="svc-cta-row">
+            <span class="svc-cta" style="color:#3ddc84">분석 시작</span>
+            <span class="svc-arrow" style="color:#3ddc84">→</span>
+          </div>
         </div>
       </a>
 
-      <a href="tarot.html" class="svc-card">
-        <div class="svc-icon-wrap" style="background:rgba(168,85,247,0.12);color:#a855f7">🃏</div>
+      <a href="tarot.html" class="svc-card" style="--svc-c:#a855f7;--svc-glow:rgba(168,85,247,0.18)">
+        <div class="svc-shimmer"></div>
+        <div class="svc-icon-wrap" style="background:rgba(168,85,247,0.12);color:#a855f7;box-shadow:0 0 20px rgba(168,85,247,0.2)">🃏</div>
         <div class="svc-body">
           <h2 class="svc-name">타로 리딩</h2>
           <p class="svc-desc">78장의 타로 카드로 현재와 미래의 흐름을 읽습니다</p>
-          <span class="svc-cta" style="color:#a855f7">카드 뽑기 →</span>
+          <div class="svc-cta-row">
+            <span class="svc-cta" style="color:#a855f7">카드 뽑기</span>
+            <span class="svc-arrow" style="color:#a855f7">→</span>
+          </div>
         </div>
       </a>
 
-      <a href="meditation.html" class="svc-card">
-        <div class="svc-icon-wrap" style="background:rgba(96,165,250,0.12);color:#60a5fa">🧘</div>
+      <a href="meditation.html" class="svc-card" style="--svc-c:#60a5fa;--svc-glow:rgba(96,165,250,0.18)">
+        <div class="svc-shimmer"></div>
+        <div class="svc-icon-wrap" style="background:rgba(96,165,250,0.12);color:#60a5fa;box-shadow:0 0 20px rgba(96,165,250,0.2)">🧘</div>
         <div class="svc-body">
           <h2 class="svc-name">명상</h2>
           <p class="svc-desc">호흡과 마음챙김으로 내면의 평화를 찾아갑니다</p>
-          <span class="svc-cta" style="color:#60a5fa">명상 시작 →</span>
+          <div class="svc-cta-row">
+            <span class="svc-cta" style="color:#60a5fa">명상 시작</span>
+            <span class="svc-arrow" style="color:#60a5fa">→</span>
+          </div>
         </div>
       </a>
 
-      <a href="yoga.html" class="svc-card">
-        <div class="svc-icon-wrap" style="background:rgba(251,146,60,0.12);color:#fb923c">🌿</div>
+      <a href="yoga.html" class="svc-card" style="--svc-c:#fb923c;--svc-glow:rgba(251,146,60,0.18)">
+        <div class="svc-shimmer"></div>
+        <div class="svc-icon-wrap" style="background:rgba(251,146,60,0.12);color:#fb923c;box-shadow:0 0 20px rgba(251,146,60,0.2)">🌿</div>
         <div class="svc-body">
           <h2 class="svc-name">요가</h2>
           <p class="svc-desc">몸과 마음을 연결하는 다양한 요가 자세를 안내합니다</p>
-          <span class="svc-cta" style="color:#fb923c">포즈 보기 →</span>
+          <div class="svc-cta-row">
+            <span class="svc-cta" style="color:#fb923c">포즈 보기</span>
+            <span class="svc-arrow" style="color:#fb923c">→</span>
+          </div>
         </div>
       </a>
 
-      <div class="svc-card svc-soon">
+      <div class="svc-card svc-soon" style="--svc-c:#818cf8">
         <div class="svc-soon-badge">준비중</div>
-        <div class="svc-icon-wrap" style="background:rgba(99,102,241,0.12);color:#818cf8">🌙</div>
+        <div class="svc-icon-wrap" style="background:rgba(99,102,241,0.1);color:#818cf8">🌙</div>
         <div class="svc-body">
           <h2 class="svc-name">꿈해몽</h2>
           <p class="svc-desc">꿈 속 상징의 의미를 분석하여 무의식을 탐구합니다</p>
         </div>
       </div>
 
-      <div class="svc-card svc-soon">
+      <div class="svc-card svc-soon" style="--svc-c:#eab308">
         <div class="svc-soon-badge">준비중</div>
-        <div class="svc-icon-wrap" style="background:rgba(234,179,8,0.12);color:#eab308">⭐</div>
+        <div class="svc-icon-wrap" style="background:rgba(234,179,8,0.1);color:#eab308">⭐</div>
         <div class="svc-body">
           <h2 class="svc-name">오늘의 운세</h2>
           <p class="svc-desc">오늘 하루의 기운과 행운 정보를 확인합니다</p>

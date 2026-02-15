@@ -142,6 +142,7 @@ function startTimer() {
   state.running = true;
   $('startBtn').textContent = '⏸';
   $('startBtn').title = '일시정지';
+  $('startBtn').classList.add('running');
 
   startBreathCycle();
 
@@ -162,6 +163,7 @@ function pauseTimer() {
   clearTimeout(state.breathIntervalId);
   $('startBtn').textContent = '▶';
   $('startBtn').title = '재개';
+  $('startBtn').classList.remove('running');
   $('phaseLabel').textContent = '일시정지';
   $('breathText').textContent = '일시정지됨';
 }

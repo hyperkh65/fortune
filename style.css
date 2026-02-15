@@ -1049,6 +1049,37 @@ ul { list-style:none; }
 }
 
 /* ── Responsive ── */
+
+/* Tablet (521px – 768px) */
+@media (min-width: 521px) and (max-width: 768px) {
+  .cw {
+    padding: 0 24px 60px;
+  }
+  .form-wrap {
+    max-width: 100%;
+  }
+  .ohaeng-viz-row {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+  .radar-container {
+    flex: 0 0 220px;
+  }
+  .sipsung-grid {
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  }
+  .lucky-grid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  }
+  .pers-hero {
+    padding: 24px 20px;
+  }
+  .pers-char-big {
+    font-size: 54px;
+  }
+}
+
+/* Mobile ≤ 520px */
 @media (max-width: 520px) {
   .pillar-card { flex: 0 0 calc(25% - 9px); min-width: 80px; }
   .pillar-stem { font-size: 32px; }
@@ -1058,10 +1089,68 @@ ul { list-style:none; }
   .yong-row { grid-template-columns: 1fr; }
   .pers-grid { grid-template-columns: 1fr; }
   .pers-hero { flex-direction: column; text-align: center; }
+
+  /* Flow card: stack label + tabs on small screens */
+  .flow-card-top {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 16px 10px;
+  }
+  .flow-tabs {
+    width: 100%;
+  }
+  .ft {
+    flex: 1;
+    text-align: center;
+    padding: 7px 8px;
+  }
+
+  /* Deep tab bar: 2-column grid */
+  .deep-tab-bar {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .dtb {
+    text-align: center;
+  }
+
+  /* Larger touch targets */
+  .tog-btn {
+    padding: 11px 14px;
+    min-height: 44px;
+  }
+  .tb {
+    padding: 14px 12px;
+    min-height: 44px;
+  }
+
+  /* Lucky grid 2-column */
+  .lucky-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* Ohaeng desc 3-column */
+  .ohaeng-desc-grid {
+    grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+  }
 }
+
+/* Very small screens ≤ 360px */
 @media (max-width: 360px) {
   .form-card { padding: 20px 16px; }
   .sel-row.three-col { grid-template-columns: 1fr 1fr; }
+  .flow-tabs {
+    flex-wrap: wrap;
+  }
+  .ft {
+    min-width: calc(50% - 2px);
+  }
+  .pers-char-big { font-size: 48px; }
+  .lucky-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 /* ── Reduced Motion ── */

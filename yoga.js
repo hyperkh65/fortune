@@ -5,6 +5,7 @@ const POSES = [
   {
     name: '산 자세', sanskrit: 'Tadasana', icon: '🏔️',
     level: 'beginner', benefits: ['flexibility','balance','stress'],
+    videoFile: 'tadasana.mp4',
     desc: '모든 서 있는 자세의 기본이 되는 포즈입니다. 바른 자세와 신체 정렬을 익히고 마음의 안정을 찾습니다.',
     steps: [
       '두 발을 모으거나 엉덩이 너비로 벌리고 섭니다.',
@@ -18,6 +19,7 @@ const POSES = [
   {
     name: '하향 개 자세', sanskrit: 'Adho Mukha Svanasana', icon: '🐕',
     level: 'beginner', benefits: ['flexibility','strength','stress'],
+    videoFile: 'adho-mukha-svanasana.mp4',
     desc: '전신을 늘려주는 대표적인 요가 포즈입니다. 허리·어깨·햄스트링을 동시에 스트레칭하고 상체 근력을 키웁니다.',
     steps: [
       '네 발 기기 자세에서 시작합니다 (손목은 어깨 아래, 무릎은 엉덩이 아래).',
@@ -31,6 +33,7 @@ const POSES = [
   {
     name: '전사 I', sanskrit: 'Virabhadrasana I', icon: '⚔️',
     level: 'beginner', benefits: ['strength','balance'],
+    videoFile: 'virabhadrasana-i.mp4',
     desc: '전신 근력과 집중력을 키우는 포즈입니다. 하체를 강화하고 가슴과 어깨를 열어줍니다.',
     steps: [
       '산 자세에서 시작하여 오른발을 앞으로 크게 내딛습니다.',
@@ -44,6 +47,7 @@ const POSES = [
   {
     name: '전사 II', sanskrit: 'Virabhadrasana II', icon: '🏹',
     level: 'beginner', benefits: ['strength','flexibility'],
+    videoFile: 'virabhadrasana-ii.mp4',
     desc: '다리와 코어를 강화하고 집중력을 높이는 강력한 서 있는 자세입니다.',
     steps: [
       '두 발을 어깨 너비의 2배 정도 벌리고 섭니다.',
@@ -57,6 +61,7 @@ const POSES = [
   {
     name: '나무 자세', sanskrit: 'Vrksasana', icon: '🌳',
     level: 'beginner', benefits: ['balance','strength'],
+    videoFile: 'vrksasana.mp4',
     desc: '균형 감각과 집중력을 기르는 대표적인 한 발 균형 자세입니다. 하체와 코어를 강화합니다.',
     steps: [
       '산 자세에서 시작하여 체중을 왼발로 옮깁니다.',
@@ -70,6 +75,7 @@ const POSES = [
   {
     name: '아이 자세', sanskrit: 'Balasana', icon: '🌙',
     level: 'beginner', benefits: ['stress','flexibility'],
+    videoFile: 'balasana.mp4',
     desc: '깊은 이완과 스트레스 해소에 최적인 휴식 자세입니다. 등과 어깨의 긴장을 풀어줍니다.',
     steps: [
       '무릎을 꿇고 앉은 자세에서 시작합니다.',
@@ -83,6 +89,7 @@ const POSES = [
   {
     name: '코브라 자세', sanskrit: 'Bhujangasana', icon: '🐍',
     level: 'beginner', benefits: ['flexibility','strength'],
+    videoFile: 'bhujangasana.mp4',
     desc: '등 근육을 강화하고 가슴을 열어주는 후굴 자세입니다. 척추를 유연하게 만들어 줍니다.',
     steps: [
       '엎드린 자세에서 손을 어깨 옆 바닥에 놓습니다.',
@@ -96,6 +103,7 @@ const POSES = [
   {
     name: '다리 자세', sanskrit: 'Setu Bandhasana', icon: '🌉',
     level: 'beginner', benefits: ['strength','flexibility'],
+    videoFile: 'setu-bandhasana.mp4',
     desc: '엉덩이와 허리 근육을 강화하고 척추와 가슴을 펴주는 후굴 자세입니다.',
     steps: [
       '등을 대고 누운 자세에서 무릎을 구부려 발바닥을 바닥에 놓습니다.',
@@ -109,6 +117,7 @@ const POSES = [
   {
     name: '앉아서 전굴', sanskrit: 'Paschimottanasana', icon: '🙏',
     level: 'middle', benefits: ['flexibility','stress'],
+    videoFile: 'paschimottanasana.mp4',
     desc: '햄스트링과 등 전체를 깊게 스트레칭하는 전굴 자세입니다. 마음을 가라앉히는 효과가 있습니다.',
     steps: [
       '다리를 앞으로 펴고 바닥에 앉습니다.',
@@ -122,6 +131,7 @@ const POSES = [
   {
     name: '앉아서 비틀기', sanskrit: 'Ardha Matsyendrasana', icon: '🌀',
     level: 'middle', benefits: ['flexibility','stress'],
+    videoFile: 'ardha-matsyendrasana.mp4',
     desc: '척추를 비틀어 소화기관을 자극하고 등과 어깨의 긴장을 풀어주는 자세입니다.',
     steps: [
       '다리를 앞으로 펴고 앉습니다.',
@@ -135,6 +145,7 @@ const POSES = [
   {
     name: '삼각 자세', sanskrit: 'Trikonasana', icon: '🔺',
     level: 'middle', benefits: ['flexibility','strength','balance'],
+    videoFile: 'trikonasana.mp4',
     desc: '전신을 스트레칭하고 허벅지와 코어를 강화하는 서 있는 자세입니다.',
     steps: [
       '두 발을 어깨 너비 2배로 벌리고 오른발을 90° 오른쪽으로 돌립니다.',
@@ -148,6 +159,7 @@ const POSES = [
   {
     name: '독수리 자세', sanskrit: 'Garudasana', icon: '🦅',
     level: 'middle', benefits: ['balance','strength'],
+    videoFile: 'garudasana.mp4',
     desc: '집중력과 균형 감각을 극한으로 키우는 서 있는 자세입니다. 어깨와 허벅지를 깊게 스트레칭합니다.',
     steps: [
       '산 자세에서 시작하여 무릎을 약간 굽힙니다.',
@@ -161,6 +173,7 @@ const POSES = [
   {
     name: '활 자세', sanskrit: 'Dhanurasana', icon: '🏹',
     level: 'advanced', benefits: ['strength','flexibility'],
+    videoFile: 'dhanurasana.mp4',
     desc: '전신을 강하게 후굴하여 척추 유연성과 등 근력을 키우는 고급 자세입니다.',
     steps: [
       '엎드린 자세에서 이마를 바닥에 대고 시작합니다.',
@@ -174,6 +187,7 @@ const POSES = [
   {
     name: '반달 자세', sanskrit: 'Ardha Chandrasana', icon: '🌙',
     level: 'advanced', benefits: ['balance','strength','flexibility'],
+    videoFile: 'ardha-chandrasana.mp4',
     desc: '한 발로 균형을 잡으며 몸 전체를 옆으로 펴는 고급 균형 자세입니다.',
     steps: [
       '전사 II 자세에서 시작하여 앞쪽 무릎 위로 상체를 기울입니다.',
@@ -187,6 +201,7 @@ const POSES = [
   {
     name: '물구나무서기 준비', sanskrit: 'Dolphin Pose', icon: '🐬',
     level: 'advanced', benefits: ['strength','balance'],
+    videoFile: 'dolphin-pose.mp4',
     desc: '물구나무서기의 준비 단계로 어깨·코어·등 근력을 집중적으로 강화합니다.',
     steps: [
       '전완을 바닥에 대고 엎드립니다 (팔꿈치는 어깨 아래).',
@@ -200,6 +215,7 @@ const POSES = [
   {
     name: '사체 자세', sanskrit: 'Savasana', icon: '☁️',
     level: 'beginner', benefits: ['stress'],
+    videoFile: 'savasana.mp4',
     desc: '모든 요가 세션의 마무리 자세입니다. 전신을 이완하고 명상을 통해 연습의 효과를 통합합니다.',
     steps: [
       '등을 대고 편안하게 눕습니다.',
@@ -235,9 +251,20 @@ function buildCard(pose) {
      </div>`
   ).join('');
 
-  // YouTube search query for this pose
-  const ytQuery = encodeURIComponent(`${pose.sanskrit} ${pose.name} yoga tutorial`);
-  const ytUrl   = `https://www.youtube.com/results?search_query=${ytQuery}`;
+  const videoId = pose.sanskrit.toLowerCase().replace(/\s+/g, '-');
+  const videoSection = pose.videoFile
+    ? `<div class="yoga-video-wrap">
+        <button class="yoga-video-toggle" onclick="toggleVideo(this, 'vid-${videoId}')">
+          ▶ 동영상 재생
+        </button>
+        <div class="yoga-video-box" id="vid-${videoId}" style="display:none">
+          <video class="yoga-video-player" controls preload="none">
+            <source src="videos/${pose.videoFile}" type="video/mp4">
+            <p class="yoga-no-video">📁 videos/${pose.videoFile} 파일을 업로드해주세요</p>
+          </video>
+        </div>
+      </div>`
+    : '';
 
   const card = document.createElement('div');
   card.className = 'yoga-pose-card';
@@ -261,16 +288,11 @@ function buildCard(pose) {
         <div class="yoga-dur-item">유지 시간 <span class="yoga-dur-val">${pose.hold}</span></div>
         <div class="yoga-dur-item">반복 <span class="yoga-dur-val">${pose.repeat}</span></div>
       </div>
-      <a class="yoga-video-btn" href="${ytUrl}" target="_blank" rel="noopener">
-        <span class="yoga-video-play">▶</span>
-        <span>YouTube에서 동영상 보기</span>
-        <span class="yoga-video-ext">↗</span>
-      </a>
+      ${videoSection}
     </div>`;
 
   card.addEventListener('click', e => {
-    // Don't toggle card when clicking the video link
-    if (e.target.closest('.yoga-video-btn')) return;
+    if (e.target.closest('.yoga-video-toggle, .yoga-video-player, .yoga-video-box')) return;
     const isOpen = card.classList.contains('expanded');
     if (expandedCard && expandedCard !== card) {
       expandedCard.classList.remove('expanded');
@@ -281,6 +303,23 @@ function buildCard(pose) {
   });
 
   return card;
+}
+
+function toggleVideo(btn, videoBoxId) {
+  const box = document.getElementById(videoBoxId);
+  if (!box) return;
+  const isHidden = box.style.display === 'none';
+  box.style.display = isHidden ? 'block' : 'none';
+  btn.textContent = isHidden ? '✕ 동영상 닫기' : '▶ 동영상 재생';
+  const video = box.querySelector('video');
+  if (video) {
+    if (isHidden) {
+      video.play().catch(() => {});
+    } else {
+      video.pause();
+      video.currentTime = 0;
+    }
+  }
 }
 
 function renderGrid() {

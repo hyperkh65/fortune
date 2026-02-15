@@ -3,316 +3,251 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="AI가 당신의 운세를 알려드립니다. 오늘의 행운, 사랑, 금전 운세를 확인하세요." />
-  <meta name="theme-color" content="#0d0019" />
-  <!-- Open Graph -->
+  <meta name="description" content="정확한 사주팔자 계산으로 나만의 맞춤 운세를 확인하세요. 년주·월주·일주·시주 분석, 오행 분포, 용신 분석." />
+  <meta name="theme-color" content="#0a0a0a" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://aifortune.live/" />
-  <meta property="og:title" content="AI Fortune - 오늘의 운세" />
-  <meta property="og:description" content="AI가 분석한 나만의 맞춤 운세를 확인하세요." />
+  <meta property="og:title" content="AI Fortune — 사주팔자 운세 분석" />
+  <meta property="og:description" content="정확한 사주 계산으로 나만의 운세를 확인하세요." />
   <meta property="og:image" content="https://aifortune.live/og-image.jpg" />
   <meta property="og:locale" content="ko_KR" />
-  <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="AI Fortune - 오늘의 운세" />
-  <meta name="twitter:description" content="AI가 분석한 나만의 맞춤 운세를 확인하세요." />
+  <meta name="twitter:title" content="AI Fortune — 사주팔자 운세 분석" />
+  <meta name="twitter:description" content="정확한 사주 계산으로 나만의 운세를 확인하세요." />
   <meta name="twitter:image" content="https://aifortune.live/og-image.jpg" />
-  <title>AI Fortune ✨ 오늘의 운세</title>
+  <title>AI Fortune — 사주팔자 운세</title>
   <link rel="canonical" href="https://aifortune.live/" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Cinzel:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&family=Noto+Serif+KR:wght@700;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- Stars Background -->
-  <div class="stars-container" id="starsContainer"></div>
-  <div class="nebula"></div>
+  <canvas id="starsBg"></canvas>
 
-  <!-- Header -->
-  <header class="header">
+  <!-- ── HEADER ── -->
+  <header class="site-header">
     <div class="header-inner">
       <div class="logo">
-        <span class="logo-icon">🔮</span>
+        <span class="logo-sym">◈</span>
         <span class="logo-text">AI Fortune</span>
       </div>
-      <nav class="header-nav">
-        <a href="#fortune" class="nav-link">운세보기</a>
-        <a href="#about" class="nav-link">소개</a>
-      </nav>
     </div>
   </header>
 
-  <!-- Hero Section -->
-  <section class="hero" id="hero">
-    <div class="hero-content">
-      <p class="hero-badge">✨ AI 기반 맞춤 운세</p>
-      <h1 class="hero-title">
-        오늘의 운명을<br/>
-        <span class="gradient-text">AI가 알려드립니다</span>
-      </h1>
-      <p class="hero-subtitle">
-        인공지능이 분석한 나만의 특별한 운세.<br/>
-        사랑, 금전, 건강, 행운 모두 확인하세요.
-      </p>
-      <button class="btn-primary" id="startBtn" onclick="scrollToFortune()">
-        <span>내 운세 보기</span>
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </button>
-    </div>
+  <!-- ══════════════════ FORM SECTION ══════════════════ -->
+  <section id="formSection">
+    <div class="form-wrap">
+      <p class="form-eyebrow">✦ 사주팔자 분석</p>
+      <h1 class="form-title">생년월일시를 입력해주세요</h1>
 
-    <!-- Crystal Ball -->
-    <div class="crystal-ball-wrapper">
-      <div class="crystal-ball" id="crystalBall">
-        <div class="crystal-inner">
-          <div class="crystal-glow"></div>
-          <div class="crystal-shimmer"></div>
-          <div class="crystal-stars">
-            <span>⭐</span><span>✨</span><span>🌟</span>
-            <span>💫</span><span>⭐</span><span>✨</span>
+      <div class="form-card">
+
+        <!-- 이름 + 성별 -->
+        <div class="field-row">
+          <div class="field-group fg-name">
+            <label class="field-label">이름</label>
+            <input id="nameInput" type="text" class="text-inp" placeholder="홍길동" maxlength="10" autocomplete="off" />
+          </div>
+          <div class="field-group fg-gender">
+            <label class="field-label">성별</label>
+            <div class="toggle-wrap" id="genderBtns">
+              <button class="tog-btn active" data-v="male">남성</button>
+              <button class="tog-btn" data-v="female">여성</button>
+            </div>
           </div>
         </div>
-        <div class="crystal-shadow"></div>
-      </div>
-    </div>
-  </section>
 
-  <!-- Instagram Media Section (shown when media_id param exists) -->
-  <section class="media-section" id="mediaSection" style="display:none;">
-    <div class="container">
-      <div class="media-card">
-        <div class="media-header">
-          <div class="media-avatar" id="mediaAvatar"></div>
-          <div class="media-info">
-            <span class="media-username" id="mediaUsername">@instagram_user</span>
-            <span class="media-label">이 게시물의 운세</span>
+        <!-- 양력/음력 -->
+        <div class="field-group">
+          <label class="field-label">생년월일</label>
+          <div class="toggle-wrap" id="calBtns">
+            <button class="tog-btn active" data-v="solar">양력</button>
+            <button class="tog-btn" data-v="lunar">음력</button>
+          </div>
+          <p id="lunarNote" class="sub-note" style="display:none">⚠ 음력은 양력으로 근사 변환됩니다 (윤달은 평달 처리)</p>
+        </div>
+
+        <!-- 년/월/일 -->
+        <div class="sel-row three-col">
+          <div class="sel-box"><select id="yearSel" class="csel"></select></div>
+          <div class="sel-box"><select id="monthSel" class="csel"></select></div>
+          <div class="sel-box"><select id="daySel" class="csel"></select></div>
+        </div>
+
+        <!-- 시간 -->
+        <div class="field-group">
+          <label class="field-label">
+            태어난 시간
+            <span class="tip-badge" data-tip="시간을 모르시면 12시 0분으로 설정하세요">?</span>
+          </label>
+          <div class="sel-row two-col">
+            <div class="sel-box"><select id="hourSel" class="csel"></select></div>
+            <div class="sel-box"><select id="minSel" class="csel"></select></div>
           </div>
         </div>
-        <div class="media-image-wrap" id="mediaImageWrap">
-          <div class="media-placeholder">
-            <span>📸</span>
-            <p>Instagram 미디어를 불러오는 중...</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
 
-  <!-- Fortune Section -->
-  <section class="fortune-section" id="fortune">
-    <div class="container">
-      <div class="section-header">
-        <h2 class="section-title">🔮 AI 운세 분석</h2>
-        <p class="section-desc">생년월일을 입력하고 오늘의 운세를 확인하세요</p>
-      </div>
+        <!-- 지역 -->
+        <div class="field-group">
+          <label class="field-label">
+            태어난 지역 (동경시 보정)
+            <span class="tip-badge" data-tip="사주는 태양시(지방 평균시)를 기준으로 합니다. 서울은 동경 135° 표준시 대비 약 32분 느립니다.">?</span>
+          </label>
+          <div class="sel-box sel-full"><select id="locSel" class="csel"></select></div>
+          <p class="sub-note">출생지 기준으로 시간이 <strong id="offsetTxt">−32분</strong> 보정됩니다</p>
+        </div>
 
-      <!-- Fortune Form -->
-      <div class="fortune-form-card" id="fortuneFormCard">
-        <div class="form-group">
-          <label class="form-label">이름</label>
-          <input type="text" class="form-input" id="nameInput" placeholder="이름을 입력하세요" maxlength="20" />
-        </div>
-        <div class="form-group">
-          <label class="form-label">생년월일</label>
-          <input type="date" class="form-input" id="birthInput" />
-        </div>
-        <div class="form-group">
-          <label class="form-label">성별</label>
-          <div class="gender-options">
-            <button class="gender-btn active" data-gender="female" onclick="selectGender(this)">
-              <span>👩</span> 여성
-            </button>
-            <button class="gender-btn" data-gender="male" onclick="selectGender(this)">
-              <span>👨</span> 남성
-            </button>
-          </div>
-        </div>
-        <button class="btn-fortune" id="fortuneBtn" onclick="generateFortune()">
-          <span class="btn-text">✨ 운세 보기</span>
-          <span class="btn-loading" style="display:none;">
-            <span class="spinner"></span> 분석 중...
-          </span>
+        <!-- 분석 버튼 -->
+        <button class="analyze-btn" id="analyzeBtn">
+          사주 분석 시작
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         </button>
-      </div>
 
-      <!-- Fortune Result -->
-      <div class="fortune-result" id="fortuneResult" style="display:none;">
-        <!-- Overall Score -->
-        <div class="fortune-overall">
-          <div class="fortune-score-ring">
-            <svg viewBox="0 0 120 120" class="score-svg">
-              <circle cx="60" cy="60" r="54" class="score-bg"/>
-              <circle cx="60" cy="60" r="54" class="score-fill" id="scoreFill"/>
-            </svg>
-            <div class="score-center">
-              <span class="score-number" id="overallScore">0</span>
-              <span class="score-label">오늘의 운</span>
-            </div>
-          </div>
-          <div class="fortune-summary">
-            <h3 class="fortune-name" id="fortuneName"></h3>
-            <p class="fortune-date" id="fortuneDate"></p>
-            <p class="fortune-message" id="fortuneMessage"></p>
-          </div>
-        </div>
-
-        <!-- Category Cards -->
-        <div class="fortune-categories">
-          <div class="category-card" id="catLove">
-            <div class="cat-icon">💕</div>
-            <div class="cat-info">
-              <span class="cat-name">사랑운</span>
-              <div class="cat-bar"><div class="cat-bar-fill" id="loveBar"></div></div>
-              <span class="cat-score" id="loveScore"></span>
-            </div>
-          </div>
-          <div class="category-card" id="catMoney">
-            <div class="cat-icon">💰</div>
-            <div class="cat-info">
-              <span class="cat-name">금전운</span>
-              <div class="cat-bar"><div class="cat-bar-fill" id="moneyBar"></div></div>
-              <span class="cat-score" id="moneyScore"></span>
-            </div>
-          </div>
-          <div class="category-card" id="catHealth">
-            <div class="cat-icon">💚</div>
-            <div class="cat-info">
-              <span class="cat-name">건강운</span>
-              <div class="cat-bar"><div class="cat-bar-fill" id="healthBar"></div></div>
-              <span class="cat-score" id="healthScore"></span>
-            </div>
-          </div>
-          <div class="category-card" id="catLuck">
-            <div class="cat-icon">🍀</div>
-            <div class="cat-info">
-              <span class="cat-name">행운지수</span>
-              <div class="cat-bar"><div class="cat-bar-fill" id="luckBar"></div></div>
-              <span class="cat-score" id="luckScore"></span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Detailed Fortune -->
-        <div class="fortune-detail-card">
-          <h4 class="detail-title">📖 오늘의 상세 운세</h4>
-          <p class="detail-text" id="detailText"></p>
-        </div>
-
-        <!-- Lucky Items -->
-        <div class="lucky-items">
-          <h4 class="lucky-title">🎯 오늘의 행운 아이템</h4>
-          <div class="lucky-grid">
-            <div class="lucky-item">
-              <span class="lucky-emoji" id="luckyColor">🎨</span>
-              <span class="lucky-label">행운의 색</span>
-              <span class="lucky-value" id="luckyColorVal"></span>
-            </div>
-            <div class="lucky-item">
-              <span class="lucky-emoji" id="luckyNumber">🔢</span>
-              <span class="lucky-label">행운의 숫자</span>
-              <span class="lucky-value" id="luckyNumberVal"></span>
-            </div>
-            <div class="lucky-item">
-              <span class="lucky-emoji">🧭</span>
-              <span class="lucky-label">행운의 방향</span>
-              <span class="lucky-value" id="luckyDirection"></span>
-            </div>
-            <div class="lucky-item">
-              <span class="lucky-emoji">💎</span>
-              <span class="lucky-label">행운의 돌</span>
-              <span class="lucky-value" id="luckyStone"></span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Share Buttons -->
-        <div class="share-section">
-          <p class="share-title">친구에게 공유하기</p>
-          <div class="share-buttons">
-            <button class="share-btn kakao" onclick="shareKakao()">
-              <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0OCA0OCI+PGNpcmNsZSBjeD0iMjQiIGN5PSIyNCIgcj0iMjQiIGZpbGw9IiNGRUUzMDAiLz48cGF0aCBkPSJNMjQgMTFjLTcuMTggMC0xMyA0LjQ3LTEzIDkuOTggMCAzLjQzIDIuMTcgNi40NCA1LjQ3IDguMjFsLTEuNCA1LjE4IDYuMDYtNC4wMWMuOTIuMTMgMS44Ny4yIDIuODcuMiA3LjE4IDAgMTMtNC40NyAxMy05Ljk4UzMxLjE4IDExIDI0IDExeiIgZmlsbD0iIzM5MUEwMSIvPjwvc3ZnPg==" alt="카카오" width="20" height="20"/>
-              카카오톡
-            </button>
-            <button class="share-btn instagram" onclick="shareInstagram()">
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
-              인스타그램
-            </button>
-            <button class="share-btn link" onclick="copyLink()">
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
-              링크 복사
-            </button>
-          </div>
-        </div>
-
-        <!-- Re-read Button -->
-        <button class="btn-retry" onclick="resetFortune()">🔄 다시 보기</button>
-      </div>
-    </div>
+      </div><!-- /form-card -->
+    </div><!-- /form-wrap -->
   </section>
 
-  <!-- Tarot Cards Section -->
-  <section class="tarot-section" id="tarot">
-    <div class="container">
-      <div class="section-header">
-        <h2 class="section-title">🃏 오늘의 타로 카드</h2>
-        <p class="section-desc">세 장의 카드를 선택하여 운명을 확인하세요</p>
-      </div>
-      <div class="tarot-cards" id="tarotCards">
-        <!-- Cards generated by JS -->
-      </div>
-      <p class="tarot-hint">카드를 클릭하여 선택하세요</p>
-      <button class="btn-tarot" id="tarotBtn" onclick="revealTarot()" style="display:none;">
-        ✨ 타로 카드 공개
+  <!-- ══════════════════ RESULT SECTION ══════════════════ -->
+  <section id="resultSection" style="display:none">
+
+    <!-- 결과 헤더 -->
+    <div class="res-header">
+      <button class="back-btn" id="backBtn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
       </button>
+      <div class="res-user" id="resUser"></div>
+      <div style="width:40px"></div>
     </div>
-  </section>
 
-  <!-- About Section -->
-  <section class="about-section" id="about">
-    <div class="container">
-      <div class="section-header">
-        <h2 class="section-title">AI Fortune 소개</h2>
-      </div>
-      <div class="about-grid">
-        <div class="about-card">
-          <div class="about-icon">🤖</div>
-          <h3>AI 기반 분석</h3>
-          <p>최첨단 인공지능이 수천만 개의 운세 데이터를 분석하여 개인화된 운세를 제공합니다.</p>
+    <!-- 탭 네비게이션 -->
+    <div class="tab-bar-wrap">
+      <nav class="tab-bar" id="tabBar">
+        <button class="tb active" data-tab="overview">사주 총평</button>
+        <button class="tb" data-tab="ohaeng">오행 분포</button>
+        <button class="tb" data-tab="flow">운세 흐름</button>
+        <button class="tb" data-tab="personality">기질 분석</button>
+      </nav>
+    </div>
+
+    <!-- ── TAB: 사주 총평 ── -->
+    <div id="tabOverview" class="tab-pane active">
+      <div class="cw">
+        <div class="sec-head">
+          <h2 class="sec-title">만세력 및 사주 총평</h2>
+          <p class="sec-desc">당신의 사주 팔자와 전체적인 기운의 흐름을 분석합니다.</p>
         </div>
-        <div class="about-card">
-          <div class="about-icon">🔒</div>
-          <h3>개인정보 보호</h3>
-          <p>입력된 정보는 운세 계산에만 사용되며, 서버에 저장되지 않습니다.</p>
+
+        <!-- 사주 카드 4개 -->
+        <div class="pillars-scroller">
+          <div class="pillars-track" id="pillarsTrack"></div>
         </div>
-        <div class="about-card">
-          <div class="about-icon">📱</div>
-          <h3>언제 어디서나</h3>
-          <p>PC, 태블릿, 스마트폰 어디서나 최적화된 경험을 제공합니다.</p>
+
+        <!-- 신강/신약 배지 -->
+        <div class="strength-row" id="strengthRow"></div>
+
+        <!-- 총평 -->
+        <div class="ov-card" id="ovCard">
+          <h3 class="ov-headline" id="ovHeadline"></h3>
+          <ul class="ov-bullets" id="ovBullets"></ul>
+        </div>
+
+        <!-- 용신/기신 -->
+        <div class="yong-row" id="yongRow"></div>
+
+        <!-- 십성 관계 -->
+        <div class="sipsung-wrap" id="sipsungWrap">
+          <h3 class="sub-section-title">십성 분석</h3>
+          <div class="sipsung-grid" id="sipsungGrid"></div>
         </div>
       </div>
     </div>
-  </section>
 
-  <!-- Footer -->
-  <footer class="footer">
-    <div class="container">
-      <div class="footer-inner">
-        <div class="footer-logo">
-          <span>🔮</span> AI Fortune
+    <!-- ── TAB: 오행 분포 ── -->
+    <div id="tabOhaeng" class="tab-pane">
+      <div class="cw">
+        <div class="sec-head">
+          <h2 class="sec-title">오행 분포</h2>
+          <p class="sec-desc">나를 구성하는 5가지 원소(목·화·토·금·수)의 균형 상태를 시각화했습니다.</p>
         </div>
-        <p class="footer-desc">AI가 분석하는 나만의 맞춤 운세 서비스</p>
-        <div class="footer-links">
-          <a href="#">이용약관</a>
-          <a href="#">개인정보처리방침</a>
-          <a href="#">문의하기</a>
+
+        <div class="ohaeng-viz-row">
+          <div class="radar-container">
+            <svg id="radarSvg" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg"></svg>
+          </div>
+          <div class="ohaeng-bar-col" id="ohaengBarCol"></div>
         </div>
-        <p class="footer-copy">© 2026 AI Fortune. All rights reserved.</p>
+
+        <div class="ohaeng-desc-grid" id="ohaengDescGrid"></div>
       </div>
     </div>
-  </footer>
 
-  <!-- Toast Notification -->
+    <!-- ── TAB: 운세 흐름 ── -->
+    <div id="tabFlow" class="tab-pane">
+      <div class="cw">
+        <div class="sec-head">
+          <h2 class="sec-title">운세 흐름</h2>
+          <p class="sec-desc">인생의 기운 흐름을 한눈에 파악할 수 있는 그래프입니다.</p>
+        </div>
+
+        <div class="flow-card">
+          <div class="flow-card-top">
+            <span class="flow-card-label">운세 그래프</span>
+            <nav class="flow-tabs" id="flowTabs">
+              <button class="ft active" data-p="today">오늘</button>
+              <button class="ft" data-p="week">일간</button>
+              <button class="ft" data-p="month">월간</button>
+              <button class="ft" data-p="year">연간</button>
+            </nav>
+          </div>
+          <div class="flow-chart-box">
+            <svg id="flowSvg" viewBox="0 0 600 220" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet"></svg>
+          </div>
+          <div class="flow-legend">
+            <span class="leg-item"><span class="leg-dot" style="background:var(--wood)"></span>木</span>
+            <span class="leg-item"><span class="leg-dot" style="background:var(--fire)"></span>火</span>
+            <span class="leg-item"><span class="leg-dot" style="background:var(--earth)"></span>土</span>
+            <span class="leg-item"><span class="leg-dot" style="background:var(--metal)"></span>金</span>
+            <span class="leg-item"><span class="leg-dot" style="background:var(--water)"></span>水</span>
+            <span class="leg-item"><span class="leg-star">★</span>용신운</span>
+            <span class="leg-item"><span class="leg-warn">！</span>기신운</span>
+          </div>
+        </div>
+
+        <!-- 대운/세운/월운/일운 심층 분석 -->
+        <div class="sec-head" style="margin-top:28px">
+          <h2 class="sec-title">심층 운세 분석</h2>
+        </div>
+        <nav class="deep-tab-bar" id="deepTabBar">
+          <button class="dtb" data-d="daeun">대운 (10년)</button>
+          <button class="dtb active" data-d="seun">세운 (1년)</button>
+          <button class="dtb" data-d="wolun">월운 (1달)</button>
+          <button class="dtb" data-d="ilun">일운 (오늘)</button>
+        </nav>
+        <div class="deep-card" id="deepCard"></div>
+
+        <!-- 행운 아이템 -->
+        <div class="lucky-section" id="luckySection"></div>
+      </div>
+    </div>
+
+    <!-- ── TAB: 기질 분석 ── -->
+    <div id="tabPersonality" class="tab-pane">
+      <div class="cw">
+        <div class="sec-head">
+          <h2 class="sec-title">기질 분석</h2>
+          <p class="sec-desc">일간(日干)을 중심으로 당신의 타고난 기질과 성향을 분석합니다.</p>
+        </div>
+        <div id="personalityContent"></div>
+      </div>
+    </div>
+
+  </section><!-- /resultSection -->
+
+  <!-- Toast -->
   <div class="toast" id="toast"></div>
+
+  <!-- Tooltip -->
+  <div class="tooltip" id="tooltip"></div>
 
   <script src="script.js"></script>
 </body>

@@ -3336,6 +3336,7 @@ body { padding-bottom: 74px; }
   border-radius: var(--r-md);
   padding: 8px 0 4px;
   overflow: hidden;
+  min-height: 100px;
 }
 .ad-label-bar {
   font-family: var(--sans);
@@ -3464,7 +3465,7 @@ body { padding-bottom: 74px; }
 /* Ad unit area */
 .ad-modal-adunit {
   padding: 8px 16px;
-  min-height: 100px;
+  min-height: 120px;
   display: flex;
   align-items: center;
   justify-content: center;

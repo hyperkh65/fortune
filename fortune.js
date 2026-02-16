@@ -434,9 +434,12 @@ function renderZodiacGrid() {
     btn.className = 'zodiac-btn';
     btn.dataset.id = z.id;
     btn.setAttribute('aria-label', z.name + ' 띠 선택');
+    // Show all birth years in compact 2-column form
+    const yearsStr = z.years.map(y => `'${String(y).slice(2)}`).join(' ');
     btn.innerHTML = `
       <span class="zodiac-emoji">${z.emoji}</span>
-      <span class="zodiac-name">${z.name}</span>
+      <span class="zodiac-name">${z.name}띠</span>
+      <span class="zodiac-years">${yearsStr}</span>
     `;
     btn.addEventListener('click', () => selectZodiac(z.id));
     grid.appendChild(btn);

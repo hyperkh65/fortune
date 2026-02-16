@@ -8,7 +8,7 @@
   <title>오늘의 운세 — 2days 웰니스</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&family=Noto+Serif+KR:wght@700;900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700;900&family=Nanum+Myeongjo:wght@400;700&family=Cinzel:wght@400;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
   <style>
     /* ── Fortune page dark theme overrides ── */
@@ -33,7 +33,7 @@
     body {
       background: var(--bg);
       color: var(--txt);
-      font-family: 'Noto Sans KR', -apple-system, 'Helvetica Neue', sans-serif;
+      font-family: 'Nanum Myeongjo', 'Noto Serif KR', serif;
       min-height: 100vh;
       overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
@@ -109,18 +109,21 @@
       flex-shrink: 0;
     }
     .logo-sym {
-      font-size: 20px;
-      background: linear-gradient(135deg, var(--gold), var(--accent));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+      width: 28px; height: 28px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #7c3aed 0%, #a855f7 50%, #f4d03f 100%);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; line-height: 1;
+      color: #fff;
+      flex-shrink: 0;
+      box-shadow: 0 2px 12px rgba(168,85,247,0.4);
     }
     .logo-text {
-      font-family: 'Noto Serif KR', serif;
-      font-size: 15px;
-      font-weight: 700;
-      letter-spacing: 0.02em;
-      background: linear-gradient(135deg, var(--txt) 40%, var(--accent) 100%);
+      font-family: 'Cinzel', 'Noto Serif KR', serif;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      background: linear-gradient(135deg, #e8e0ff 20%, #c084fc 60%, var(--gold) 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
@@ -275,28 +278,25 @@
     }
     .zodiac-grid {
       display: grid;
-      grid-template-columns: repeat(6, 1fr);
+      grid-template-columns: repeat(4, 1fr);
       gap: 8px;
       margin-bottom: 32px;
     }
-    @media (max-width: 480px) {
-      .zodiac-grid { grid-template-columns: repeat(4, 1fr); }
-    }
-    @media (max-width: 320px) {
-      .zodiac-grid { grid-template-columns: repeat(3, 1fr); }
+    @media (min-width: 520px) {
+      .zodiac-grid { grid-template-columns: repeat(6, 1fr); }
     }
     .zodiac-btn {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 4px;
-      padding: 12px 4px 10px;
+      gap: 3px;
+      padding: 12px 6px 10px;
       border-radius: 14px;
       background: var(--bg-card);
       border: 1px solid var(--border);
       cursor: pointer;
       transition: all 0.2s cubic-bezier(0.4,0,0.2,1);
-      font-family: inherit;
+      font-family: 'Nanum Myeongjo', 'Noto Serif KR', serif;
     }
     .zodiac-btn:hover {
       border-color: var(--border-hi);
@@ -310,16 +310,27 @@
       transform: translateY(-3px);
     }
     .zodiac-emoji {
-      font-size: 26px;
+      font-size: 24px;
       line-height: 1;
     }
     .zodiac-name {
       font-size: 12px;
-      font-weight: 600;
+      font-weight: 700;
       color: var(--txt-muted);
     }
     .zodiac-btn.active .zodiac-name {
       color: var(--fortune-accent);
+    }
+    .zodiac-years {
+      font-size: 9px;
+      color: var(--txt-dim);
+      line-height: 1.5;
+      text-align: center;
+      word-break: break-all;
+      font-family: 'Cinzel', 'Nanum Myeongjo', serif;
+    }
+    .zodiac-btn.active .zodiac-years {
+      color: rgba(234,179,8,0.7);
     }
 
     /* Select prompt */
@@ -771,7 +782,7 @@
   <header class="site-header">
     <div class="header-inner">
       <a href="index.html" class="logo">
-        <span class="logo-sym">◈</span>
+        <span class="logo-sym">✦</span>
         <span class="logo-text">2days 웰니스</span>
       </a>
       <nav class="page-nav">
@@ -959,7 +970,7 @@
   </main>
 
   <nav class="bottom-nav">
-    <a href="index.html" class="bn-item"><span class="bn-icon">◈</span><span class="bn-label">홈</span></a>
+    <a href="index.html" class="bn-item"><span class="bn-icon">🏠</span><span class="bn-label">홈</span></a>
     <a href="saju.html" class="bn-item"><span class="bn-icon">☯</span><span class="bn-label">사주</span></a>
     <a href="tarot.html" class="bn-item"><span class="bn-icon">🃏</span><span class="bn-label">타로</span></a>
     <a href="meditation.html" class="bn-item"><span class="bn-icon">🧘</span><span class="bn-label">명상</span></a>

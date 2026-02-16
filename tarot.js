@@ -181,36 +181,24 @@ function showPhase(phaseId) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-/* ── Build fan of cards ── */
+/* ── Build horizontal row of cards ── */
 function buildFan(needed) {
   const wrap = document.getElementById('fanCardsWrap');
   if (!wrap) return;
   wrap.innerHTML = '';
 
   const TOTAL_CARDS = 22;
-  const fanCards   = Math.min(TOTAL_CARDS, Math.max(needed * 3, 14));
-  const angleRange = Math.min(130, fanCards * 6);
-  const startAngle = -angleRange / 2;
-  const step       = fanCards > 1 ? angleRange / (fanCards - 1) : 0;
-
   state.deck = shuffle([...Array(TOTAL_CARDS).keys()]);
 
-  for (let i = 0; i < fanCards; i++) {
-    const angle = startAngle + step * i;
-    const card  = document.createElement('div');
+  for (let i = 0; i < TOTAL_CARDS; i++) {
+    const card = document.createElement('div');
     card.className = 'fan-card';
-    card.dataset.idx    = i;
-    card.dataset.cardIdx= state.deck[i];
-    card.dataset.angle  = angle;
+    card.dataset.idx     = i;
+    card.dataset.cardIdx = state.deck[i];
 
-    // All cards centered; rotation alone creates the fan spread
-    card.style.left     = 'calc(50% - 35px)';
-    card.style.zIndex   = i + 1;
-    card.style.setProperty('--fan-rotate', `rotate(${angle}deg)`);
-
-    // Start below the stage (fly-in animation)
-    card.style.transform = 'translateY(140px) rotate(0deg)';
+    // Start translated down (fly-in from below)
     card.style.opacity   = '0';
+    card.style.transform = 'translateY(50px) scale(0.85)';
 
     card.addEventListener('click', () => onCardClick(card, i));
     wrap.appendChild(card);
@@ -218,14 +206,12 @@ function buildFan(needed) {
 
   // Staggered fly-in
   requestAnimationFrame(() => {
-    const cards = wrap.querySelectorAll('.fan-card');
-    cards.forEach((c, i) => {
-      const angle = startAngle + step * i;
+    wrap.querySelectorAll('.fan-card').forEach((c, i) => {
       setTimeout(() => {
-        c.style.transition = 'transform 0.55s cubic-bezier(0.34,1.56,0.64,1), opacity 0.35s ease';
-        c.style.opacity   = '1';
-        c.style.transform = `rotate(${angle}deg)`;
-      }, i * 35 + 80);
+        c.style.transition = 'transform 0.4s cubic-bezier(0.34,1.56,0.64,1), opacity 0.3s ease';
+        c.style.opacity    = '1';
+        c.style.transform  = 'translateY(0) scale(1)';
+      }, i * 28 + 60);
     });
   });
 

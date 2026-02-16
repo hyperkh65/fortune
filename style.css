@@ -2592,7 +2592,9 @@ a.svc-card:hover .svc-icon-wrap { transform: scale(1.1) rotate(-3deg); }
 
 /* Page scrollable area adjustment when bottom nav shown */
 body.has-bnav .cw,
-body.has-bnav .hub-main { padding-bottom: calc(var(--bnav) + 20px); }
+body.has-bnav .hub-main { padding-bottom: calc(var(--bnav) + 74px); }
+/* extra room for sticky ad */
+body { padding-bottom: 74px; }
 
 /* ════════════════════════════════════════════
    PAGE NAV (inner-page header navigation)
@@ -3314,3 +3316,238 @@ body.has-bnav .hub-main { padding-bottom: calc(var(--bnav) + 20px); }
   .bottom-nav { display: none !important; }
   .page-nav { display: flex; }
 }
+
+
+/* ════════════════════════════════════════════
+   ADVERTISING — AdSense Components
+════════════════════════════════════════════ */
+
+/* ── Inline ad wrapper ── */
+.ad-inline {
+  width: 100%;
+  max-width: 680px;
+  margin: 0 auto 4px;
+  text-align: center;
+  overflow: hidden;
+}
+.ad-inline-inner {
+  background: var(--bg-card);
+  border: 1px solid rgba(200,134,42,0.12);
+  border-radius: var(--r-md);
+  padding: 8px 0 4px;
+  overflow: hidden;
+}
+.ad-label-bar {
+  font-family: var(--sans);
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--txt-dim);
+  margin-bottom: 4px;
+}
+
+/* ── Section spacer ad (between result sections) ── */
+.ad-section-spacer {
+  padding: 6px 20px 2px;
+}
+
+/* ── Sticky bottom banner ── */
+.ad-sticky-bar {
+  position: fixed;
+  bottom: var(--bnav);          /* sits above bottom nav on mobile */
+  left: 0; right: 0;
+  z-index: 155;
+  background: rgba(4,12,24,0.97);
+  border-top: 1px solid rgba(200,134,42,0.18);
+  padding: 4px 0 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 62px;
+  box-shadow: 0 -4px 20px rgba(0,0,0,0.5);
+}
+.ad-sticky-close {
+  position: absolute;
+  top: 4px; right: 8px;
+  width: 22px; height: 22px;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(255,255,255,0.08);
+  border-radius: 50%;
+  font-size: 12px;
+  color: var(--txt-muted);
+  cursor: pointer;
+  border: none;
+  line-height: 1;
+  z-index: 2;
+  transition: background var(--t);
+}
+.ad-sticky-close:hover { background: rgba(255,255,255,0.15); }
+.ad-sticky-inner {
+  width: 100%;
+  max-width: 728px;
+  text-align: center;
+}
+@media (min-width: 641px) {
+  .ad-sticky-bar { bottom: 0; }
+}
+
+/* ── Pre-result modal overlay ── */
+.ad-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  background: rgba(2,8,16,0.92);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s var(--ease);
+}
+.ad-modal-overlay.visible {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.ad-modal-box {
+  width: 100%;
+  max-width: 520px;
+  background: linear-gradient(160deg, #0a1a2e 0%, #071424 100%);
+  border: 1px solid rgba(200,134,42,0.3);
+  border-radius: var(--r-xl);
+  overflow: hidden;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.7), 0 1px 0 rgba(200,134,42,0.2) inset;
+  animation: modalSlideUp 0.3s var(--ease) both;
+}
+@keyframes modalSlideUp {
+  from { transform: translateY(24px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+/* Modal top header */
+.ad-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px 12px;
+  border-bottom: 1px solid rgba(200,134,42,0.12);
+}
+.ad-modal-title {
+  font-family: var(--serif);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--txt);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.ad-modal-title-icon {
+  width: 28px; height: 28px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #7a5a14, #c8862a);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px;
+}
+.ad-modal-countdown-badge {
+  font-family: var(--display);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--accent);
+  min-width: 32px;
+  text-align: center;
+  line-height: 1;
+}
+
+/* Ad unit area */
+.ad-modal-adunit {
+  padding: 8px 16px;
+  min-height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(8,24,40,0.5);
+  position: relative;
+}
+.ad-modal-adlabel {
+  position: absolute;
+  top: 6px; left: 12px;
+  font-family: var(--sans);
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--txt-dim);
+}
+
+/* Modal footer */
+.ad-modal-footer {
+  padding: 12px 20px 20px;
+}
+.ad-modal-status {
+  font-family: var(--sans);
+  font-size: 12px;
+  color: var(--txt-muted);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.ad-modal-status::before {
+  content: '';
+  display: inline-block;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: statusPulse 1.2s ease-in-out infinite;
+}
+@keyframes statusPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.4; transform: scale(0.7); }
+}
+
+/* Progress bar */
+.ad-modal-progress-track {
+  width: 100%;
+  height: 3px;
+  background: rgba(200,134,42,0.12);
+  border-radius: 99px;
+  overflow: hidden;
+  margin-bottom: 14px;
+}
+.ad-modal-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #7a5a14, #c8862a, #e8a83e);
+  border-radius: 99px;
+  transition: width 0.9s linear;
+  width: 0%;
+}
+
+/* Skip / confirm button */
+#adSkipBtn {
+  width: 100%;
+  padding: 14px;
+  border-radius: var(--r-md);
+  background: rgba(200,134,42,0.1);
+  border: 1px solid rgba(200,134,42,0.25);
+  color: var(--txt-muted);
+  font-family: var(--serif);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: not-allowed;
+  transition: all 0.25s var(--ease);
+  letter-spacing: 0.04em;
+}
+#adSkipBtn.ready {
+  background: linear-gradient(135deg, #7a5a14 0%, #c8862a 50%, #e8a83e 100%);
+  border-color: transparent;
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 6px 24px rgba(200,134,42,0.45), 0 1px 0 rgba(255,220,150,0.3) inset;
+}
+#adSkipBtn.ready:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(200,134,42,0.55), 0 1px 0 rgba(255,220,150,0.3) inset;
+}
+

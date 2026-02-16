@@ -244,6 +244,36 @@
   </style>
 </head>
 <body class="tarot-page">
+
+  <!-- Pre-Result Ad Modal -->
+  <div class="ad-modal-overlay" id="adResultModal">
+    <div class="ad-modal-box">
+      <div class="ad-modal-header">
+        <div class="ad-modal-title">
+          <div class="ad-modal-title-icon">✦</div>
+          타로 카드 해석 중...
+        </div>
+        <div class="ad-modal-countdown-badge" id="adCountdown">5</div>
+      </div>
+      <div class="ad-modal-adunit">
+        <span class="ad-modal-adlabel">광고</span>
+        <ins class="adsbygoogle"
+             style="display:block;width:100%"
+             data-ad-client="ca-pub-8940400388075870"
+             data-ad-slot="4318415347"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+      </div>
+      <div class="ad-modal-footer">
+        <p class="ad-modal-status" id="adStatusText">AI가 사주를 분석하고 있습니다...</p>
+        <div class="ad-modal-progress-track">
+          <div class="ad-modal-progress-fill" id="adProgressBar"></div>
+        </div>
+        <button id="adSkipBtn" disabled>잠시만요... (5초)</button>
+      </div>
+    </div>
+  </div>
   <canvas id="starsBg"></canvas>
 
   <header class="site-header">
@@ -341,7 +371,22 @@
     <a href="dream.html" class="bn-item"><span class="bn-icon">🌙</span><span class="bn-label">꿈해몽</span></a>
     <a href="fortune.html" class="bn-item"><span class="bn-icon">⭐</span><span class="bn-label">운세</span></a>
   </nav>
+
+  <!-- Sticky Bottom Ad Banner -->
+  <div class="ad-sticky-bar" id="adStickyBar">
+    <button class="ad-sticky-close" onclick="document.getElementById('adStickyBar').style.display='none'" title="닫기">✕</button>
+    <div class="ad-sticky-inner">
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-8940400388075870"
+           data-ad-slot="4966757696"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+  </div>
   <script src="stars.js"></script>
   <script src="tarot.js"></script>
+  <script src="ads.js"></script>
 </body>
 </html>

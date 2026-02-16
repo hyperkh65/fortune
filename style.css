@@ -1,38 +1,41 @@
 /* ======================================================
-   AI Wellness — Light Bright UI
+   AI Wellness — Dark Mystical UI  v2.0
    ====================================================== */
 
 /* ── Variables ── */
 :root {
-  --bg:        #f0f4ff;
-  --bg-card:   #ffffff;
-  --bg-card2:  #eef1ff;
-  --bg-hover:  #e3e8ff;
-  --border:    rgba(20,0,100,0.09);
-  --border-hi: rgba(20,0,100,0.18);
-  --txt:       #0f172a;
-  --txt-muted: #4b5675;
-  --txt-dim:   #94a3b8;
-  --accent:    #4f46e5;
-  --accent-dim:rgba(79,70,229,0.12);
-  /* five element colors */
-  --wood:  #16a34a;
-  --fire:  #dc2626;
-  --earth: #b45309;
-  --metal: #475569;
-  --water: #1d4ed8;
-  /* pillar top colors */
-  --wood-glow:  rgba(22,163,74,0.15);
-  --fire-glow:  rgba(220,38,38,0.15);
-  --earth-glow: rgba(180,83,9,0.15);
-  --metal-glow: rgba(71,85,105,0.15);
-  --water-glow: rgba(29,78,216,0.15);
+  --bg:        #07070f;
+  --bg-card:   #0f0f1a;
+  --bg-card2:  #161625;
+  --bg-hover:  #1e1e30;
+  --border:    rgba(139,92,246,0.18);
+  --border-hi: rgba(139,92,246,0.35);
+  --txt:       #e8e0ff;
+  --txt-muted: #9590b8;
+  --txt-dim:   #4e4a6a;
+  --accent:    #8b5cf6;
+  --accent-dim:rgba(139,92,246,0.15);
+  --gold:      #f4d03f;
+  --gold-dim:  rgba(244,208,63,0.15);
+  /* five element colors — vivid for dark bg */
+  --wood:  #34d399;
+  --fire:  #f87171;
+  --earth: #fbbf24;
+  --metal: #94a3b8;
+  --water: #60a5fa;
+  /* pillar glow */
+  --wood-glow:  rgba(52,211,153,0.2);
+  --fire-glow:  rgba(248,113,113,0.2);
+  --earth-glow: rgba(251,191,36,0.2);
+  --metal-glow: rgba(148,163,184,0.2);
+  --water-glow: rgba(96,165,250,0.2);
 
   --r-sm:  8px;
   --r-md:  14px;
   --r-lg:  20px;
   --r-xl:  28px;
   --hdr:   56px;
+  --bnav:  64px; /* bottom nav height */
   --font:  'Noto Sans KR', -apple-system, 'Helvetica Neue', sans-serif;
   --serif: 'Noto Serif KR', 'Batang', 'UnBatang', serif;
   --ease:  cubic-bezier(0.4,0,0.2,1);
@@ -57,7 +60,10 @@ ul { list-style:none; }
 
 /* ── Stars Canvas ── */
 #starsBg {
-  display: none; /* hidden on light theme */
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
 }
 
 /* ── Header ── */
@@ -66,11 +72,11 @@ ul { list-style:none; }
   top:0; left:0; right:0;
   z-index: 100;
   height: var(--hdr);
-  background: rgba(240,244,255,0.92);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--border);
-  box-shadow: 0 1px 20px rgba(0,0,60,0.06);
+  background: rgba(7,7,15,0.88);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-bottom: 1px solid rgba(139,92,246,0.12);
+  box-shadow: 0 1px 30px rgba(0,0,0,0.5);
 }
 .header-inner {
   max-width: 680px;
@@ -97,7 +103,7 @@ ul { list-style:none; }
   font-size: 17px;
   font-weight: 700;
   letter-spacing: 0.02em;
-  background: linear-gradient(135deg, #fff 40%, var(--accent) 100%);
+  background: linear-gradient(135deg, #e8e0ff 30%, var(--accent) 70%, var(--gold) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -193,7 +199,7 @@ ul { list-style:none; }
 .text-inp::placeholder { color: var(--txt-dim); }
 .text-inp:focus {
   border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(61,220,132,0.12);
+  box-shadow: 0 0 0 3px rgba(139,92,246,0.15);
 }
 
 /* Toggle Buttons */
@@ -250,7 +256,7 @@ ul { list-style:none; }
   transition: border-color var(--t) var(--ease);
 }
 .csel:focus { border-color: var(--accent); }
-.csel option { background: #fff; color: #0f172a; }
+.csel option { background: var(--bg-card2); color: var(--txt); }
 
 /* Sub Notes */
 .sub-note {
@@ -288,18 +294,18 @@ ul { list-style:none; }
   gap: 8px;
   padding: 16px;
   border-radius: var(--r-lg);
-  background: var(--accent);
+  background: linear-gradient(135deg, #7c3aed, #8b5cf6);
   color: #ffffff;
   font-size: 15px;
   font-weight: 700;
   font-family: var(--font);
   transition: transform var(--t) var(--ease), box-shadow var(--t) var(--ease), opacity var(--t);
-  box-shadow: 0 4px 24px rgba(61,220,132,0.3);
+  box-shadow: 0 4px 24px rgba(139,92,246,0.45);
   margin-top: 4px;
 }
 .analyze-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 32px rgba(61,220,132,0.4);
+  box-shadow: 0 8px 32px rgba(139,92,246,0.6);
 }
 .analyze-btn:active { transform: translateY(0); }
 .analyze-btn:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
@@ -308,9 +314,9 @@ ul { list-style:none; }
 .tooltip {
   position: fixed;
   z-index: 999;
-  background: #1e293b;
-  color: #f8fafc;
-  border: 1px solid rgba(255,255,255,0.12);
+  background: #1a1a2e;
+  color: #e8e0ff;
+  border: 1px solid rgba(139,92,246,0.3);
   border-radius: var(--r-sm);
   padding: 8px 12px;
   font-size: 12px;
@@ -1186,20 +1192,20 @@ ul { list-style:none; }
   animation: orbFloat 12s ease-in-out infinite;
 }
 .orb-1 {
-  width: 600px; height: 600px;
-  background: radial-gradient(circle, rgba(79,70,229,0.08) 0%, transparent 70%);
-  top: -200px; left: -150px;
+  width: 700px; height: 700px;
+  background: radial-gradient(circle, rgba(139,92,246,0.18) 0%, transparent 70%);
+  top: -250px; left: -200px;
   animation-delay: 0s;
 }
 .orb-2 {
-  width: 500px; height: 500px;
-  background: radial-gradient(circle, rgba(124,58,237,0.06) 0%, transparent 70%);
-  top: 20%; right: -120px;
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(168,85,247,0.14) 0%, transparent 70%);
+  top: 20%; right: -150px;
   animation-delay: -4s;
 }
 .orb-3 {
-  width: 450px; height: 450px;
-  background: radial-gradient(circle, rgba(14,165,233,0.06) 0%, transparent 70%);
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(244,208,63,0.08) 0%, transparent 70%);
   bottom: 0; left: 25%;
   animation-delay: -8s;
 }
@@ -1252,13 +1258,13 @@ ul { list-style:none; }
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 6px 16px;
+  padding: 6px 18px;
   border-radius: 999px;
-  background: rgba(61,220,132,0.08);
-  border: 1px solid rgba(61,220,132,0.25);
+  background: rgba(139,92,246,0.12);
+  border: 1px solid rgba(139,92,246,0.35);
   font-size: 11px;
   font-weight: 700;
-  color: var(--accent);
+  color: #c4b5fd;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   margin-bottom: 28px;
@@ -1269,7 +1275,7 @@ ul { list-style:none; }
   font-weight: 900;
   line-height: 1.15;
   margin-bottom: 22px;
-  background: linear-gradient(135deg, #ffffff 0%, #e2e8f0 30%, var(--accent) 60%, #a855f7 100%);
+  background: linear-gradient(135deg, #e8e0ff 0%, #c4b5fd 30%, #8b5cf6 55%, #f4d03f 100%);
   background-size: 300% 300%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -2526,4 +2532,768 @@ a.svc-card:hover .svc-icon-wrap { transform: scale(1.1) rotate(-3deg); }
 /* ── Safe Area ── */
 @supports (padding: max(0px)) {
   .toast { bottom: max(28px, calc(env(safe-area-inset-bottom) + 16px)); }
+  .bottom-nav { padding-bottom: max(8px, env(safe-area-inset-bottom)); }
+}
+
+/* ════════════════════════════════════════════
+   BOTTOM NAV (mobile persistent navigation)
+════════════════════════════════════════════ */
+.bottom-nav {
+  display: none;
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  z-index: 200;
+  height: var(--bnav);
+  background: rgba(7,7,15,0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(139,92,246,0.2);
+  padding: 6px 4px 8px;
+  display: none;
+  align-items: center;
+  justify-content: space-around;
+}
+.bn-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  flex: 1;
+  padding: 4px 2px;
+  border-radius: var(--r-sm);
+  color: var(--txt-dim);
+  text-decoration: none;
+  transition: color var(--t), background var(--t);
+  min-height: 44px;
+  justify-content: center;
+}
+.bn-item:hover, .bn-item.active {
+  color: var(--accent);
+}
+.bn-item.active .bn-icon { filter: drop-shadow(0 0 6px rgba(139,92,246,0.6)); }
+.bn-icon { font-size: 20px; line-height: 1; }
+.bn-label { font-size: 10px; font-weight: 600; letter-spacing: 0.03em; }
+
+/* Page scrollable area adjustment when bottom nav shown */
+body.has-bnav .cw,
+body.has-bnav .hub-main { padding-bottom: calc(var(--bnav) + 20px); }
+
+/* ════════════════════════════════════════════
+   PAGE NAV (inner-page header navigation)
+════════════════════════════════════════════ */
+.header-inner { justify-content: space-between; }
+.page-nav {
+  display: flex;
+  gap: 2px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.page-nav::-webkit-scrollbar { display: none; }
+.pn-link {
+  padding: 7px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--txt-muted);
+  border-radius: var(--r-sm);
+  white-space: nowrap;
+  transition: background var(--t), color var(--t);
+}
+.pn-link:hover { background: var(--bg-card2); color: var(--txt); }
+.pn-link.active {
+  background: rgba(139,92,246,0.15);
+  color: #c4b5fd;
+}
+
+/* ════════════════════════════════════════════
+   VERSION BADGE & HERO FEATURES (index)
+════════════════════════════════════════════ */
+.hub-version {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 12px;
+  border-radius: 999px;
+  background: rgba(244,208,63,0.1);
+  border: 1px solid rgba(244,208,63,0.3);
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--gold);
+  letter-spacing: 0.1em;
+  margin-bottom: 14px;
+}
+.hub-features-row {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 28px 0 48px;
+}
+.hub-feat-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--txt-muted);
+  transition: border-color var(--t), color var(--t);
+}
+.hub-feat-chip:hover { border-color: var(--accent); color: var(--txt); }
+.hub-feat-chip .chip-icon { font-size: 14px; }
+
+/* ── Section Dividers ── */
+.hub-section-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--txt-dim);
+  margin: 48px 0 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.hub-section-label::before,
+.hub-section-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+/* ════════════════════════════════════════════
+   TAROT CARD VISUAL ART
+════════════════════════════════════════════ */
+/* Each card face has a unique visual identity */
+.card-face-art {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 8px 10px;
+  border-radius: inherit;
+}
+.card-art-frame {
+  position: absolute;
+  inset: 5px;
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: calc(var(--r-md) - 4px);
+  pointer-events: none;
+}
+.card-art-frame::before {
+  content: '';
+  position: absolute;
+  inset: 4px;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: calc(var(--r-md) - 8px);
+}
+.card-roman {
+  font-family: var(--serif);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: rgba(255,255,255,0.55);
+  z-index: 1;
+}
+.card-art-sym {
+  font-size: 52px;
+  line-height: 1;
+  z-index: 1;
+  filter: drop-shadow(0 0 16px rgba(255,255,255,0.3));
+}
+.card-art-name {
+  font-family: var(--serif);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-align: center;
+  color: rgba(255,255,255,0.85);
+  z-index: 1;
+  line-height: 1.3;
+}
+/* Card back pattern */
+.card-back-pattern {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background:
+    repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 4px,
+      rgba(139,92,246,0.06) 4px,
+      rgba(139,92,246,0.06) 8px
+    );
+}
+.card-back-center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  opacity: 0.4;
+}
+
+/* Enhanced card visual elements */
+.card-art-en {
+  font-size: 9px;
+  color: rgba(255,255,255,0.4);
+  letter-spacing: 0.08em;
+  text-align: center;
+  margin-top: 2px;
+}
+.card-color-bar {
+  position: absolute;
+  bottom: 0; left: 6px; right: 6px;
+  height: 3px;
+  border-radius: 0 0 4px 4px;
+  opacity: 0.7;
+}
+.tarot-reversed-badge {
+  position: absolute;
+  top: 8px; right: 8px;
+  font-size: 10px;
+  font-weight: 700;
+  color: #ef4444;
+  background: rgba(239,68,68,0.15);
+  border: 1px solid rgba(239,68,68,0.4);
+  border-radius: 4px;
+  padding: 2px 5px;
+  letter-spacing: 0.05em;
+  z-index: 2;
+}
+.tarot-back-sigil {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 18px;
+  opacity: 0.25;
+  color: #8b5cf6;
+}
+
+/* ════════════════════════════════════════════
+   DREAM PAGE (꿈해몽)
+════════════════════════════════════════════ */
+.dream-page { --dream-accent: #818cf8; }
+.dream-hero {
+  text-align: center;
+  padding: calc(var(--hdr) + 56px) 20px 40px;
+}
+.dream-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 16px;
+  border-radius: 999px;
+  background: rgba(129,140,248,0.1);
+  border: 1px solid rgba(129,140,248,0.3);
+  font-size: 11px;
+  font-weight: 700;
+  color: #a5b4fc;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 18px;
+}
+.dream-title {
+  font-family: var(--serif);
+  font-size: clamp(26px, 6vw, 38px);
+  font-weight: 900;
+  margin-bottom: 10px;
+  background: linear-gradient(135deg, #c7d2fe 0%, #818cf8 50%, #6366f1 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.dream-sub {
+  font-size: 15px;
+  color: var(--txt-muted);
+  line-height: 1.8;
+  margin-bottom: 32px;
+}
+.dream-search-wrap {
+  max-width: 480px;
+  margin: 0 auto 36px;
+  position: relative;
+}
+.dream-search-icon {
+  position: absolute;
+  left: 16px; top: 50%;
+  transform: translateY(-50%);
+  font-size: 18px;
+  opacity: 0.5;
+  pointer-events: none;
+}
+.dream-search-inp {
+  width: 100%;
+  background: var(--bg-card);
+  border: 1px solid var(--border-hi);
+  border-radius: 999px;
+  padding: 14px 20px 14px 46px;
+  color: var(--txt);
+  font-size: 15px;
+  font-family: var(--font);
+  outline: none;
+  transition: border-color var(--t), box-shadow var(--t);
+}
+.dream-search-inp::placeholder { color: var(--txt-dim); }
+.dream-search-inp:focus {
+  border-color: #818cf8;
+  box-shadow: 0 0 0 3px rgba(129,140,248,0.15);
+}
+.dream-cats {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 36px;
+}
+.dream-cat-btn {
+  padding: 7px 16px;
+  border-radius: 999px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  color: var(--txt-muted);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--t);
+}
+.dream-cat-btn:hover { border-color: #818cf8; color: #a5b4fc; }
+.dream-cat-btn.active {
+  background: rgba(129,140,248,0.15);
+  border-color: #818cf8;
+  color: #a5b4fc;
+}
+.dream-popular-section {
+  max-width: 680px;
+  margin: 0 auto 40px;
+  padding: 0 20px;
+}
+.dream-popular-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--txt-muted);
+  margin-bottom: 14px;
+  letter-spacing: 0.05em;
+}
+.dream-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.dream-chip {
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: var(--bg-card2);
+  border: 1px solid var(--border);
+  color: var(--txt-muted);
+  font-size: 13px;
+  cursor: pointer;
+  transition: all var(--t);
+}
+.dream-chip:hover {
+  background: rgba(129,140,248,0.1);
+  border-color: #818cf8;
+  color: #a5b4fc;
+}
+.dream-results {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 20px 40px;
+}
+.dream-results-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--txt-dim);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+.dream-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 14px;
+}
+.dream-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-xl);
+  padding: 22px 20px;
+  cursor: pointer;
+  transition: border-color var(--t), transform var(--t), box-shadow var(--t);
+}
+.dream-card:hover {
+  border-color: #818cf8;
+  transform: translateY(-3px);
+  box-shadow: 0 12px 40px rgba(129,140,248,0.15);
+}
+.dream-card-top {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 12px;
+}
+.dream-card-emoji {
+  font-size: 32px;
+  flex-shrink: 0;
+  width: 52px; height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(129,140,248,0.08);
+  border-radius: 14px;
+  border: 1px solid rgba(129,140,248,0.2);
+}
+.dream-card-name {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--txt);
+  margin-bottom: 3px;
+}
+.dream-card-short {
+  font-size: 12px;
+  color: var(--txt-muted);
+}
+.dream-card-omen {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+.dream-card-omen.good { background: rgba(52,211,153,0.1); color: #34d399; border: 1px solid rgba(52,211,153,0.25); }
+.dream-card-omen.bad  { background: rgba(248,113,113,0.1); color: #f87171; border: 1px solid rgba(248,113,113,0.25); }
+.dream-card-omen.neutral { background: rgba(148,163,184,0.1); color: var(--txt-muted); border: 1px solid var(--border); }
+.dream-card-meaning {
+  font-size: 13px;
+  color: var(--txt-muted);
+  line-height: 1.75;
+  margin-bottom: 14px;
+}
+.dream-card-lucky {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.dream-lucky-item {
+  padding: 4px 10px;
+  background: var(--bg-card2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  font-size: 11px;
+  color: var(--txt-dim);
+}
+.dream-lucky-item strong { color: var(--txt-muted); }
+.dream-today-section {
+  max-width: 480px;
+  margin: 0 auto 48px;
+  padding: 0 20px;
+}
+.dream-today-card {
+  background: linear-gradient(135deg, rgba(99,102,241,0.15), rgba(129,140,248,0.08));
+  border: 1px solid rgba(129,140,248,0.3);
+  border-radius: var(--r-xl);
+  padding: 24px 22px;
+  text-align: center;
+}
+.dream-today-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #a5b4fc;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+.dream-today-sym { font-size: 48px; margin-bottom: 10px; }
+.dream-today-name { font-size: 20px; font-weight: 700; color: var(--txt); margin-bottom: 6px; }
+.dream-today-text { font-size: 14px; color: var(--txt-muted); line-height: 1.7; }
+.dream-empty {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--txt-dim);
+  font-size: 14px;
+}
+.dream-empty-icon { font-size: 48px; margin-bottom: 16px; opacity: 0.4; }
+
+/* ════════════════════════════════════════════
+   FORTUNE PAGE (오늘의 운세)
+════════════════════════════════════════════ */
+.fortune-page { --fortune-accent: #f4d03f; }
+.fortune-hero {
+  text-align: center;
+  padding: calc(var(--hdr) + 56px) 20px 40px;
+}
+.fortune-date-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 18px;
+  border-radius: 999px;
+  background: rgba(244,208,63,0.1);
+  border: 1px solid rgba(244,208,63,0.3);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--gold);
+  margin-bottom: 20px;
+}
+.fortune-title {
+  font-family: var(--serif);
+  font-size: clamp(26px, 6vw, 38px);
+  font-weight: 900;
+  margin-bottom: 10px;
+  background: linear-gradient(135deg, #fef3c7 0%, var(--gold) 50%, #f59e0b 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.fortune-sub {
+  font-size: 15px;
+  color: var(--txt-muted);
+  line-height: 1.8;
+  margin-bottom: 40px;
+}
+/* Zodiac selector */
+.zodiac-wrap {
+  max-width: 600px;
+  margin: 0 auto 48px;
+  padding: 0 20px;
+}
+.zodiac-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--txt-muted);
+  text-align: center;
+  margin-bottom: 18px;
+  letter-spacing: 0.04em;
+}
+.zodiac-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 10px;
+}
+.zodiac-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  padding: 14px 6px 12px;
+  border-radius: var(--r-lg);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: all var(--t);
+  font-family: var(--font);
+}
+.zodiac-btn:hover { border-color: var(--gold); background: rgba(244,208,63,0.06); }
+.zodiac-btn.active {
+  border-color: var(--gold);
+  background: rgba(244,208,63,0.1);
+  box-shadow: 0 0 0 1px var(--gold);
+}
+.zodiac-emoji { font-size: 24px; }
+.zodiac-name { font-size: 12px; font-weight: 700; color: var(--txt-muted); }
+.zodiac-btn.active .zodiac-name { color: var(--gold); }
+/* Fortune result */
+.fortune-result {
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 0 20px 60px;
+  display: none;
+}
+.fortune-result.visible { display: block; }
+.fortune-overall {
+  background: var(--bg-card);
+  border: 1px solid rgba(244,208,63,0.3);
+  border-radius: var(--r-xl);
+  padding: 28px 24px;
+  text-align: center;
+  margin-bottom: 16px;
+}
+.fortune-overall-label { font-size: 12px; font-weight: 700; color: var(--txt-dim); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 10px; }
+.fortune-stars { font-size: 28px; letter-spacing: 4px; margin-bottom: 8px; }
+.fortune-overall-pct {
+  font-size: 48px;
+  font-weight: 900;
+  font-family: var(--serif);
+  background: linear-gradient(135deg, var(--gold), #f59e0b);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 6px;
+}
+.fortune-overall-text { font-size: 15px; color: var(--txt-muted); line-height: 1.75; }
+/* Category bars */
+.fortune-cats {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.fortune-cat-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 16px 18px;
+}
+.fortune-cat-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.fortune-cat-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--txt);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.fortune-cat-pct { font-size: 13px; font-weight: 700; color: var(--gold); }
+.fortune-bar-track {
+  height: 6px;
+  background: var(--bg-card2);
+  border-radius: 999px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+.fortune-bar-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #8b5cf6, var(--gold));
+  transition: width 0.8s var(--ease);
+  width: 0;
+}
+.fortune-cat-text { font-size: 12px; color: var(--txt-muted); line-height: 1.6; }
+/* Lucky items */
+.fortune-lucky {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-xl);
+  padding: 22px 20px;
+  margin-bottom: 16px;
+}
+.fortune-lucky-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--txt-muted);
+  letter-spacing: 0.05em;
+  margin-bottom: 16px;
+  text-align: center;
+}
+.fortune-lucky-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+.fortune-lucky-item {
+  background: var(--bg-card2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.fortune-lucky-key { font-size: 11px; color: var(--txt-dim); font-weight: 600; letter-spacing: 0.05em; }
+.fortune-lucky-val { font-size: 15px; font-weight: 700; color: var(--txt); }
+/* Advice */
+.fortune-advice {
+  background: linear-gradient(135deg, rgba(244,208,63,0.08), rgba(139,92,246,0.06));
+  border: 1px solid rgba(244,208,63,0.25);
+  border-radius: var(--r-xl);
+  padding: 24px 22px;
+  text-align: center;
+  margin-bottom: 16px;
+}
+.fortune-advice-icon { font-size: 32px; margin-bottom: 10px; }
+.fortune-advice-label { font-size: 11px; font-weight: 700; color: #fbbf24; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 10px; }
+.fortune-advice-text { font-size: 15px; color: var(--txt); line-height: 1.85; font-style: italic; }
+/* Weekly preview */
+.fortune-weekly {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-xl);
+  padding: 20px;
+}
+.fortune-weekly-title { font-size: 13px; font-weight: 700; color: var(--txt-muted); margin-bottom: 14px; letter-spacing: 0.05em; text-align: center; }
+.fortune-weekly-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+}
+.fortune-week-day {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  padding: 10px 4px;
+  border-radius: var(--r-md);
+  background: var(--bg-card2);
+  border: 1px solid var(--border);
+}
+.fortune-week-day.today {
+  border-color: var(--gold);
+  background: rgba(244,208,63,0.08);
+}
+.fwd-label { font-size: 10px; font-weight: 700; color: var(--txt-dim); }
+.fwd-score { font-size: 16px; font-weight: 900; color: var(--txt); }
+.fwd-bar { width: 4px; height: 24px; border-radius: 2px; background: var(--bg-hover); overflow: hidden; }
+.fwd-bar-inner { width: 100%; border-radius: 2px; background: linear-gradient(to top, #8b5cf6, var(--gold)); transition: height 0.6s var(--ease); }
+
+/* ════════════════════════════════════════════
+   HUB WHY SECTION
+════════════════════════════════════════════ */
+.hub-why-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 14px;
+  margin-bottom: 60px;
+}
+.hub-why-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-xl);
+  padding: 24px 20px;
+  transition: border-color var(--t), transform var(--t);
+}
+.hub-why-card:hover { border-color: var(--border-hi); transform: translateY(-2px); }
+.hub-why-icon { font-size: 28px; margin-bottom: 12px; }
+.hub-why-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--txt);
+  margin-bottom: 8px;
+}
+.hub-why-desc {
+  font-size: 13px;
+  color: var(--txt-muted);
+  line-height: 1.75;
+}
+
+/* ── Responsive show/hide bottom nav ── */
+@media (max-width: 640px) {
+  .bottom-nav { display: flex; }
+  .page-nav { display: none; }
+  body { padding-bottom: var(--bnav); }
+  .zodiac-grid { grid-template-columns: repeat(4, 1fr); }
+  .dream-grid { grid-template-columns: 1fr; }
+  .fortune-weekly-grid { grid-template-columns: repeat(7, 1fr); gap: 4px; }
+  .fwd-score { font-size: 13px; }
+  .fwd-label { font-size: 9px; }
+}
+@media (min-width: 641px) {
+  .bottom-nav { display: none !important; }
+  .page-nav { display: flex; }
 }

@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="오늘의 운세 — 띠별 일일 운세와 행운 정보를 확인하세요" />
+  <meta name="theme-color" content="#0a0a12" />
+  <title>오늘의 운세 — AI Wellness</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&family=Noto+Serif+KR:wght@700;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* ── Fortune page dark theme overrides ── */
+    :root {
+      --bg:             #0a0a12;
+      --bg-card:        #13131f;
+      --bg-card2:       #1a1a2e;
+      --bg-hover:       #1e1e32;
+      --border:         rgba(139,92,246,0.15);
+      --border-hi:      rgba(139,92,246,0.3);
+      --txt:            #e8e0ff;
+      --txt-muted:      #a89fc8;
+      --txt-dim:        #6b6490;
+      --accent:         #8b5cf6;
+      --accent-dim:     rgba(139,92,246,0.12);
+      --gold:           #f4d03f;
+      --fortune-accent: #eab308;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--txt);
+      font-family: 'Noto Sans KR', -apple-system, 'Helvetica Neue', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Stars canvas */
+    #starsBg {
+      display: block;
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* Ambient orbs */
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(90px);
+      pointer-events: none;
+      z-index: 0;
+      animation: orbFloat 14s ease-in-out infinite;
+    }
+    .orb-1 {
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(139,92,246,0.12) 0%, transparent 70%);
+      top: -150px; left: -100px;
+      animation-delay: 0s;
+    }
+    .orb-2 {
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(234,179,8,0.07) 0%, transparent 70%);
+      top: 30%; right: -80px;
+      animation-delay: -5s;
+    }
+    .orb-3 {
+      width: 350px; height: 350px;
+      background: radial-gradient(circle, rgba(139,92,246,0.08) 0%, transparent 70%);
+      bottom: 0; left: 20%;
+      animation-delay: -9s;
+    }
+    @keyframes orbFloat {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50%       { transform: translateY(-28px) scale(1.05); }
+    }
+
+    /* Header */
+    .site-header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      height: 56px;
+      background: rgba(10,10,18,0.88);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-bottom: 1px solid var(--border);
+      box-shadow: 0 1px 24px rgba(0,0,0,0.4);
+    }
+    .header-inner {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 0 20px;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+    .logo-sym {
+      font-size: 20px;
+      background: linear-gradient(135deg, var(--gold), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .logo-text {
+      font-family: 'Noto Serif KR', serif;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      background: linear-gradient(135deg, var(--txt) 40%, var(--accent) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .page-nav {
+      display: flex;
+      gap: 2px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+      margin-left: auto;
+    }
+    .page-nav::-webkit-scrollbar { display: none; }
+    .pn-link {
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--txt-muted);
+      border-radius: 8px;
+      white-space: nowrap;
+      text-decoration: none;
+      transition: background 0.2s, color 0.2s;
+    }
+    .pn-link:hover { background: var(--bg-card2); color: var(--txt); }
+    .pn-link.active {
+      background: rgba(234,179,8,0.15);
+      color: var(--fortune-accent);
+      font-weight: 600;
+    }
+
+    /* Main layout */
+    .fortune-wrap {
+      position: relative;
+      z-index: 1;
+      max-width: 720px;
+      margin: 0 auto;
+      padding: calc(56px + 32px) 20px 120px;
+    }
+
+    /* Page hero */
+    .fortune-hero {
+      text-align: center;
+      margin-bottom: 36px;
+    }
+    .fortune-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 5px 16px;
+      border-radius: 999px;
+      background: rgba(234,179,8,0.1);
+      border: 1px solid rgba(234,179,8,0.3);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--fortune-accent);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    .fortune-title {
+      font-family: 'Noto Serif KR', serif;
+      font-size: clamp(26px, 6vw, 38px);
+      font-weight: 900;
+      margin-bottom: 10px;
+      background: linear-gradient(135deg, var(--txt) 30%, var(--gold) 70%, var(--fortune-accent) 100%);
+      background-size: 200% 200%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: titleShimmer 6s ease-in-out infinite;
+    }
+    @keyframes titleShimmer {
+      0%, 100% { background-position: 0% 50%; }
+      50%       { background-position: 100% 50%; }
+    }
+    .fortune-subtitle {
+      font-size: 14px;
+      color: var(--txt-muted);
+      line-height: 1.8;
+    }
+
+    /* Date card */
+    .date-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+    .date-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--fortune-accent), transparent);
+      opacity: 0.6;
+    }
+    .date-solar {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .date-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--txt-dim);
+    }
+    .date-value {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--txt);
+    }
+    .date-lunar {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 3px;
+    }
+    .date-lunar-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--txt-dim);
+    }
+    .date-lunar-value {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--fortune-accent);
+    }
+    .date-day-symbol {
+      font-size: 32px;
+      line-height: 1;
+    }
+
+    /* Zodiac selector */
+    .section-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--txt-dim);
+      margin-bottom: 14px;
+    }
+    .zodiac-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 8px;
+      margin-bottom: 32px;
+    }
+    @media (max-width: 480px) {
+      .zodiac-grid { grid-template-columns: repeat(4, 1fr); }
+    }
+    @media (max-width: 320px) {
+      .zodiac-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    .zodiac-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      padding: 12px 4px 10px;
+      border-radius: 14px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.4,0,0.2,1);
+      font-family: inherit;
+    }
+    .zodiac-btn:hover {
+      border-color: var(--border-hi);
+      background: var(--bg-card2);
+      transform: translateY(-2px);
+    }
+    .zodiac-btn.active {
+      background: rgba(234,179,8,0.12);
+      border-color: var(--fortune-accent);
+      box-shadow: 0 0 16px rgba(234,179,8,0.2), 0 4px 12px rgba(0,0,0,0.3);
+      transform: translateY(-3px);
+    }
+    .zodiac-emoji {
+      font-size: 26px;
+      line-height: 1;
+    }
+    .zodiac-name {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--txt-muted);
+    }
+    .zodiac-btn.active .zodiac-name {
+      color: var(--fortune-accent);
+    }
+
+    /* Select prompt */
+    .select-prompt {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--txt-dim);
+    }
+    .select-prompt-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+      display: block;
+      opacity: 0.5;
+    }
+    .select-prompt-text {
+      font-size: 15px;
+      line-height: 1.8;
+    }
+
+    /* Fortune result */
+    .fortune-result {
+      display: none;
+      animation: fadeUp 0.5s cubic-bezier(0.4,0,0.2,1) both;
+    }
+    .fortune-result.visible { display: block; }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Overall score */
+    .overall-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 28px 24px;
+      margin-bottom: 16px;
+      position: relative;
+      overflow: hidden;
+    }
+    .overall-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold), var(--fortune-accent), transparent);
+      opacity: 0.8;
+    }
+    .overall-top {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+    .zodiac-display {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+    .zodiac-display-emoji {
+      font-size: 52px;
+      line-height: 1;
+      filter: drop-shadow(0 0 12px rgba(234,179,8,0.4));
+    }
+    .zodiac-display-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--fortune-accent);
+    }
+    .overall-info { flex: 1; }
+    .overall-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--txt-muted);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .overall-score-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 10px;
+    }
+    .star-rating {
+      display: flex;
+      gap: 3px;
+      font-size: 22px;
+    }
+    .star { color: var(--txt-dim); transition: color 0.3s, transform 0.3s; }
+    .star.lit { color: var(--gold); text-shadow: 0 0 8px rgba(244,208,63,0.6); }
+    .overall-pct {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--gold);
+      letter-spacing: -0.02em;
+    }
+    .overall-label {
+      font-size: 13px;
+      color: var(--txt-muted);
+      line-height: 1.7;
+    }
+
+    /* Category bars */
+    .categories-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 24px;
+      margin-bottom: 16px;
+    }
+    .card-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--txt);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .card-title-icon { font-size: 18px; }
+    .category-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .category-row {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .category-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .category-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--txt);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .category-icon { font-size: 16px; }
+    .category-pct {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--fortune-accent);
+    }
+    .category-bar-track {
+      height: 7px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .category-bar-fill {
+      height: 100%;
+      border-radius: 999px;
+      width: 0;
+      transition: width 1s cubic-bezier(0.4,0,0.2,1);
+    }
+    .bar-love    { background: linear-gradient(90deg, #e879f9, #c026d3); }
+    .bar-money   { background: linear-gradient(90deg, #facc15, #eab308); }
+    .bar-health  { background: linear-gradient(90deg, #4ade80, #16a34a); }
+    .bar-career  { background: linear-gradient(90deg, #60a5fa, #2563eb); }
+    .bar-study   { background: linear-gradient(90deg, #fb923c, #ea580c); }
+    .category-text {
+      font-size: 12px;
+      color: var(--txt-muted);
+      line-height: 1.6;
+    }
+
+    /* Lucky items */
+    .lucky-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 24px;
+      margin-bottom: 16px;
+    }
+    .lucky-grid-fortune {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+    @media (min-width: 480px) {
+      .lucky-grid-fortune { grid-template-columns: repeat(4, 1fr); }
+    }
+    .lucky-item-fortune {
+      background: var(--bg-card2);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px 10px;
+      text-align: center;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .lucky-item-fortune:hover {
+      transform: translateY(-2px);
+      border-color: var(--border-hi);
+    }
+    .lucky-item-icon { font-size: 24px; margin-bottom: 8px; }
+    .lucky-item-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--txt-dim);
+      margin-bottom: 6px;
+    }
+    .lucky-item-val {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--gold);
+    }
+    .lucky-color-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      display: inline-block;
+      margin-right: 5px;
+      vertical-align: middle;
+      box-shadow: 0 0 6px currentColor;
+    }
+
+    /* Daily message */
+    .message-card {
+      background: linear-gradient(135deg, rgba(139,92,246,0.1), rgba(234,179,8,0.07));
+      border: 1px solid rgba(139,92,246,0.25);
+      border-radius: 20px;
+      padding: 28px 24px;
+      margin-bottom: 16px;
+      position: relative;
+      overflow: hidden;
+    }
+    .message-card::after {
+      content: '"';
+      position: absolute;
+      bottom: -20px;
+      right: 20px;
+      font-size: 120px;
+      font-family: 'Noto Serif KR', serif;
+      color: rgba(139,92,246,0.15);
+      line-height: 1;
+      pointer-events: none;
+    }
+    .message-quote {
+      font-family: 'Noto Serif KR', serif;
+      font-size: clamp(15px, 3.5vw, 18px);
+      font-weight: 700;
+      color: var(--txt);
+      line-height: 1.8;
+      margin-bottom: 16px;
+      position: relative;
+      z-index: 1;
+    }
+    .message-advice {
+      font-size: 13px;
+      color: var(--txt-muted);
+      line-height: 1.9;
+      position: relative;
+      z-index: 1;
+      padding: 14px 16px;
+      background: rgba(255,255,255,0.03);
+      border-radius: 12px;
+      border-left: 3px solid var(--accent);
+    }
+
+    /* Weekly preview */
+    .weekly-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 24px;
+      margin-bottom: 16px;
+    }
+    .weekly-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 6px;
+    }
+    @media (max-width: 400px) {
+      .weekly-grid { grid-template-columns: repeat(4, 1fr); }
+    }
+    .weekly-day {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+      padding: 10px 4px;
+      border-radius: 12px;
+      background: var(--bg-card2);
+      border: 1px solid var(--border);
+      transition: all 0.2s;
+    }
+    .weekly-day.today {
+      background: rgba(234,179,8,0.12);
+      border-color: rgba(234,179,8,0.4);
+    }
+    .weekly-day-name {
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--txt-dim);
+    }
+    .weekly-day.today .weekly-day-name {
+      color: var(--fortune-accent);
+    }
+    .weekly-date-num {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--txt-muted);
+    }
+    .weekly-day.today .weekly-date-num {
+      color: var(--gold);
+    }
+    .weekly-mini-stars {
+      font-size: 9px;
+      color: var(--gold);
+      letter-spacing: -1px;
+    }
+    .weekly-mini-pct {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--txt-dim);
+    }
+    .weekly-day.today .weekly-mini-pct {
+      color: var(--fortune-accent);
+    }
+
+    /* Advice section */
+    .advice-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 24px;
+      margin-bottom: 16px;
+    }
+    .advice-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .advice-item {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      font-size: 13px;
+      color: var(--txt-muted);
+      line-height: 1.7;
+      padding: 12px 14px;
+      background: rgba(255,255,255,0.02);
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.04);
+    }
+    .advice-item-icon {
+      font-size: 18px;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    /* Bottom nav */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      z-index: 90;
+      background: rgba(10,10,18,0.95);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: stretch;
+      padding-bottom: env(safe-area-inset-bottom, 0px);
+    }
+    .bn-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      padding: 10px 4px;
+      text-decoration: none;
+      color: var(--txt-dim);
+      transition: color 0.2s;
+      min-width: 0;
+    }
+    .bn-item:hover { color: var(--txt-muted); }
+    .bn-item.active { color: var(--fortune-accent); }
+    .bn-icon { font-size: 20px; line-height: 1; }
+    .bn-label {
+      font-size: 10px;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100%;
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 80px;
+      left: 50%;
+      transform: translateX(-50%) translateY(40px);
+      background: #1a1a2e;
+      border: 1px solid rgba(139,92,246,0.4);
+      color: var(--txt);
+      padding: 10px 20px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 500;
+      z-index: 999;
+      opacity: 0;
+      transition: transform 0.3s, opacity 0.3s;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    /* Responsive */
+    @media (max-width: 480px) {
+      .fortune-wrap { padding: calc(56px + 24px) 16px 100px; }
+      .overall-card { padding: 20px 16px; }
+      .categories-card, .lucky-card, .message-card, .weekly-card, .advice-card { padding: 18px 16px; }
+      .date-card { padding: 16px; }
+      .zodiac-btn { padding: 10px 2px 8px; }
+      .zodiac-emoji { font-size: 22px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="starsBg"></canvas>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="index.html" class="logo">
+        <span class="logo-sym">◈</span>
+        <span class="logo-text">AI Wellness</span>
+      </a>
+      <nav class="page-nav">
+        <a href="saju.html" class="pn-link">사주</a>
+        <a href="tarot.html" class="pn-link">타로</a>
+        <a href="meditation.html" class="pn-link">명상</a>
+        <a href="yoga.html" class="pn-link">요가</a>
+        <a href="dream.html" class="pn-link">꿈해몽</a>
+        <a href="fortune.html" class="pn-link active">운세</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="fortune-wrap">
+
+    <!-- Hero -->
+    <section class="fortune-hero">
+      <div class="fortune-eyebrow">⭐ 오늘의 운세</div>
+      <h1 class="fortune-title">오늘 당신의 별자리가<br/>말하는 것</h1>
+      <p class="fortune-subtitle">띠를 선택하면 오늘 하루의 기운과 행운을 알려드립니다</p>
+    </section>
+
+    <!-- Date display -->
+    <div class="date-card" id="dateCard">
+      <div class="date-solar">
+        <span class="date-label">오늘 날짜</span>
+        <span class="date-value" id="solarDate">불러오는 중...</span>
+      </div>
+      <div class="date-day-symbol" id="daySymbol">🌕</div>
+      <div class="date-lunar">
+        <span class="date-lunar-label">음력</span>
+        <span class="date-lunar-value" id="lunarDate">불러오는 중...</span>
+      </div>
+    </div>
+
+    <!-- Zodiac selector -->
+    <div class="section-label">나의 띠를 선택하세요</div>
+    <div class="zodiac-grid" id="zodiacGrid">
+      <!-- Rendered by JS -->
+    </div>
+
+    <!-- Select prompt -->
+    <div id="selectPrompt" class="select-prompt">
+      <span class="select-prompt-icon">✨</span>
+      <p class="select-prompt-text">위에서 나의 띠를 선택하시면<br/>오늘의 운세를 확인할 수 있습니다</p>
+    </div>
+
+    <!-- Fortune result (hidden until zodiac selected) -->
+    <div id="fortuneResult" class="fortune-result">
+
+      <!-- Overall score card -->
+      <div class="overall-card">
+        <div class="overall-top">
+          <div class="zodiac-display">
+            <span class="zodiac-display-emoji" id="resultEmoji"></span>
+            <span class="zodiac-display-name" id="resultName"></span>
+          </div>
+          <div class="overall-info">
+            <div class="overall-title">종합 운세</div>
+            <div class="overall-score-row">
+              <div class="star-rating" id="starRating">
+                <span class="star">★</span>
+                <span class="star">★</span>
+                <span class="star">★</span>
+                <span class="star">★</span>
+                <span class="star">★</span>
+              </div>
+              <span class="overall-pct" id="overallPct">--%</span>
+            </div>
+            <p class="overall-label" id="overallLabel">운세를 불러오는 중입니다...</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Category scores -->
+      <div class="categories-card">
+        <div class="card-title">
+          <span class="card-title-icon">📊</span>
+          세부 운세
+        </div>
+        <div class="category-list" id="categoryList">
+          <!-- Rendered by JS -->
+        </div>
+      </div>
+
+      <!-- Lucky items -->
+      <div class="lucky-card">
+        <div class="card-title">
+          <span class="card-title-icon">🍀</span>
+          오늘의 행운
+        </div>
+        <div class="lucky-grid-fortune" id="luckyGrid">
+          <!-- Rendered by JS -->
+        </div>
+      </div>
+
+      <!-- Daily message -->
+      <div class="message-card">
+        <div class="card-title" style="color:var(--txt);margin-bottom:16px;">
+          <span class="card-title-icon">✨</span>
+          오늘의 메시지
+        </div>
+        <p class="message-quote" id="messageQuote"></p>
+        <p class="message-advice" id="messageAdvice"></p>
+      </div>
+
+      <!-- Advice list -->
+      <div class="advice-card">
+        <div class="card-title">
+          <span class="card-title-icon">💫</span>
+          오늘의 조언
+        </div>
+        <div class="advice-list" id="adviceList">
+          <!-- Rendered by JS -->
+        </div>
+      </div>
+
+      <!-- Weekly preview -->
+      <div class="weekly-card">
+        <div class="card-title">
+          <span class="card-title-icon">📅</span>
+          이번 주 운세 미리보기
+        </div>
+        <div class="weekly-grid" id="weeklyGrid">
+          <!-- Rendered by JS -->
+        </div>
+      </div>
+
+    </div><!-- /fortuneResult -->
+
+  </main>
+
+  <nav class="bottom-nav">
+    <a href="index.html" class="bn-item"><span class="bn-icon">◈</span><span class="bn-label">홈</span></a>
+    <a href="saju.html" class="bn-item"><span class="bn-icon">☯</span><span class="bn-label">사주</span></a>
+    <a href="tarot.html" class="bn-item"><span class="bn-icon">🃏</span><span class="bn-label">타로</span></a>
+    <a href="meditation.html" class="bn-item"><span class="bn-icon">🧘</span><span class="bn-label">명상</span></a>
+    <a href="yoga.html" class="bn-item"><span class="bn-icon">🌿</span><span class="bn-label">요가</span></a>
+    <a href="dream.html" class="bn-item"><span class="bn-icon">🌙</span><span class="bn-label">꿈해몽</span></a>
+    <a href="fortune.html" class="bn-item active"><span class="bn-icon">⭐</span><span class="bn-label">운세</span></a>
+  </nav>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="stars.js"></script>
+  <script src="fortune.js"></script>
+</body>
+</html>

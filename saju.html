@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="정확한 사주팔자 계산으로 나만의 맞춤 운세를 확인하세요. 년주·월주·일주·시주 분석, 오행 분포, 용신 분석." />
-  <meta name="theme-color" content="#0a0a0a" />
+  <meta name="theme-color" content="#07070f" />
   <title>사주팔자 — AI Wellness</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -16,16 +16,18 @@
 
   <!-- ── HEADER ── -->
   <header class="site-header">
-    <div class="header-inner hub-header-inner">
-      <a href="index.html" class="page-back-nav">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
-        AI Wellness
+    <div class="header-inner">
+      <a href="index.html" class="logo">
+        <span class="logo-sym">◈</span>
+        <span class="logo-text">AI Wellness</span>
       </a>
-      <span class="page-title-badge">사주팔자</span>
-      <nav class="hub-nav">
-        <a href="tarot.html"      class="hn-link">타로</a>
-        <a href="meditation.html" class="hn-link">명상</a>
-        <a href="yoga.html"       class="hn-link">요가</a>
+      <nav class="page-nav">
+        <a href="saju.html"       class="pn-link active">사주</a>
+        <a href="tarot.html"      class="pn-link">타로</a>
+        <a href="meditation.html" class="pn-link">명상</a>
+        <a href="yoga.html"       class="pn-link">요가</a>
+        <a href="dream.html"      class="pn-link">꿈해몽</a>
+        <a href="fortune.html"    class="pn-link">운세</a>
       </nav>
     </div>
   </header>
@@ -249,6 +251,15 @@
   <div class="toast" id="toast"></div>
   <div class="tooltip" id="tooltip"></div>
 
+  <nav class="bottom-nav">
+    <a href="index.html" class="bn-item"><span class="bn-icon">◈</span><span class="bn-label">홈</span></a>
+    <a href="saju.html" class="bn-item active"><span class="bn-icon">☯</span><span class="bn-label">사주</span></a>
+    <a href="tarot.html" class="bn-item"><span class="bn-icon">🃏</span><span class="bn-label">타로</span></a>
+    <a href="meditation.html" class="bn-item"><span class="bn-icon">🧘</span><span class="bn-label">명상</span></a>
+    <a href="yoga.html" class="bn-item"><span class="bn-icon">🌿</span><span class="bn-label">요가</span></a>
+    <a href="dream.html" class="bn-item"><span class="bn-icon">🌙</span><span class="bn-label">꿈해몽</span></a>
+    <a href="fortune.html" class="bn-item"><span class="bn-icon">⭐</span><span class="bn-label">운세</span></a>
+  </nav>
   <script src="script.js"></script>
 </body>
 </html>

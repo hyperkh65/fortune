@@ -174,25 +174,60 @@ function showPhase(name) {
   state.phase = name;
 }
 
+/* ── Card Art Config ── */
+const ROMAN = ['0','I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII','XIII','XIV','XV','XVI','XVII','XVIII','XIX','XX','XXI'];
+const CARD_GRADIENTS = [
+  'linear-gradient(160deg,#1a1200 0%,#2d2000 40%,#3d2c00 100%)',  // 0 Fool
+  'linear-gradient(160deg,#1a0000 0%,#2d0a0a 40%,#3d1010 100%)',  // 1 Magician
+  'linear-gradient(160deg,#0a0018 0%,#150030 40%,#1e0042 100%)',  // 2 Priestess
+  'linear-gradient(160deg,#001a08 0%,#002d12 40%,#003d18 100%)',  // 3 Empress
+  'linear-gradient(160deg,#1a0000 0%,#3d0a0a 40%,#500000 100%)',  // 4 Emperor
+  'linear-gradient(160deg,#14001a 0%,#22003d 40%,#300050 100%)',  // 5 Hierophant
+  'linear-gradient(160deg,#1a0008 0%,#3d0015 40%,#500020 100%)',  // 6 Lovers
+  'linear-gradient(160deg,#1a1200 0%,#3d2800 40%,#503200 100%)',  // 7 Chariot
+  'linear-gradient(160deg,#1a0a00 0%,#3d1800 40%,#502000 100%)',  // 8 Strength
+  'linear-gradient(160deg,#0f0f0f 0%,#1a1a1a 40%,#222222 100%)',  // 9 Hermit
+  'linear-gradient(160deg,#001a12 0%,#003d28 40%,#005035 100%)',  // 10 Wheel
+  'linear-gradient(160deg,#001530 0%,#002d5a 40%,#003d78 100%)',  // 11 Justice
+  'linear-gradient(160deg,#0a0018 0%,#18003a 40%,#220050 100%)',  // 12 Hanged
+  'linear-gradient(160deg,#050508 0%,#0d0d14 40%,#121218 100%)',  // 13 Death
+  'linear-gradient(160deg,#001530 0%,#003060 40%,#004080 100%)',  // 14 Temperance
+  'linear-gradient(160deg,#1a0000 0%,#380000 40%,#500000 100%)',  // 15 Devil
+  'linear-gradient(160deg,#1a0500 0%,#380a00 40%,#501000 100%)',  // 16 Tower
+  'linear-gradient(160deg,#001224 0%,#002a50 40%,#003568 100%)',  // 17 Star
+  'linear-gradient(160deg,#0a0018 0%,#160030 40%,#200045 100%)',  // 18 Moon
+  'linear-gradient(160deg,#1a1400 0%,#3a2c00 40%,#503c00 100%)',  // 19 Sun
+  'linear-gradient(160deg,#1a0800 0%,#381400 40%,#502000 100%)',  // 20 Judgement
+  'linear-gradient(160deg,#001a0d 0%,#003820 40%,#005030 100%)',  // 21 World
+];
+
 /* ── Card HTML ── */
 function buildCardHTML(cardData, pos, idx) {
   const { card, reversed } = cardData;
-  const bg = card.color + '18';
+  const grad = CARD_GRADIENTS[card.num] || CARD_GRADIENTS[0];
+  const roman = ROMAN[card.num];
   return `
     <div class="tarot-slot">
       <span class="tarot-slot-label">${pos.label}</span>
       <div class="tarot-card-wrap" data-idx="${idx}" id="tc${idx}">
         <div class="tarot-card-inner">
           <div class="tarot-card-face tarot-card-back-face">
-            <div class="tarot-back-pattern">✦</div>
+            <div class="card-back-pattern"></div>
+            <div class="card-back-center">✦</div>
+            <div class="tarot-back-sigil">◈</div>
           </div>
-          <div class="tarot-card-face tarot-card-front-face"
-               style="background:linear-gradient(160deg,var(--bg-card) 0%,${bg} 100%);border:2px solid ${card.color}55;">
-            <span class="tarot-card-num">${String(card.num).padStart(2,'0')}</span>
-            <span class="tarot-card-sym" style="${reversed ? 'transform:rotate(180deg)' : ''}">${card.sym}</span>
-            <span class="tarot-card-name-kr" style="color:${card.color}">${card.name}</span>
-            <span class="tarot-card-name-en">${card.en}</span>
-            ${reversed ? '<span class="tarot-reversed-label">역방향</span>' : ''}
+          <div class="tarot-card-face tarot-card-front-face" style="background:${grad}">
+            <div class="card-art-frame"></div>
+            <div class="card-face-art" style="${reversed ? 'transform:rotate(180deg)' : ''}">
+              <span class="card-roman">${roman}</span>
+              <span class="card-art-sym" style="filter:drop-shadow(0 0 20px ${card.color}88)">${card.sym}</span>
+              <div>
+                <div class="card-art-name" style="color:${card.color}">${card.name}</div>
+                <div class="card-art-en">${card.en}</div>
+              </div>
+            </div>
+            <div class="card-color-bar" style="background:${card.color}"></div>
+            ${reversed ? '<div class="tarot-reversed-badge">역</div>' : ''}
           </div>
         </div>
       </div>

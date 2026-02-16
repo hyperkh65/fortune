@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="꿈해몽 — 꿈 속 상징의 의미를 분석하여 무의식을 탐구합니다 | AI Wellness" />
+  <meta name="theme-color" content="#0a0a12" />
+  <title>꿈해몽 — AI Wellness</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&family=Noto+Serif+KR:wght@700;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* ══════════════════════════════════════
+       DREAM PAGE — DARK MYSTICAL OVERRIDES
+    ══════════════════════════════════════ */
+    :root {
+      --bg:          #0a0a12;
+      --bg-card:     #13131f;
+      --bg-card2:    #1a1a2e;
+      --bg-hover:    #1e1e32;
+      --border:      rgba(150,100,255,0.15);
+      --border-hi:   rgba(150,100,255,0.28);
+      --txt:         #e8e0ff;
+      --txt-muted:   #9590b8;
+      --txt-dim:     #5e5a7a;
+      --accent:      #8b5cf6;
+      --accent-dim:  rgba(139,92,246,0.14);
+      --dream-accent:#818cf8;
+      --dream-glow:  rgba(129,140,248,0.22);
+      --good-c:      #4ade80;
+      --bad-c:       #f87171;
+      --neutral-c:   #fbbf24;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--txt);
+    }
+
+    /* Stars canvas (visible in dark mode) */
+    #starsBg {
+      display: block;
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.55;
+    }
+
+    /* ── Header ── */
+    .site-header {
+      background: rgba(10,10,18,0.88);
+      border-bottom-color: var(--border);
+      box-shadow: 0 1px 24px rgba(100,60,255,0.1);
+    }
+    .logo-text {
+      background: linear-gradient(135deg, #c4b5fd 20%, var(--dream-accent) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .logo-sym {
+      background: linear-gradient(135deg, var(--accent), var(--dream-accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .page-nav {
+      display: flex;
+      gap: 2px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .page-nav::-webkit-scrollbar { display: none; }
+    .pn-link {
+      padding: 7px 13px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--txt-muted);
+      border-radius: 8px;
+      white-space: nowrap;
+      transition: background 0.2s, color 0.2s;
+      text-decoration: none;
+    }
+    .pn-link:hover { background: var(--bg-card2); color: var(--txt); }
+    .pn-link.active { background: var(--accent-dim); color: var(--dream-accent); font-weight: 600; }
+
+    /* ── Orbs (dream palette) ── */
+    .orb-1 { background: radial-gradient(circle, rgba(139,92,246,0.12) 0%, transparent 70%); }
+    .orb-2 { background: radial-gradient(circle, rgba(129,140,248,0.09) 0%, transparent 70%); }
+    .orb-3 { background: radial-gradient(circle, rgba(168,85,247,0.07) 0%, transparent 70%); }
+
+    /* ══════════════════════════════════════
+       LAYOUT
+    ══════════════════════════════════════ */
+    .dream-wrap {
+      position: relative;
+      z-index: 1;
+      max-width: 760px;
+      margin: 0 auto;
+      padding: calc(var(--hdr) + 40px) 20px 120px;
+    }
+
+    /* ══════════════════════════════════════
+       HERO
+    ══════════════════════════════════════ */
+    .dream-hero {
+      text-align: center;
+      padding-bottom: 44px;
+    }
+    .dream-moon {
+      font-size: 60px;
+      display: block;
+      margin-bottom: 18px;
+      filter: drop-shadow(0 0 28px rgba(129,140,248,0.55));
+      animation: moonPulse 5s ease-in-out infinite;
+    }
+    @keyframes moonPulse {
+      0%, 100% { filter: drop-shadow(0 0 28px rgba(129,140,248,0.55)); transform: scale(1); }
+      50%       { filter: drop-shadow(0 0 44px rgba(129,140,248,0.85)); transform: scale(1.04); }
+    }
+    .dream-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 5px 18px;
+      border-radius: 999px;
+      background: rgba(129,140,248,0.1);
+      border: 1px solid rgba(129,140,248,0.28);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--dream-accent);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+    .dream-title {
+      font-family: 'Noto Serif KR', serif;
+      font-size: clamp(30px, 7vw, 46px);
+      font-weight: 900;
+      line-height: 1.2;
+      margin-bottom: 14px;
+      background: linear-gradient(135deg, #e0d7ff 0%, var(--dream-accent) 50%, #c084fc 100%);
+      background-size: 200% 200%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: titleShimmer 7s ease infinite;
+    }
+    @keyframes titleShimmer {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    .dream-subtitle {
+      font-size: 15px;
+      color: var(--txt-muted);
+      line-height: 1.8;
+      max-width: 420px;
+      margin: 0 auto;
+    }
+
+    /* ══════════════════════════════════════
+       DAILY DREAM CARD
+    ══════════════════════════════════════ */
+    .daily-dream-card {
+      background: linear-gradient(135deg, rgba(129,140,248,0.08) 0%, rgba(139,92,246,0.06) 100%);
+      border: 1px solid rgba(129,140,248,0.22);
+      border-radius: 20px;
+      padding: 20px 22px;
+      margin-bottom: 32px;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      position: relative;
+      overflow: hidden;
+    }
+    .daily-dream-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(129,140,248,0.5), transparent);
+    }
+    .daily-dream-emoji {
+      font-size: 40px;
+      flex-shrink: 0;
+      filter: drop-shadow(0 0 16px rgba(129,140,248,0.5));
+    }
+    .daily-dream-body { flex: 1; min-width: 0; }
+    .daily-dream-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--dream-accent);
+      margin-bottom: 4px;
+    }
+    .daily-dream-name {
+      font-family: 'Noto Serif KR', serif;
+      font-size: 19px;
+      font-weight: 700;
+      color: var(--txt);
+      margin-bottom: 4px;
+    }
+    .daily-dream-short {
+      font-size: 13px;
+      color: var(--txt-muted);
+      line-height: 1.6;
+    }
+    .daily-dream-omen {
+      flex-shrink: 0;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 5px 11px;
+      border-radius: 999px;
+      letter-spacing: 0.04em;
+    }
+    .omen-good    { background: rgba(74,222,128,0.12); border: 1px solid rgba(74,222,128,0.3); color: var(--good-c); }
+    .omen-bad     { background: rgba(248,113,113,0.12); border: 1px solid rgba(248,113,113,0.3); color: var(--bad-c); }
+    .omen-neutral { background: rgba(251,191,36,0.12); border: 1px solid rgba(251,191,36,0.3); color: var(--neutral-c); }
+
+    /* ══════════════════════════════════════
+       SEARCH BOX
+    ══════════════════════════════════════ */
+    .search-section { margin-bottom: 24px; }
+    .search-box-wrap {
+      position: relative;
+    }
+    .search-icon {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 18px;
+      pointer-events: none;
+      opacity: 0.5;
+    }
+    .dream-search-inp {
+      width: 100%;
+      background: var(--bg-card);
+      border: 1px solid var(--border-hi);
+      border-radius: 14px;
+      padding: 15px 48px 15px 48px;
+      color: var(--txt);
+      font-size: 16px;
+      font-family: 'Noto Sans KR', sans-serif;
+      outline: none;
+      transition: border-color 0.22s, box-shadow 0.22s;
+    }
+    .dream-search-inp::placeholder { color: var(--txt-dim); }
+    .dream-search-inp:focus {
+      border-color: var(--dream-accent);
+      box-shadow: 0 0 0 3px rgba(129,140,248,0.15), 0 0 20px rgba(129,140,248,0.1);
+    }
+    .search-clear-btn {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--bg-card2);
+      border: 1px solid var(--border);
+      color: var(--txt-muted);
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity 0.2s, background 0.2s;
+      pointer-events: none;
+    }
+    .search-clear-btn.visible { opacity: 1; pointer-events: auto; }
+    .search-clear-btn:hover { background: var(--bg-hover); color: var(--txt); }
+
+    /* ══════════════════════════════════════
+       CATEGORY FILTER
+    ══════════════════════════════════════ */
+    .cat-filter-row {
+      display: flex;
+      gap: 7px;
+      flex-wrap: wrap;
+      margin-bottom: 28px;
+    }
+    .cat-btn {
+      padding: 8px 16px;
+      border-radius: 999px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--txt-muted);
+      cursor: pointer;
+      font-family: 'Noto Sans KR', sans-serif;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .cat-btn:hover {
+      border-color: var(--border-hi);
+      color: var(--txt);
+      background: var(--bg-hover);
+    }
+    .cat-btn.active {
+      background: var(--accent-dim);
+      border-color: var(--dream-accent);
+      color: var(--dream-accent);
+      font-weight: 700;
+      box-shadow: 0 0 12px rgba(129,140,248,0.18);
+    }
+
+    /* ══════════════════════════════════════
+       RESULTS HEADER
+    ══════════════════════════════════════ */
+    .results-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      min-height: 28px;
+    }
+    .results-count {
+      font-size: 13px;
+      color: var(--txt-muted);
+    }
+    .results-count strong { color: var(--dream-accent); }
+    .results-sort {
+      font-size: 12px;
+      color: var(--txt-dim);
+    }
+
+    /* ══════════════════════════════════════
+       RESULTS GRID
+    ══════════════════════════════════════ */
+    .results-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 14px;
+      margin-bottom: 48px;
+    }
+    .dream-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: border-color 0.22s, transform 0.22s, box-shadow 0.22s;
+      position: relative;
+    }
+    .dream-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: radial-gradient(ellipse at 50% 0%, rgba(129,140,248,0.08) 0%, transparent 55%);
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+    }
+    .dream-card:hover {
+      border-color: rgba(129,140,248,0.38);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 32px rgba(129,140,248,0.12), 0 0 0 1px rgba(129,140,248,0.1);
+    }
+    .dream-card:hover::before { opacity: 1; }
+    .dream-card.expanded { border-color: rgba(139,92,246,0.45); }
+
+    .dc-top {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 18px 16px 14px;
+    }
+    .dc-emoji {
+      font-size: 34px;
+      line-height: 1;
+      flex-shrink: 0;
+      filter: drop-shadow(0 0 10px rgba(129,140,248,0.35));
+    }
+    .dc-info { flex: 1; min-width: 0; }
+    .dc-name {
+      font-family: 'Noto Serif KR', serif;
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--txt);
+      margin-bottom: 4px;
+    }
+    .dc-short {
+      font-size: 12px;
+      color: var(--txt-muted);
+      line-height: 1.6;
+    }
+    .dc-badges {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0 16px 14px;
+      flex-wrap: wrap;
+    }
+    .dc-cat-badge {
+      font-size: 10px;
+      font-weight: 600;
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: var(--bg-card2);
+      border: 1px solid var(--border);
+      color: var(--txt-dim);
+      letter-spacing: 0.03em;
+    }
+    .dc-omen-badge {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 3px 9px;
+      border-radius: 999px;
+      letter-spacing: 0.03em;
+    }
+    .dc-expand-btn {
+      width: 100%;
+      padding: 12px 16px;
+      border-top: 1px solid var(--border);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--txt-dim);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: color 0.2s, background 0.2s;
+      cursor: pointer;
+      font-family: 'Noto Sans KR', sans-serif;
+    }
+    .dc-expand-btn:hover { color: var(--dream-accent); background: rgba(129,140,248,0.05); }
+    .dc-expand-arrow {
+      font-size: 11px;
+      transition: transform 0.25s;
+      display: inline-block;
+    }
+    .dream-card.expanded .dc-expand-arrow { transform: rotate(180deg); }
+
+    /* Expanded body */
+    .dc-body {
+      display: none;
+      padding: 16px;
+      border-top: 1px solid var(--border);
+      background: rgba(0,0,0,0.15);
+      animation: fadeUp 0.25s ease both;
+    }
+    .dream-card.expanded .dc-body { display: block; }
+    .dc-meaning {
+      font-size: 13px;
+      color: var(--txt-muted);
+      line-height: 1.85;
+      margin-bottom: 16px;
+    }
+    .dc-lucky-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .dc-lucky-item {
+      flex: 1;
+      min-width: 70px;
+      background: var(--bg-card2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 8px;
+      text-align: center;
+    }
+    .dc-lucky-label {
+      font-size: 10px;
+      color: var(--txt-dim);
+      margin-bottom: 4px;
+      letter-spacing: 0.04em;
+    }
+    .dc-lucky-val {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--dream-accent);
+    }
+    .dc-tags {
+      display: flex;
+      gap: 5px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+    .dc-tag {
+      font-size: 11px;
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: rgba(129,140,248,0.07);
+      border: 1px solid rgba(129,140,248,0.18);
+      color: var(--txt-dim);
+    }
+
+    /* ══════════════════════════════════════
+       EMPTY STATE
+    ══════════════════════════════════════ */
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      display: none;
+    }
+    .empty-state.show { display: block; }
+    .empty-icon { font-size: 48px; margin-bottom: 16px; opacity: 0.4; }
+    .empty-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--txt);
+      margin-bottom: 8px;
+    }
+    .empty-sub { font-size: 13px; color: var(--txt-muted); }
+
+    /* ══════════════════════════════════════
+       POPULAR KEYWORDS
+    ══════════════════════════════════════ */
+    .popular-section {
+      margin-bottom: 48px;
+    }
+    .section-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .section-icon { font-size: 18px; }
+    .section-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--txt);
+    }
+    .popular-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .pop-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 14px;
+      border-radius: 999px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--txt-muted);
+      cursor: pointer;
+      font-family: 'Noto Sans KR', sans-serif;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+    .pop-chip:hover {
+      border-color: rgba(129,140,248,0.35);
+      color: var(--txt);
+      background: var(--bg-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(129,140,248,0.12);
+    }
+    .pop-chip-emoji { font-size: 15px; }
+
+    /* ══════════════════════════════════════
+       BOTTOM NAV
+    ══════════════════════════════════════ */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      height: 64px;
+      background: rgba(10,10,18,0.94);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-top: 1px solid var(--border);
+      padding: 0 4px;
+      padding-bottom: env(safe-area-inset-bottom, 0);
+    }
+    .bn-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      flex: 1;
+      padding: 6px 4px;
+      text-decoration: none;
+      color: var(--txt-dim);
+      transition: color 0.2s;
+      min-width: 0;
+    }
+    .bn-item:hover { color: var(--txt-muted); }
+    .bn-item.active { color: var(--dream-accent); }
+    .bn-icon {
+      font-size: 20px;
+      line-height: 1;
+    }
+    .bn-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100%;
+    }
+    .bn-item.active .bn-icon {
+      filter: drop-shadow(0 0 8px rgba(129,140,248,0.7));
+    }
+
+    /* ══════════════════════════════════════
+       SEPARATING DIVIDER
+    ══════════════════════════════════════ */
+    .mystic-divider {
+      text-align: center;
+      margin: 36px 0 32px;
+      position: relative;
+    }
+    .mystic-divider::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border-hi), transparent);
+    }
+    .mystic-divider-inner {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--bg);
+      padding: 0 16px;
+      position: relative;
+      font-size: 12px;
+      color: var(--txt-dim);
+      letter-spacing: 0.06em;
+    }
+
+    /* ══════════════════════════════════════
+       CATEGORY SECTION HEADERS
+    ══════════════════════════════════════ */
+    .category-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+    .category-header-icon { font-size: 18px; }
+    .category-header-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--txt);
+    }
+    .category-header-count {
+      font-size: 11px;
+      color: var(--txt-dim);
+      margin-left: auto;
+    }
+
+    /* ══════════════════════════════════════
+       ANIMATIONS
+    ══════════════════════════════════════ */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .results-grid { animation: fadeUp 0.35s ease both; }
+
+    /* ══════════════════════════════════════
+       RESPONSIVE
+    ══════════════════════════════════════ */
+    @media (max-width: 520px) {
+      .results-grid { grid-template-columns: 1fr; }
+      .dream-wrap { padding-left: 14px; padding-right: 14px; }
+      .daily-dream-card { flex-direction: column; text-align: center; gap: 12px; }
+      .daily-dream-omen { align-self: center; }
+    }
+    @media (min-width: 521px) and (max-width: 680px) {
+      .results-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 360px) {
+      .cat-btn { padding: 7px 11px; font-size: 12px; }
+    }
+
+    /* ══════════════════════════════════════
+       TOAST
+    ══════════════════════════════════════ */
+    .toast {
+      position: fixed;
+      bottom: 80px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: var(--bg-card);
+      border: 1px solid rgba(129,140,248,0.3);
+      color: var(--txt);
+      padding: 11px 22px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 500;
+      z-index: 999;
+      opacity: 0;
+      transition: transform 0.3s ease, opacity 0.3s;
+      white-space: nowrap;
+      pointer-events: none;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    }
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="starsBg"></canvas>
+
+  <!-- Ambient orbs -->
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="index.html" class="logo">
+        <span class="logo-sym">◈</span>
+        <span class="logo-text">AI Wellness</span>
+      </a>
+      <nav class="page-nav">
+        <a href="saju.html"       class="pn-link">사주</a>
+        <a href="tarot.html"      class="pn-link">타로</a>
+        <a href="meditation.html" class="pn-link">명상</a>
+        <a href="yoga.html"       class="pn-link">요가</a>
+        <a href="dream.html"      class="pn-link active">꿈해몽</a>
+        <a href="fortune.html"    class="pn-link">운세</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="dream-wrap">
+
+    <!-- Hero -->
+    <section class="dream-hero">
+      <span class="dream-moon">🌙</span>
+      <div class="dream-eyebrow">✦ 꿈 해몽 사전</div>
+      <h1 class="dream-title">꿈해몽</h1>
+      <p class="dream-subtitle">
+        꿈 속에 나타난 상징들을 해석하여<br/>
+        무의식의 메시지를 읽어드립니다
+      </p>
+    </section>
+
+    <!-- Today's Dream -->
+    <div class="daily-dream-card" id="dailyDreamCard">
+      <div class="daily-dream-emoji" id="dailyEmoji">🌙</div>
+      <div class="daily-dream-body">
+        <div class="daily-dream-label">오늘의 꿈 상징</div>
+        <div class="daily-dream-name" id="dailyName">로딩 중...</div>
+        <div class="daily-dream-short" id="dailyShort"></div>
+      </div>
+      <div class="daily-dream-omen" id="dailyOmen"></div>
+    </div>
+
+    <!-- Search -->
+    <div class="search-section">
+      <div class="search-box-wrap">
+        <span class="search-icon">🔍</span>
+        <input
+          id="dreamSearchInp"
+          class="dream-search-inp"
+          type="text"
+          placeholder="꿈에서 본 것을 검색하세요 (예: 뱀, 물, 하늘...)"
+          autocomplete="off"
+          autocorrect="off"
+          spellcheck="false"
+        />
+        <button class="search-clear-btn" id="searchClearBtn" aria-label="검색어 지우기">✕</button>
+      </div>
+    </div>
+
+    <!-- Category Filter -->
+    <div class="cat-filter-row" id="catFilterRow">
+      <button class="cat-btn active" data-cat="all">전체</button>
+      <button class="cat-btn" data-cat="nature">자연</button>
+      <button class="cat-btn" data-cat="animal">동물</button>
+      <button class="cat-btn" data-cat="person">사람</button>
+      <button class="cat-btn" data-cat="place">장소</button>
+      <button class="cat-btn" data-cat="object">사물</button>
+      <button class="cat-btn" data-cat="action">행동</button>
+      <button class="cat-btn" data-cat="emotion">감정</button>
+    </div>
+
+    <!-- Results Meta -->
+    <div class="results-meta" id="resultsMeta">
+      <div class="results-count" id="resultsCount"></div>
+    </div>
+
+    <!-- Results Grid -->
+    <div class="results-grid" id="resultsGrid"></div>
+
+    <!-- Empty State -->
+    <div class="empty-state" id="emptyState">
+      <div class="empty-icon">🌑</div>
+      <div class="empty-title">꿈 상징을 찾을 수 없습니다</div>
+      <div class="empty-sub">다른 키워드로 검색하거나 카테고리를 변경해 보세요</div>
+    </div>
+
+    <!-- Divider -->
+    <div class="mystic-divider">
+      <span class="mystic-divider-inner">✦&nbsp;&nbsp;자주 찾는 꿈 상징&nbsp;&nbsp;✦</span>
+    </div>
+
+    <!-- Popular Keywords -->
+    <section class="popular-section">
+      <div class="section-head">
+        <span class="section-icon">⭐</span>
+        <span class="section-title">인기 꿈 키워드</span>
+      </div>
+      <div class="popular-chips" id="popularChips"></div>
+    </section>
+
+  </main>
+
+  <!-- Bottom Nav -->
+  <nav class="bottom-nav">
+    <a href="index.html"      class="bn-item"><span class="bn-icon">◈</span><span class="bn-label">홈</span></a>
+    <a href="saju.html"       class="bn-item"><span class="bn-icon">☯</span><span class="bn-label">사주</span></a>
+    <a href="tarot.html"      class="bn-item"><span class="bn-icon">🃏</span><span class="bn-label">타로</span></a>
+    <a href="meditation.html" class="bn-item"><span class="bn-icon">🧘</span><span class="bn-label">명상</span></a>
+    <a href="yoga.html"       class="bn-item"><span class="bn-icon">🌿</span><span class="bn-label">요가</span></a>
+    <a href="dream.html"      class="bn-item active"><span class="bn-icon">🌙</span><span class="bn-label">꿈해몽</span></a>
+    <a href="fortune.html"    class="bn-item"><span class="bn-icon">⭐</span><span class="bn-label">운세</span></a>
+  </nav>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <script src="stars.js"></script>
+  <script src="dream.js"></script>
+</body>
+</html>

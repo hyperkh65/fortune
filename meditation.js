@@ -67,7 +67,11 @@ class SoundEngine {
 
   async start(theme, volume) {
     if (theme === 'none') { this.stop(); return; }
-    await this._boot();
+    // Always try to resume AudioContext from user gesture
+    this.initCtx();
+    if (this.ctx.state === 'suspended') {
+      try { await this.ctx.resume(); } catch (_) {}
+    }
     // Stop previous nodes smoothly
     this._timers.forEach(t => clearTimeout(t));
     this._timers = [];
@@ -76,17 +80,20 @@ class SoundEngine {
     // Fade master to 0, start new sound, then fade up
     const now = this.ctx.currentTime;
     this.masterGain.gain.cancelScheduledValues(now);
-    this.masterGain.gain.setTargetAtTime(0, now, 0.15);
+    this.masterGain.gain.setTargetAtTime(0, now, 0.06);
     setTimeout(() => {
       oldNodes.forEach(n => { try { n.stop(); } catch (_) {} try { n.disconnect(); } catch (_) {} });
-      if (!this.ctx || this.theme === null) return;
+      if (!this.ctx) return;
+      // Re-try resume in case context is still suspended
+      if (this.ctx.state === 'suspended') this.ctx.resume().catch(() => {});
       const fn = this[`_play_${theme}`];
       if (fn) fn.call(this);
       const t = this.ctx.currentTime;
       this.masterGain.gain.cancelScheduledValues(t);
       this.masterGain.gain.setValueAtTime(0, t);
-      this.masterGain.gain.setTargetAtTime(volume, t, 0.5);
-    }, 200);
+      // Use linearRamp for immediate, predictable fade-in
+      this.masterGain.gain.linearRampToValueAtTime(volume, t + 0.3);
+    }, 150);
     this.theme = theme;
   }
 
@@ -103,7 +110,7 @@ class SoundEngine {
     if (this.masterGain && this.ctx) {
       const now = this.ctx.currentTime;
       this.masterGain.gain.cancelScheduledValues(now);
-      this.masterGain.gain.setTargetAtTime(0, now, 0.3);
+      this.masterGain.gain.setTargetAtTime(0, now, 0.15);
     }
     const nodesToStop = [...this.activeNodes];
     this.activeNodes = [];
@@ -246,26 +253,26 @@ class SoundEngine {
 
   /* ══ RAIN ══ */
   _play_rain() {
-    // Main rain body
+    // Main rain body — louder
     const n1 = this._noise('white');
     const bp = this._filter('bandpass', 1400, 1.5);
-    const g1 = this._gain(0.55);
+    const g1 = this._gain(1.1);
     n1.connect(bp); bp.connect(g1); g1.connect(this.masterGain); n1.start();
 
     // Fine drizzle (high)
     const n2 = this._noise('white');
-    const hp = this._filter('highpass', 4000);
-    const g2 = this._gain(0.22);
+    const hp = this._filter('highpass', 3500);
+    const g2 = this._gain(0.5);
     const lfo = this._osc(4.0);
-    const lfoG = this._gain(0.15);
+    const lfoG = this._gain(0.2);
     lfo.connect(lfoG); lfoG.connect(g2.gain);
     n2.connect(hp); hp.connect(g2); g2.connect(this.masterGain);
     n2.start(); lfo.start();
 
     // Thunder rumble
     const n3 = this._noise('brown');
-    const lp = this._filter('lowpass', 90);
-    const g3 = this._gain(0.3);
+    const lp = this._filter('lowpass', 120);
+    const g3 = this._gain(0.55);
     n3.connect(lp); lp.connect(g3); g3.connect(this.masterGain); n3.start();
   }
 
@@ -304,12 +311,12 @@ class SoundEngine {
 
   /* ══ FIREPLACE ══ */
   _play_fire() {
-    // Main fire body (pink noise, low pass)
+    // Main fire body (pink noise, low pass) — louder
     const n1 = this._noise('pink');
-    const lp = this._filter('lowpass', 700);
-    const g1 = this._gain(0.55);
+    const lp = this._filter('lowpass', 800);
+    const g1 = this._gain(1.0);
     const lfo = this._osc(0.7);
-    const lfoG = this._gain(0.22);
+    const lfoG = this._gain(0.35);
     lfo.connect(lfoG); lfoG.connect(g1.gain);
     n1.connect(lp); lp.connect(g1); g1.connect(this.masterGain);
     n1.start(); lfo.start();

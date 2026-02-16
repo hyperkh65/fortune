@@ -8,7 +8,7 @@
   <title>오늘의 운세 — 2days 웰니스</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700;900&family=Nanum+Myeongjo:wght@400;700&family=Cinzel:wght@400;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Serif+KR:wght@400;600;700;900&family=Noto+Sans+KR:wght@400;500;700&family=Cinzel:wght@500;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
   <style>
     /* ── Fortune page dark theme overrides ── */
@@ -33,7 +33,7 @@
     body {
       background: var(--bg);
       color: var(--txt);
-      font-family: 'Nanum Myeongjo', 'Noto Serif KR', serif;
+      font-family: 'Black Han Sans', 'Noto Serif KR', serif;
       min-height: 100vh;
       overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
@@ -109,21 +109,19 @@
       flex-shrink: 0;
     }
     .logo-sym {
-      width: 28px; height: 28px;
+      width: 30px; height: 30px;
       border-radius: 8px;
-      background: linear-gradient(135deg, #7c3aed 0%, #a855f7 50%, #f4d03f 100%);
+      background: linear-gradient(135deg, #0f766e 0%, #0d9488 55%, #f59e0b 100%);
       display: flex; align-items: center; justify-content: center;
-      font-size: 14px; line-height: 1;
-      color: #fff;
-      flex-shrink: 0;
-      box-shadow: 0 2px 12px rgba(168,85,247,0.4);
+      font-size: 15px; line-height: 1;
+      color: #fff; flex-shrink: 0;
+      box-shadow: 0 2px 14px rgba(13,148,136,0.45);
+      font-family: 'Black Han Sans', serif;
     }
     .logo-text {
-      font-family: 'Cinzel', 'Noto Serif KR', serif;
-      font-size: 13px;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      background: linear-gradient(135deg, #e8e0ff 20%, #c084fc 60%, var(--gold) 100%);
+      font-family: 'Black Han Sans', 'Noto Serif KR', serif;
+      font-size: 14px; font-weight: 400; letter-spacing: 0.04em;
+      background: linear-gradient(135deg, #dff0ee 20%, #0d9488 60%, var(--gold) 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
@@ -755,6 +753,64 @@
       opacity: 1;
     }
 
+    /* ── 태어난 해별 운세 카드 ── */
+    #allYearFortunes {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    #allYearFortunes.loaded { display: flex !important; }
+    .year-fortune-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 16px;
+      animation: fadeUp 0.35s ease both;
+    }
+    .year-fortune-card:hover { border-color: var(--border-hi); }
+    .yfc-header {
+      display: flex; align-items: center; gap: 8px;
+      margin-bottom: 12px; flex-wrap: wrap;
+    }
+    .yfc-year {
+      font-family: 'Black Han Sans', serif;
+      font-size: 15px; font-weight: 400;
+      color: var(--txt); flex: 1;
+    }
+    .yfc-grade {
+      font-family: 'Black Han Sans', serif;
+      font-size: 13px; font-weight: 400; min-width: 28px;
+    }
+    .yfc-stars { font-size: 12px; letter-spacing: -1px; }
+    .yfc-pct { font-size: 13px; font-weight: 700; min-width: 36px; text-align: right; }
+    .yfc-bars { display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px; }
+    .yfc-bar-row { display: flex; align-items: center; gap: 8px; }
+    .yfc-bar-label {
+      font-size: 11px; color: var(--txt-muted);
+      width: 26px; text-align: right; flex-shrink: 0;
+      font-family: 'Black Han Sans', serif;
+    }
+    .yfc-bar-track {
+      flex: 1; height: 5px; border-radius: 3px;
+      background: rgba(255,255,255,0.07);
+    }
+    .yfc-bar-fill {
+      height: 100%; border-radius: 3px;
+      transition: width 0.6s cubic-bezier(0.4,0,0.2,1);
+    }
+    .yfc-bar-num { font-size: 10px; color: var(--txt-dim); width: 24px; text-align: right; }
+    .yfc-advice {
+      font-size: 12px; color: var(--txt-muted); line-height: 1.6;
+      margin-bottom: 8px;
+      padding: 8px; background: rgba(13,148,136,0.06);
+      border-radius: 8px; border-left: 2px solid var(--accent);
+    }
+    .yfc-lucky {
+      font-size: 11px; color: var(--txt-dim);
+      display: flex; gap: 4px; flex-wrap: wrap;
+    }
+
     /* Responsive */
     @media (max-width: 480px) {
       .fortune-wrap { padding: calc(56px + 24px) 16px 100px; }
@@ -856,6 +912,9 @@
       <span class="select-prompt-icon">✨</span>
       <p class="select-prompt-text">위에서 나의 띠를 선택하시면<br/>오늘의 운세를 확인할 수 있습니다</p>
     </div>
+
+    <!-- 태어난 해별 운세 (all years for selected zodiac) -->
+    <div id="allYearFortunes" class="loaded" style="display:none"></div>
 
     <!-- Fortune result (hidden until zodiac selected) -->
     <div id="fortuneResult" class="fortune-result">

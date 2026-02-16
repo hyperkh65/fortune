@@ -1,44 +1,45 @@
 /* ======================================================
-   AI Wellness — Dark Mystical UI  v2.0
+   AI Wellness — Dark Mystical UI  v3.0
    ====================================================== */
-@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700;900&family=Nanum+Myeongjo:wght@400;700&family=Cinzel:wght@400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Serif+KR:wght@400;600;700;900&family=Noto+Sans+KR:wght@400;500;700&family=Cinzel:wght@500;700&display=swap');
 
 /* ── Variables ── */
 :root {
-  --bg:        #07070f;
-  --bg-card:   #0f0f1a;
-  --bg-card2:  #161625;
-  --bg-hover:  #1e1e30;
-  --border:    rgba(139,92,246,0.18);
-  --border-hi: rgba(139,92,246,0.35);
-  --txt:       #e8e0ff;
-  --txt-muted: #9590b8;
-  --txt-dim:   #4e4a6a;
-  --accent:    #8b5cf6;
-  --accent-dim:rgba(139,92,246,0.15);
-  --gold:      #f4d03f;
-  --gold-dim:  rgba(244,208,63,0.15);
-  /* five element colors — vivid for dark bg */
+  --bg:        #060e18;
+  --bg-card:   #0b1929;
+  --bg-card2:  #102135;
+  --bg-hover:  #163048;
+  --border:    rgba(13,148,136,0.22);
+  --border-hi: rgba(13,148,136,0.5);
+  --txt:       #dff0ee;
+  --txt-muted: #7aacaa;
+  --txt-dim:   #3a6060;
+  --accent:    #0d9488;
+  --accent-dim:rgba(13,148,136,0.13);
+  --gold:      #f59e0b;
+  --gold-dim:  rgba(245,158,11,0.13);
+  /* five element colors */
   --wood:  #34d399;
-  --fire:  #f87171;
+  --fire:  #fb7185;
   --earth: #fbbf24;
   --metal: #94a3b8;
-  --water: #60a5fa;
+  --water: #38bdf8;
   /* pillar glow */
-  --wood-glow:  rgba(52,211,153,0.2);
-  --fire-glow:  rgba(248,113,113,0.2);
-  --earth-glow: rgba(251,191,36,0.2);
-  --metal-glow: rgba(148,163,184,0.2);
-  --water-glow: rgba(96,165,250,0.2);
+  --wood-glow:  rgba(52,211,153,0.22);
+  --fire-glow:  rgba(251,113,133,0.22);
+  --earth-glow: rgba(251,191,36,0.22);
+  --metal-glow: rgba(148,163,184,0.22);
+  --water-glow: rgba(56,189,248,0.22);
 
   --r-sm:  8px;
   --r-md:  14px;
   --r-lg:  20px;
   --r-xl:  28px;
   --hdr:   56px;
-  --bnav:  64px; /* bottom nav height */
-  --font:  'Nanum Myeongjo', 'Noto Serif KR', 'Batang', serif;
-  --serif: 'Noto Serif KR', 'Batang', 'UnBatang', serif;
+  --bnav:  64px;
+  --font:  'Black Han Sans', 'Noto Serif KR', 'Batang', serif;
+  --sans:  'Noto Sans KR', -apple-system, sans-serif;
+  --serif: 'Noto Serif KR', 'Batang', serif;
   --ease:  cubic-bezier(0.4,0,0.2,1);
   --t:     0.22s;
 }
@@ -76,7 +77,7 @@ ul { list-style:none; }
   background: rgba(7,7,15,0.88);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
-  border-bottom: 1px solid rgba(139,92,246,0.12);
+  border-bottom: 1px solid rgba(13,148,136,0.15);
   box-shadow: 0 1px 30px rgba(0,0,0,0.5);
 }
 .header-inner {
@@ -93,21 +94,22 @@ ul { list-style:none; }
   gap: 9px;
 }
 .logo-sym {
-  width: 28px; height: 28px;
+  width: 30px; height: 30px;
   border-radius: 8px;
-  background: linear-gradient(135deg, #7c3aed 0%, #a855f7 50%, #f4d03f 100%);
+  background: linear-gradient(135deg, #0f766e 0%, #0d9488 55%, #f59e0b 100%);
   display: flex; align-items: center; justify-content: center;
-  font-size: 14px; line-height: 1;
+  font-size: 15px; line-height: 1;
   color: #fff;
   flex-shrink: 0;
-  box-shadow: 0 2px 12px rgba(168,85,247,0.4);
+  box-shadow: 0 2px 14px rgba(13,148,136,0.45);
+  font-family: 'Black Han Sans', serif;
 }
 .logo-text {
-  font-family: 'Cinzel', var(--serif);
-  font-size: 14px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  background: linear-gradient(135deg, #e8e0ff 20%, #c084fc 60%, var(--gold) 100%);
+  font-family: 'Black Han Sans', var(--serif);
+  font-size: 15px;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  background: linear-gradient(135deg, #dff0ee 20%, #0d9488 60%, var(--gold) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;

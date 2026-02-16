@@ -107,69 +107,60 @@
 
     /* ── Card Row Stage ── */
     .fan-hint {
-      text-align: center; font-size: 14px; color: rgba(192,132,252,0.85);
-      margin-bottom: 16px; animation: pulse 2s ease-in-out infinite;
-      font-family: 'Nanum Myeongjo', serif; letter-spacing: 0.3px;
+      text-align: center; font-size: 14px; color: rgba(13,148,136,0.9);
+      margin-bottom: 12px; animation: pulse 2s ease-in-out infinite;
+      font-family: 'Black Han Sans', 'Noto Serif KR', serif; letter-spacing: 0.5px;
       padding: 0 20px;
     }
     @keyframes pulse { 0%,100%{opacity:0.6} 50%{opacity:1} }
 
-    /* Horizontal scroll row */
-    .tarot-reader-scene { display: none; } /* 이미지 제거 */
+    /* Grid card layout — all 22 cards in one view */
+    .tarot-reader-scene { display: none; }
 
     .fan-cards-wrap {
-      display: flex;
-      gap: 10px;
-      overflow-x: auto;
-      overflow-y: visible;
-      padding: 20px 20px 28px;
-      scroll-behavior: smooth;
-      scrollbar-width: thin;
-      scrollbar-color: rgba(168,85,247,0.35) transparent;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(56px, 1fr));
+      gap: 8px;
+      padding: 14px 16px 18px;
       width: 100%;
     }
-    .fan-cards-wrap::-webkit-scrollbar { height: 4px; }
-    .fan-cards-wrap::-webkit-scrollbar-track { background: transparent; }
-    .fan-cards-wrap::-webkit-scrollbar-thumb {
-      background: rgba(168,85,247,0.35); border-radius: 99px;
-    }
 
-    /* Individual cards — flat in row */
+    /* Individual cards — grid tile */
     .fan-card {
-      flex-shrink: 0;
-      width: 72px; height: 118px;
-      background: linear-gradient(160deg, #2a0f6e 0%, #4c1d95 50%, #1e0a4a 100%);
-      border: 1.5px solid rgba(168,85,247,0.4);
+      width: 100%; aspect-ratio: 3/5;
+      min-height: 85px;
+      background: linear-gradient(160deg, #081e30 0%, #0d2f48 55%, #061726 100%);
+      border: 1.5px solid rgba(13,148,136,0.32);
       border-radius: 10px;
       cursor: pointer;
-      transition: transform .25s cubic-bezier(0.34,1.56,0.64,1), box-shadow .25s ease, filter .25s ease;
+      transition: transform .22s cubic-bezier(0.34,1.56,0.64,1), box-shadow .22s ease, filter .22s ease;
       display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+      box-shadow: 0 3px 10px rgba(0,0,0,0.4);
       user-select: none;
       position: relative;
     }
     .fan-card::before {
       content: '';
       position: absolute; inset: 4px;
-      border: 1px solid rgba(168,85,247,0.25);
+      border: 1px solid rgba(13,148,136,0.18);
       border-radius: 6px;
     }
     .fan-card::after {
       content: '✦';
-      color: rgba(168,85,247,0.55); font-size: 16px;
+      color: rgba(13,148,136,0.55); font-size: 14px;
     }
     .fan-card:hover {
-      transform: translateY(-18px) scale(1.1);
-      box-shadow: 0 16px 36px rgba(168,85,247,0.5), 0 0 18px rgba(168,85,247,0.3);
-      filter: brightness(1.35);
+      transform: translateY(-9px) scale(1.07);
+      box-shadow: 0 14px 28px rgba(13,148,136,0.4), 0 0 14px rgba(13,148,136,0.22);
+      filter: brightness(1.45);
     }
     .fan-card.selected {
-      filter: brightness(1.5);
-      border-color: #c084fc;
-      box-shadow: 0 0 28px rgba(168,85,247,0.8);
+      filter: brightness(1.6);
+      border-color: #0d9488;
+      box-shadow: 0 0 22px rgba(13,148,136,0.65);
     }
     .fan-card.dimmed {
-      opacity: 0.35; pointer-events: none;
+      opacity: 0.28; pointer-events: none;
     }
 
     /* Revealed card (real image) */

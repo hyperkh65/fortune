@@ -287,11 +287,13 @@ function blendedDaySeed(zodiacOffset, date) {
  * Calculate fortune for a zodiac sign on a given date.
  * Returns scores in range 0–100, plus lucky items.
  */
-function calcFortune(zodiacId, date) {
+function calcFortune(zodiacId, date, birthYear) {
   const zodiac = ZODIAC.find(z => z.id === zodiacId);
   if (!zodiac) return null;
 
-  const seed = blendedDaySeed(zodiac.offset, date);
+  // birthYear modifier: each birth year gets distinct fortune variation
+  const yearMod = birthYear ? ((birthYear % 60) * 7919) : 0;
+  const seed = blendedDaySeed(zodiac.offset, date) + yearMod;
   const rng  = createRng(seed);
 
   // --- Smooth day-to-day variation using multiple sine waves ---
@@ -791,8 +793,67 @@ function selectZodiac(zodiacId) {
     result.style.animation = '';
   }
 
-  renderFortune(zodiacId);
+  renderAllYearFortunes(zodiacId);
   renderWeekly(zodiacId);
+}
+
+/* ================================================================
+   PER-BIRTH-YEAR FORTUNE DISPLAY
+   태어난 해별로 오늘 운세를 모두 표시
+================================================================ */
+function renderAllYearFortunes(zodiacId) {
+  const today  = new Date();
+  const zodiac = ZODIAC.find(z => z.id === zodiacId);
+  if (!zodiac) return;
+
+  const container = document.getElementById('allYearFortunes');
+  if (!container) { renderFortune(zodiacId); return; }
+
+  container.style.display = 'flex';
+
+  container.innerHTML = '';
+
+  zodiac.years.forEach(year => {
+    const f = calcFortune(zodiacId, today, year);
+    if (!f) return;
+
+    const stars    = scoreToStars(f.overall);
+    const starHtml = '★'.repeat(stars) + '☆'.repeat(5 - stars);
+    const barColor = f.overall >= 75 ? '#10b981' : f.overall >= 55 ? '#0d9488' : f.overall >= 40 ? '#f59e0b' : '#fb7185';
+    const grade    = f.overall >= 85 ? '대길' : f.overall >= 70 ? '길' : f.overall >= 55 ? '보통' : f.overall >= 40 ? '주의' : '흉';
+
+    const card = document.createElement('div');
+    card.className = 'year-fortune-card';
+    card.innerHTML = `
+      <div class="yfc-header">
+        <span class="yfc-year">${year}년생 ${zodiac.emoji} ${zodiac.name}띠</span>
+        <span class="yfc-grade" style="color:${barColor}">${grade}</span>
+        <span class="yfc-stars" style="color:${barColor}">${starHtml}</span>
+        <span class="yfc-pct" style="color:${barColor}">${f.overall}점</span>
+      </div>
+      <div class="yfc-bars">
+        ${[
+          { label:'애정', score: f.love },
+          { label:'재물', score: f.money },
+          { label:'건강', score: f.health },
+          { label:'직업', score: f.career },
+          { label:'학업', score: f.study },
+        ].map(cat => `
+          <div class="yfc-bar-row">
+            <span class="yfc-bar-label">${cat.label}</span>
+            <div class="yfc-bar-track">
+              <div class="yfc-bar-fill" style="width:${cat.score}%;background:${barColor}"></div>
+            </div>
+            <span class="yfc-bar-num">${cat.score}</span>
+          </div>`).join('')}
+      </div>
+      <div class="yfc-advice">${f.advice.love}</div>
+      <div class="yfc-lucky">
+        🎨 ${f.lucky_color.name} &nbsp; 🔢 ${f.lucky_number} &nbsp; 🧭 ${f.lucky_direction}
+      </div>
+    `;
+    container.appendChild(card);
+  });
 }
 
 function loadSavedZodiac() {

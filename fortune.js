@@ -893,7 +893,7 @@ function handleBirthYear() {
   const resultText = document.getElementById('birthYearResultText');
   if (!input) return;
   const year = parseInt(input.value, 10);
-  if (!year || year < 1924 || year > 2024) {
+  if (!year || year < 1920 || year > 2025) {
     input.style.borderColor = '#ef4444';
     showToast('1924년 ~ 2024년 사이의 년도를 입력하세요', 2200);
     return;

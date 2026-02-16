@@ -8,7 +8,7 @@
   <title>2days 웰니스 — 사주·타로·명상·요가·꿈해몽·운세</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Serif+KR:wght@400;600;700;900&family=Noto+Sans+KR:wght@400;500;700&family=Cinzel:wght@500;700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600;700;900&family=Noto+Sans+KR:wght@300;400;500;700&family=Cinzel:wght@400;600;700&family=Cinzel:wght@500;700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
   <style>
     /* ── Index-specific overrides ── */
@@ -30,7 +30,7 @@
     }
     .hub-hero-overlay {
       position: absolute; inset: 0;
-      background: radial-gradient(ellipse 80% 60% at 50% 40%, rgba(139,92,246,0.18) 0%, transparent 70%),
+      background: radial-gradient(ellipse 80% 60% at 50% 40%, rgba(200,134,42,0.15) 0%, transparent 70%),
                   linear-gradient(to bottom, rgba(7,7,15,0.3) 0%, rgba(7,7,15,0.75) 70%, rgba(7,7,15,1) 100%);
     }
     .hub-hero-content { position: relative; z-index: 2; max-width: 600px; }
@@ -46,26 +46,28 @@
 
     .hub-title {
       font-family: 'Noto Serif KR', serif;
-      font-size: clamp(36px, 8vw, 64px);
+      font-size: clamp(32px, 7vw, 58px);
       font-weight: 900;
-      line-height: 1.15;
-      letter-spacing: -0.01em;
-      margin-bottom: 20px;
-      background: linear-gradient(135deg, #fff 0%, #e8e0ff 40%, #f4d03f 80%);
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+      margin-bottom: 18px;
+      background: linear-gradient(145deg, #f0ead8 0%, #fff 35%, #e8c580 70%, #c8862a 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
     }
     .hub-title em {
       font-style: italic;
-      font-family: 'Playfair Display', serif;
+      font-family: 'Cinzel', 'Noto Serif KR', serif;
     }
 
     .hub-sub {
-      font-size: clamp(14px, 2.5vw, 17px);
-      color: rgba(255,255,255,0.58);
-      line-height: 1.9;
+      font-family: 'Noto Sans KR', sans-serif;
+      font-size: clamp(13px, 2.2vw, 16px);
+      color: rgba(240,234,216,0.55);
+      line-height: 2;
       margin-bottom: 36px;
+      font-weight: 300;
     }
 
     .hub-cta-row {
@@ -73,24 +75,31 @@
       margin-bottom: 48px;
     }
     .hub-cta-primary {
-      background: linear-gradient(135deg, #0f766e, #0d9488);
-      color: #fff; border: none; border-radius: 14px;
-      padding: 15px 28px; font-size: 15px; font-weight: 700;
-      font-family: 'Black Han Sans', 'Noto Serif KR', serif;
+      background: linear-gradient(135deg, #7a5a14 0%, #c8862a 50%, #e8a83e 100%);
+      color: #fff; border: none; border-radius: 12px;
+      padding: 14px 32px; font-size: 15px; font-weight: 700;
+      font-family: 'Noto Serif KR', serif; letter-spacing: 0.04em;
       cursor: pointer; text-decoration: none;
-      box-shadow: 0 8px 30px rgba(13,148,136,0.4);
-      transition: all .2s;
+      box-shadow: 0 6px 28px rgba(200,134,42,0.45), 0 1px 0 rgba(255,220,150,0.3) inset;
+      transition: all .2s var(--ease);
     }
-    .hub-cta-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(13,148,136,0.5); }
+    .hub-cta-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 40px rgba(200,134,42,0.55), 0 1px 0 rgba(255,220,150,0.3) inset;
+    }
     .hub-cta-secondary {
-      background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.15);
-      color: rgba(255,255,255,0.8); border-radius: 14px;
-      padding: 15px 28px; font-size: 15px; font-weight: 600;
-      font-family: 'Black Han Sans', 'Noto Serif KR', serif;
+      background: rgba(200,134,42,0.08);
+      border: 1px solid rgba(200,134,42,0.3);
+      color: rgba(240,234,216,0.85); border-radius: 12px;
+      padding: 14px 28px; font-size: 15px; font-weight: 600;
+      font-family: 'Noto Serif KR', serif;
       cursor: pointer; text-decoration: none;
       transition: all .2s;
     }
-    .hub-cta-secondary:hover { background: rgba(255,255,255,0.12); }
+    .hub-cta-secondary:hover {
+      background: rgba(200,134,42,0.15);
+      border-color: rgba(200,134,42,0.5);
+    }
 
     /* Floating stat chips */
     .hub-stats-row {
@@ -119,7 +128,7 @@
       display: inline-block;
       font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
       color: var(--accent); font-weight: 700;
-      background: rgba(139,92,246,0.1); border: 1px solid rgba(139,92,246,0.2);
+      background: rgba(200,134,42,0.1); border: 1px solid rgba(200,134,42,0.2);
       padding: 5px 14px; border-radius: 999px; margin-bottom: 14px;
     }
     .hub-section-title {
@@ -151,7 +160,7 @@
     .svc-card:hover {
       transform: translateY(-4px);
       border-color: var(--svc-c, var(--border-hi));
-      box-shadow: 0 12px 40px var(--svc-glow, rgba(139,92,246,0.15));
+      box-shadow: 0 12px 40px var(--svc-glow, rgba(200,134,42,0.15));
     }
     .svc-card-img {
       width: 100%; height: 100px; object-fit: cover;
@@ -293,16 +302,16 @@
           </div>
         </a>
 
-        <a href="tarot.html" class="svc-card" style="--svc-c:#a855f7;--svc-glow:rgba(168,85,247,0.15)">
+        <a href="tarot.html" class="svc-card" style="--svc-c:#c8862a;--svc-glow:rgba(200,134,42,0.15)">
           <div class="svc-shimmer"></div>
           <img class="svc-card-img" src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=600&q=70" alt="타로" loading="lazy" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1518241353330-0f7941c2d9b5?w=600&q=70'" />
-          <div class="svc-icon-wrap" style="background:rgba(168,85,247,0.1);color:#a855f7;box-shadow:0 0 20px rgba(168,85,247,0.2)">🃏</div>
+          <div class="svc-icon-wrap" style="background:rgba(200,134,42,0.1);color:#c8862a;box-shadow:0 0 20px rgba(200,134,42,0.2)">🃏</div>
           <div class="svc-body">
             <h2 class="svc-name">타로 리딩</h2>
             <p class="svc-desc">22장 RWS 아르카나. 1·3·7·10장 스프레드와 종합 해석.</p>
             <div class="svc-cta-row">
-              <span class="svc-cta" style="color:#a855f7">카드 뽑기</span>
-              <span class="svc-arrow" style="color:#a855f7">→</span>
+              <span class="svc-cta" style="color:#c8862a">카드 뽑기</span>
+              <span class="svc-arrow" style="color:#c8862a">→</span>
             </div>
           </div>
         </a>

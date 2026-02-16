@@ -8,7 +8,7 @@
   <title>꿈해몽 — 2days 웰니스</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Serif+KR:wght@400;600;700;900&family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@700;900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600;700;900&family=Noto+Sans+KR:wght@300;400;500;700&family=Cinzel:wght@400;600;700&family=Noto+Serif+KR:wght@700;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
   <style>
     /* ══════════════════════════════════════
@@ -24,8 +24,8 @@
       --txt:         #e8e0ff;
       --txt-muted:   #9590b8;
       --txt-dim:     #5e5a7a;
-      --accent:      #8b5cf6;
-      --accent-dim:  rgba(139,92,246,0.14);
+      --accent:      #c8862a;
+      --accent-dim:  rgba(200,134,42,0.14);
       --dream-accent:#818cf8;
       --dream-glow:  rgba(129,140,248,0.22);
       --good-c:      #4ade80;
@@ -88,9 +88,9 @@
     .pn-link.active { background: var(--accent-dim); color: var(--dream-accent); font-weight: 600; }
 
     /* ── Orbs (dream palette) ── */
-    .orb-1 { background: radial-gradient(circle, rgba(139,92,246,0.12) 0%, transparent 70%); }
+    .orb-1 { background: radial-gradient(circle, rgba(200,134,42,0.12) 0%, transparent 70%); }
     .orb-2 { background: radial-gradient(circle, rgba(129,140,248,0.09) 0%, transparent 70%); }
-    .orb-3 { background: radial-gradient(circle, rgba(168,85,247,0.07) 0%, transparent 70%); }
+    .orb-3 { background: radial-gradient(circle, rgba(200,134,42,0.07) 0%, transparent 70%); }
 
     /* ══════════════════════════════════════
        LAYOUT
@@ -142,7 +142,7 @@
       font-weight: 900;
       line-height: 1.2;
       margin-bottom: 14px;
-      background: linear-gradient(135deg, #e0d7ff 0%, var(--dream-accent) 50%, #c084fc 100%);
+      background: linear-gradient(135deg, #e0d7ff 0%, var(--dream-accent) 50%, #e8a83e 100%);
       background-size: 200% 200%;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -166,7 +166,7 @@
        DAILY DREAM CARD
     ══════════════════════════════════════ */
     .daily-dream-card {
-      background: linear-gradient(135deg, rgba(129,140,248,0.08) 0%, rgba(139,92,246,0.06) 100%);
+      background: linear-gradient(135deg, rgba(129,140,248,0.08) 0%, rgba(200,134,42,0.06) 100%);
       border: 1px solid rgba(129,140,248,0.22);
       border-radius: 20px;
       padding: 20px 22px;
@@ -367,7 +367,7 @@
       box-shadow: 0 12px 32px rgba(129,140,248,0.12), 0 0 0 1px rgba(129,140,248,0.1);
     }
     .dream-card:hover::before { opacity: 1; }
-    .dream-card.expanded { border-color: rgba(139,92,246,0.45); }
+    .dream-card.expanded { border-color: rgba(200,134,42,0.45); }
 
     .dc-top {
       display: flex;

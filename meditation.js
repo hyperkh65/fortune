@@ -67,34 +67,40 @@ class SoundEngine {
 
   async start(theme, volume) {
     if (theme === 'none') { this.stop(); return; }
-    // Always try to resume AudioContext from user gesture
+    // Synchronously create context (must be in user-gesture call stack)
     this.initCtx();
+    // Resume suspended context (iOS requires this after each user gesture)
     if (this.ctx.state === 'suspended') {
       try { await this.ctx.resume(); } catch (_) {}
     }
-    // Stop previous nodes smoothly
+    // Store theme so onstatechange can resume
+    this.theme = theme;
+
+    // Stop previous nodes
     this._timers.forEach(t => clearTimeout(t));
     this._timers = [];
     const oldNodes = [...this.activeNodes];
     this.activeNodes = [];
-    // Fade master to 0, start new sound, then fade up
+
+    // Fade master to 0, swap sound, then ramp up
     const now = this.ctx.currentTime;
     this.masterGain.gain.cancelScheduledValues(now);
-    this.masterGain.gain.setTargetAtTime(0, now, 0.06);
+    this.masterGain.gain.setValueAtTime(this.masterGain.gain.value, now);
+    this.masterGain.gain.linearRampToValueAtTime(0, now + 0.08);
+
     setTimeout(() => {
       oldNodes.forEach(n => { try { n.stop(); } catch (_) {} try { n.disconnect(); } catch (_) {} });
       if (!this.ctx) return;
-      // Re-try resume in case context is still suspended
+      // Re-resume in case context got suspended during the 100ms wait
       if (this.ctx.state === 'suspended') this.ctx.resume().catch(() => {});
       const fn = this[`_play_${theme}`];
       if (fn) fn.call(this);
       const t = this.ctx.currentTime;
       this.masterGain.gain.cancelScheduledValues(t);
       this.masterGain.gain.setValueAtTime(0, t);
-      // Use linearRamp for immediate, predictable fade-in
-      this.masterGain.gain.linearRampToValueAtTime(volume, t + 0.3);
-    }, 150);
-    this.theme = theme;
+      // Snap to volume quickly (100ms) for near-instant response
+      this.masterGain.gain.linearRampToValueAtTime(volume, t + 0.1);
+    }, 100);
   }
 
   setVolume(vol) {

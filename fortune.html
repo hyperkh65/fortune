@@ -8,32 +8,18 @@
   <title>오늘의 운세 — 2days 웰니스</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Serif+KR:wght@400;600;700;900&family=Noto+Sans+KR:wght@400;500;700&family=Cinzel:wght@500;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600;700;900&family=Noto+Sans+KR:wght@300;400;500;700&family=Cinzel:wght@400;600;700&family=Cinzel:wght@500;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
   <style>
-    /* ── Fortune page dark theme overrides ── */
-    :root {
-      --bg:             #0a0a12;
-      --bg-card:        #13131f;
-      --bg-card2:       #1a1a2e;
-      --bg-hover:       #1e1e32;
-      --border:         rgba(139,92,246,0.15);
-      --border-hi:      rgba(139,92,246,0.3);
-      --txt:            #e8e0ff;
-      --txt-muted:      #a89fc8;
-      --txt-dim:        #6b6490;
-      --accent:         #8b5cf6;
-      --accent-dim:     rgba(139,92,246,0.12);
-      --gold:           #f4d03f;
-      --fortune-accent: #eab308;
-    }
+    /* Fortune page uses global premium tokens */
+    :root { --fortune-accent: var(--gold); }
 
     html { scroll-behavior: smooth; }
 
     body {
       background: var(--bg);
       color: var(--txt);
-      font-family: 'Black Han Sans', 'Noto Serif KR', serif;
+      font-family: var(--font);
       min-height: 100vh;
       overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
@@ -59,7 +45,7 @@
     }
     .orb-1 {
       width: 500px; height: 500px;
-      background: radial-gradient(circle, rgba(139,92,246,0.12) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(200,134,42,0.12) 0%, transparent 70%);
       top: -150px; left: -100px;
       animation-delay: 0s;
     }
@@ -71,7 +57,7 @@
     }
     .orb-3 {
       width: 350px; height: 350px;
-      background: radial-gradient(circle, rgba(139,92,246,0.08) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(200,134,42,0.08) 0%, transparent 70%);
       bottom: 0; left: 20%;
       animation-delay: -9s;
     }
@@ -85,8 +71,8 @@
       position: fixed;
       top: 0; left: 0; right: 0;
       z-index: 100;
-      height: 56px;
-      background: rgba(10,10,18,0.88);
+      height: var(--hdr);
+      background: rgba(4,12,24,0.92);
       backdrop-filter: blur(24px);
       -webkit-backdrop-filter: blur(24px);
       border-bottom: 1px solid var(--border);
@@ -109,19 +95,19 @@
       flex-shrink: 0;
     }
     .logo-sym {
-      width: 30px; height: 30px;
-      border-radius: 8px;
-      background: linear-gradient(135deg, #0f766e 0%, #0d9488 55%, #f59e0b 100%);
+      width: 32px; height: 32px;
+      border-radius: 10px;
+      background: linear-gradient(145deg, #7a5a14 0%, #c8862a 50%, #e8a83e 100%);
       display: flex; align-items: center; justify-content: center;
       font-size: 15px; line-height: 1;
       color: #fff; flex-shrink: 0;
-      box-shadow: 0 2px 14px rgba(13,148,136,0.45);
-      font-family: 'Black Han Sans', serif;
+      box-shadow: 0 2px 16px rgba(200,134,42,0.5), 0 1px 0 rgba(255,220,150,0.3) inset;
+      font-family: var(--serif);
     }
     .logo-text {
-      font-family: 'Black Han Sans', 'Noto Serif KR', serif;
-      font-size: 14px; font-weight: 400; letter-spacing: 0.04em;
-      background: linear-gradient(135deg, #dff0ee 20%, #0d9488 60%, var(--gold) 100%);
+      font-family: var(--serif);
+      font-size: 15px; font-weight: 700; letter-spacing: 0.06em;
+      background: linear-gradient(135deg, #f0ead8 0%, #e8a83e 55%, #c8862a 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
@@ -294,7 +280,7 @@
       border: 1px solid var(--border);
       cursor: pointer;
       transition: all 0.2s cubic-bezier(0.4,0,0.2,1);
-      font-family: 'Nanum Myeongjo', 'Noto Serif KR', serif;
+      font-family: 'Noto Serif KR', serif;
     }
     .zodiac-btn:hover {
       border-color: var(--border-hi);
@@ -325,7 +311,7 @@
       line-height: 1.5;
       text-align: center;
       word-break: break-all;
-      font-family: 'Cinzel', 'Nanum Myeongjo', serif;
+      font-family: 'Cinzel', 'Noto Serif KR', serif;
     }
     .zodiac-btn.active .zodiac-years {
       color: rgba(234,179,8,0.7);
@@ -558,8 +544,8 @@
 
     /* Daily message */
     .message-card {
-      background: linear-gradient(135deg, rgba(139,92,246,0.1), rgba(234,179,8,0.07));
-      border: 1px solid rgba(139,92,246,0.25);
+      background: linear-gradient(135deg, rgba(200,134,42,0.1), rgba(234,179,8,0.07));
+      border: 1px solid rgba(200,134,42,0.25);
       border-radius: 20px;
       padding: 28px 24px;
       margin-bottom: 16px;
@@ -573,7 +559,7 @@
       right: 20px;
       font-size: 120px;
       font-family: 'Noto Serif KR', serif;
-      color: rgba(139,92,246,0.15);
+      color: rgba(200,134,42,0.15);
       line-height: 1;
       pointer-events: none;
     }
@@ -736,7 +722,7 @@
       left: 50%;
       transform: translateX(-50%) translateY(40px);
       background: #1a1a2e;
-      border: 1px solid rgba(139,92,246,0.4);
+      border: 1px solid rgba(200,134,42,0.4);
       color: var(--txt);
       padding: 10px 20px;
       border-radius: 999px;
@@ -774,12 +760,12 @@
       margin-bottom: 12px; flex-wrap: wrap;
     }
     .yfc-year {
-      font-family: 'Black Han Sans', serif;
+      font-family: 'Noto Serif KR', serif;
       font-size: 15px; font-weight: 400;
       color: var(--txt); flex: 1;
     }
     .yfc-grade {
-      font-family: 'Black Han Sans', serif;
+      font-family: 'Noto Serif KR', serif;
       font-size: 13px; font-weight: 400; min-width: 28px;
     }
     .yfc-stars { font-size: 12px; letter-spacing: -1px; }
@@ -789,7 +775,7 @@
     .yfc-bar-label {
       font-size: 11px; color: var(--txt-muted);
       width: 26px; text-align: right; flex-shrink: 0;
-      font-family: 'Black Han Sans', serif;
+      font-family: 'Noto Serif KR', serif;
     }
     .yfc-bar-track {
       flex: 1; height: 5px; border-radius: 3px;
@@ -803,7 +789,7 @@
     .yfc-advice {
       font-size: 12px; color: var(--txt-muted); line-height: 1.6;
       margin-bottom: 8px;
-      padding: 8px; background: rgba(13,148,136,0.06);
+      padding: 8px; background: rgba(200,134,42,0.06);
       border-radius: 8px; border-left: 2px solid var(--accent);
     }
     .yfc-lucky {
@@ -882,7 +868,7 @@
     <div class="section-label">태어난 년도로 띠 찾기</div>
     <div style="display:flex;gap:10px;margin-bottom:20px;align-items:center">
       <input type="number" id="birthYearInput" placeholder="출생연도 입력 (예: 1990)"
-        min="1924" max="2024"
+        min="1924" max="2025"
         style="flex:1;background:var(--bg-card);border:1px solid var(--border);
                border-radius:12px;color:var(--txt);font-size:15px;padding:13px 16px;
                font-family:inherit;outline:none;-moz-appearance:textfield"

@@ -883,7 +883,7 @@ function initTooltips() {
 function populateForm() {
   // Year
   const yearSel = document.getElementById('yearSel');
-  for (let y = 2005; y >= 1930; y--) {
+  for (let y = 2025; y >= 1920; y--) {
     const opt = document.createElement('option');
     opt.value = y; opt.textContent = `${y}년`;
     yearSel.appendChild(opt);

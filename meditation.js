@@ -40,9 +40,21 @@ class SoundEngine {
       this.ctx = new (window.AudioContext || window.webkitAudioContext)();
     }
     if (this.ctx.state === 'suspended') await this.ctx.resume();
-    this.masterGain = this.ctx.createGain();
-    this.masterGain.gain.value = 0;
-    this.masterGain.connect(this.ctx.destination);
+    // Only create masterGain if we don't have one (prevents accumulation)
+    if (!this.masterGain) {
+      this.masterGain = this.ctx.createGain();
+      this.masterGain.gain.value = 0;
+      this.masterGain.connect(this.ctx.destination);
+    }
+    // Resume on visibility change (prevents sound cutting out in background)
+    if (!this._visibilityBound) {
+      this._visibilityBound = true;
+      document.addEventListener('visibilitychange', () => {
+        if (!document.hidden && this.ctx && this.ctx.state === 'suspended') {
+          this.ctx.resume();
+        }
+      });
+    }
   }
 
   async start(theme, volume) {
@@ -65,18 +77,22 @@ class SoundEngine {
   stop() {
     this._timers.forEach(t => clearTimeout(t));
     this._timers = [];
+    // Fade out master gain
     if (this.masterGain && this.ctx) {
-      this.masterGain.gain.setTargetAtTime(0, this.ctx.currentTime, 0.3);
+      const now = this.ctx.currentTime;
+      this.masterGain.gain.cancelScheduledValues(now);
+      this.masterGain.gain.setTargetAtTime(0, now, 0.3);
     }
+    const nodesToStop = [...this.activeNodes];
+    this.activeNodes = [];
     setTimeout(() => {
-      this.activeNodes.forEach(n => {
+      nodesToStop.forEach(n => {
         try { n.stop(); } catch (_) {}
         try { n.disconnect(); } catch (_) {}
       });
-      this.activeNodes = [];
-      if (this.masterGain) { try { this.masterGain.disconnect(); } catch (_) {} this.masterGain = null; }
-    }, 500);
+    }, 600);
     this.theme = null;
+    // Keep masterGain alive for next start (just reset to 0)
   }
 
   /* ── Helpers ── */
@@ -576,16 +592,32 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.med-sound-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     currentSound = btn.dataset.sound;
+    // Update body class for background image
+    document.body.className = document.body.className
+      .replace(/\bsound-\S+/g, '').trim();
+    if (currentSound !== 'none') {
+      document.body.classList.add('sound-' + currentSound);
+    }
     if (state.running) {
       const vol = parseFloat($('volumeSlider').value);
       soundEngine.start(currentSound, vol);
     }
   });
 
-  // Volume
-  $('volumeSlider').addEventListener('input', e => {
+  // Volume — update track fill and percentage
+  const volSlider = $('volumeSlider');
+  const volPct    = $('volPct');
+  function updateVolSliderUI() {
+    const val = parseFloat(volSlider.value);
+    const pct = Math.round(val * 100);
+    volSlider.style.setProperty('--vol', pct + '%');
+    if (volPct) volPct.textContent = pct + '%';
+  }
+  volSlider.addEventListener('input', e => {
+    updateVolSliderUI();
     soundEngine.setVolume(parseFloat(e.target.value));
   });
+  updateVolSliderUI(); // initial
 
   // Start / pause
   $('startBtn').addEventListener('click', () => {

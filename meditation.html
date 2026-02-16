@@ -3,12 +3,100 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="호흡과 마음챙김으로 내면의 평화를 찾아가는 명상 타이머. 다양한 호흡법과 배경음으로 깊은 명상을 도와드립니다." />
-  <title>명상 — AI Wellness</title>
+  <meta name="description" content="호흡과 마음챙김으로 내면의 평화를 찾아가는 명상 타이머." />
+  <title>명상 — 2days 웰니스</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&family=Noto+Serif+KR:wght@700;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
+  <style>
+    /* ── Meditation Hero ── */
+    .med-hero {
+      position: relative; height: 260px;
+      display: flex; align-items: flex-end; justify-content: center;
+      overflow: hidden;
+    }
+    .med-hero-bg {
+      position: absolute; inset: 0;
+      background: url('https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=1200&q=80') center/cover no-repeat;
+      filter: brightness(0.4);
+      transition: background-image 0.8s ease;
+    }
+    .med-hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to bottom, rgba(7,7,15,0.1), rgba(7,7,15,0.85));
+    }
+    .med-hero-text {
+      position: relative; z-index: 2;
+      text-align: center; padding: 0 20px 24px;
+    }
+    .med-hero-eyebrow { font-size: 11px; letter-spacing: 3px; color: #60a5fa; margin-bottom: 8px; }
+    .med-hero-title { font-size: clamp(22px, 5vw, 32px); font-weight: 900; color: #fff; font-family: 'Noto Serif KR', serif; }
+
+    /* Sound cards with real images */
+    .med-sound-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 10px; margin-bottom: 16px;
+    }
+    @media(min-width:500px){ .med-sound-grid { grid-template-columns: repeat(5, 1fr); } }
+    @media(min-width:700px){ .med-sound-grid { grid-template-columns: repeat(9, 1fr); } }
+
+    .med-sound-btn {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 12px; overflow: hidden; cursor: pointer;
+      transition: all .2s; position: relative; padding: 0;
+      aspect-ratio: 1;
+    }
+    .med-sound-btn.active {
+      border-color: #60a5fa;
+      box-shadow: 0 0 16px rgba(96,165,250,0.3);
+    }
+    .med-sound-img {
+      width: 100%; height: 60px; object-fit: cover;
+      display: block;
+    }
+    .med-sound-no-img {
+      width: 100%; height: 60px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px; background: rgba(96,165,250,0.08);
+    }
+    .med-sound-label-wrap {
+      padding: 5px 4px;
+      text-align: center;
+    }
+    .med-sound-name { font-size: 11px; color: var(--txt-muted); display: block; }
+    .med-sound-btn.active .med-sound-name { color: #60a5fa; font-weight: 600; }
+
+    /* Volume control */
+    .med-volume-row {
+      display: flex; align-items: center; gap: 10px;
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 12px; padding: 12px 16px; margin-bottom: 20px;
+    }
+    .med-vol-icon { font-size: 18px; }
+    .med-volume-slider {
+      flex: 1; -webkit-appearance: none; appearance: none;
+      height: 4px; border-radius: 2px;
+      background: linear-gradient(to right, #60a5fa 0%, #60a5fa var(--vol, 50%), rgba(255,255,255,0.15) var(--vol, 50%), rgba(255,255,255,0.15) 100%);
+      outline: none; cursor: pointer;
+    }
+    .med-volume-slider::-webkit-slider-thumb {
+      -webkit-appearance: none; width: 16px; height: 16px;
+      border-radius: 50%; background: #60a5fa;
+      box-shadow: 0 0 8px rgba(96,165,250,0.5);
+    }
+    .med-vol-pct { font-size: 12px; color: #60a5fa; min-width: 32px; text-align: right; }
+
+    /* Active bg per sound */
+    body.sound-ocean    .med-hero-bg { background-image: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&q=80'); }
+    body.sound-forest   .med-hero-bg { background-image: url('https://images.unsplash.com/photo-1448375240586-882707db888b?w=1200&q=80'); }
+    body.sound-rain     .med-hero-bg { background-image: url('https://images.unsplash.com/photo-1498496294664-d4f87d90d666?w=1200&q=80'); }
+    body.sound-temple   .med-hero-bg { background-image: url('https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=1200&q=80'); }
+    body.sound-fire     .med-hero-bg { background-image: url('https://images.unsplash.com/photo-1486974914048-c4d9d984d9f1?w=1200&q=80'); }
+    body.sound-wind     .med-hero-bg { background-image: url('https://images.unsplash.com/photo-1504701954957-2010ec3bcec1?w=1200&q=80'); }
+    body.sound-healing  .med-hero-bg { background-image: url('https://images.unsplash.com/photo-1518241353330-0f7941c2d9b5?w=1200&q=80'); }
+    body.sound-white    .med-hero-bg { background-image: url('https://images.unsplash.com/photo-1542281286-9e0a16bb7366?w=1200&q=80'); }
+  </style>
 </head>
 <body class="med-page">
   <canvas id="starsBg"></canvas>
@@ -17,7 +105,7 @@
     <div class="header-inner">
       <a href="index.html" class="logo">
         <span class="logo-sym">◈</span>
-        <span class="logo-text">AI Wellness</span>
+        <span class="logo-text">2days 웰니스</span>
       </a>
       <nav class="page-nav">
         <a href="saju.html"       class="pn-link">사주</a>
@@ -30,9 +118,17 @@
     </div>
   </header>
 
+  <!-- Hero with dynamic background -->
+  <div class="med-hero">
+    <div class="med-hero-bg" id="medHeroBg"></div>
+    <div class="med-hero-overlay"></div>
+    <div class="med-hero-text">
+      <div class="med-hero-eyebrow">✦ MEDITATION TIMER ✦</div>
+      <h1 class="med-hero-title">지금 이 순간에 머무세요</h1>
+    </div>
+  </div>
+
   <div class="med-wrap">
-    <p class="med-eyebrow">✦ 명상 타이머</p>
-    <h1 class="med-title">지금 이 순간에 머무세요</h1>
 
     <!-- Breathing type -->
     <div class="med-type-grid" id="typeGrid">
@@ -44,12 +140,12 @@
       <button class="med-type-btn" data-type="box">
         <div class="med-type-icon">📦</div>
         <div class="med-type-name">박스 호흡</div>
-        <div class="med-type-sub">4-4-4-4 사각 호흡</div>
+        <div class="med-type-sub">4-4-4-4 사각호흡</div>
       </button>
       <button class="med-type-btn" data-type="478">
         <div class="med-type-icon">🌙</div>
         <div class="med-type-name">4-7-8 호흡</div>
-        <div class="med-type-sub">수면·이완 호흡법</div>
+        <div class="med-type-sub">수면·이완 호흡</div>
       </button>
       <button class="med-type-btn" data-type="open">
         <div class="med-type-icon">🧘</div>
@@ -66,52 +162,55 @@
       <button class="med-dur-btn" data-min="20">20분</button>
     </div>
 
-    <!-- Sound theme selector -->
+    <!-- Sound theme with real images -->
     <div class="med-sound-section">
       <p class="med-sound-label">🎵 배경 소리</p>
       <div class="med-sound-grid" id="soundGrid">
         <button class="med-sound-btn active" data-sound="none">
-          <span class="med-sound-icon">🔇</span>
-          <span class="med-sound-name">없음</span>
+          <div class="med-sound-no-img">🔇</div>
+          <div class="med-sound-label-wrap"><span class="med-sound-name">없음</span></div>
         </button>
         <button class="med-sound-btn" data-sound="ocean">
-          <span class="med-sound-icon">🌊</span>
-          <span class="med-sound-name">바다</span>
+          <img class="med-sound-img" src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=200&q=60" alt="바다" loading="lazy" />
+          <div class="med-sound-label-wrap"><span class="med-sound-name">🌊 바다</span></div>
         </button>
         <button class="med-sound-btn" data-sound="forest">
-          <span class="med-sound-icon">🌲</span>
-          <span class="med-sound-name">산속</span>
+          <img class="med-sound-img" src="https://images.unsplash.com/photo-1448375240586-882707db888b?w=200&q=60" alt="산속" loading="lazy" />
+          <div class="med-sound-label-wrap"><span class="med-sound-name">🌲 산속</span></div>
         </button>
         <button class="med-sound-btn" data-sound="rain">
-          <span class="med-sound-icon">🌧️</span>
-          <span class="med-sound-name">빗소리</span>
+          <img class="med-sound-img" src="https://images.unsplash.com/photo-1498496294664-d4f87d90d666?w=200&q=60" alt="빗소리" loading="lazy" />
+          <div class="med-sound-label-wrap"><span class="med-sound-name">🌧️ 빗소리</span></div>
         </button>
         <button class="med-sound-btn" data-sound="temple">
-          <span class="med-sound-icon">🏯</span>
-          <span class="med-sound-name">사찰</span>
+          <img class="med-sound-img" src="https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=200&q=60" alt="사찰" loading="lazy" />
+          <div class="med-sound-label-wrap"><span class="med-sound-name">🏯 사찰</span></div>
         </button>
         <button class="med-sound-btn" data-sound="fire">
-          <span class="med-sound-icon">🔥</span>
-          <span class="med-sound-name">벽난로</span>
+          <img class="med-sound-img" src="https://images.unsplash.com/photo-1486974914048-c4d9d984d9f1?w=200&q=60" alt="벽난로" loading="lazy" />
+          <div class="med-sound-label-wrap"><span class="med-sound-name">🔥 벽난로</span></div>
         </button>
         <button class="med-sound-btn" data-sound="wind">
-          <span class="med-sound-icon">💨</span>
-          <span class="med-sound-name">바람</span>
+          <img class="med-sound-img" src="https://images.unsplash.com/photo-1504701954957-2010ec3bcec1?w=200&q=60" alt="바람" loading="lazy" />
+          <div class="med-sound-label-wrap"><span class="med-sound-name">💨 바람</span></div>
         </button>
         <button class="med-sound-btn" data-sound="healing">
-          <span class="med-sound-icon">✨</span>
-          <span class="med-sound-name">치유·432Hz</span>
+          <img class="med-sound-img" src="https://images.unsplash.com/photo-1518241353330-0f7941c2d9b5?w=200&q=60" alt="치유" loading="lazy" />
+          <div class="med-sound-label-wrap"><span class="med-sound-name">✨ 432Hz</span></div>
         </button>
         <button class="med-sound-btn" data-sound="white">
-          <span class="med-sound-icon">📻</span>
-          <span class="med-sound-name">백색소음</span>
+          <img class="med-sound-img" src="https://images.unsplash.com/photo-1542281286-9e0a16bb7366?w=200&q=60" alt="백색소음" loading="lazy" />
+          <div class="med-sound-label-wrap"><span class="med-sound-name">📻 백색소음</span></div>
         </button>
       </div>
+
+      <!-- Volume control -->
       <div class="med-volume-row">
         <span class="med-vol-icon">🔈</span>
         <input type="range" id="volumeSlider" class="med-volume-slider"
-               min="0" max="1" step="0.05" value="0.5" />
+               min="0" max="1" step="0.01" value="0.5" />
         <span class="med-vol-icon">🔊</span>
+        <span class="med-vol-pct" id="volPct">50%</span>
       </div>
     </div>
 
@@ -135,18 +234,16 @@
         </div>
       </div>
 
-      <!-- Breathing circle -->
       <div class="med-breath-wrap" id="breathWrap">
         <div class="med-breath-ring" id="breathRing"></div>
         <div class="med-breath-core" id="breathCore"></div>
       </div>
       <p class="med-breath-text" id="breathText">시작 버튼을 눌러 명상을 시작하세요</p>
 
-      <!-- Controls -->
       <div class="med-ctrl-row">
         <button class="med-reset-btn" id="resetBtn" title="초기화">↺</button>
         <button class="med-start-btn" id="startBtn">▶</button>
-        <button class="med-reset-btn" id="skipBtn" title="건너뛰기">⏭</button>
+        <button class="med-reset-btn" id="skipBtn" title="완료 처리">⏭</button>
       </div>
     </div>
 

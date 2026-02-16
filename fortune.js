@@ -600,6 +600,143 @@ function renderFortune(zodiacId) {
       adviceList.appendChild(el);
     });
   }
+
+  // Monthly forecast
+  renderMonthlyForecast(zodiacId, today);
+  // Compatibility
+  renderCompatibility(zodiacId, today);
+  // Extended lucky items
+  renderLuckyItemsFull(fortune, today);
+}
+
+/* ── Monthly Forecast ── */
+function renderMonthlyForecast(zodiacId, today) {
+  const el = document.getElementById('monthlyForecast');
+  if (!el) return;
+  const zodiac = ZODIAC.find(z => z.id === zodiacId);
+  if (!zodiac) return;
+
+  const month = today.getMonth() + 1;
+  const MONTH_THEMES = [
+    '새해의 기운이 강하게 밀려오는 달입니다. 새로운 시작에 적극적으로 나서세요.',
+    '봄의 기운이 움트는 달입니다. 작은 변화를 두려워하지 마세요.',
+    '활동적인 에너지가 넘치는 달입니다. 추진력을 발휘할 최적의 시기입니다.',
+    '봄이 무르익는 달입니다. 인간관계에서 좋은 인연이 생깁니다.',
+    '성장과 풍요의 에너지가 가득한 달입니다. 노력의 결실을 맺기 시작합니다.',
+    '중반기의 흐름을 점검하는 달입니다. 계획을 재정비하는 것이 유리합니다.',
+    '열정적인 에너지가 넘치는 달입니다. 과도한 열기는 조심하세요.',
+    '수확의 계절이 시작됩니다. 지금까지의 노력이 빛을 발합니다.',
+    '정리와 결실의 달입니다. 중요한 결정을 내리기에 좋은 시기입니다.',
+    '내면을 돌아보는 달입니다. 차분하게 미래를 준비하세요.',
+    '마무리의 달입니다. 올 한 해를 되돌아보고 내년을 준비하세요.',
+    '한 해를 마무리하는 달입니다. 감사함을 나누고 새해를 준비하세요.',
+  ];
+
+  const rng = createRng(zodiac.offset + today.getFullYear() * 100 + month * 10);
+  const scores = [];
+  for (let w = 1; w <= 4; w++) {
+    scores.push(45 + Math.floor(rng() * 45));
+  }
+
+  el.innerHTML = `
+    <div style="font-size:13px;color:var(--txt-muted);line-height:1.75;margin-bottom:14px;
+      padding:14px;background:rgba(244,208,63,0.06);border-radius:10px;border:1px solid rgba(244,208,63,0.15)">
+      <strong style="color:var(--gold)">${month}월 총평:</strong> ${MONTH_THEMES[month - 1]}
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">
+      ${scores.map((s, i) => {
+        const grade = s >= 75 ? '대길' : s >= 60 ? '길' : s >= 45 ? '보통' : '주의';
+        const color = s >= 75 ? '#34d399' : s >= 60 ? '#60a5fa' : s >= 45 ? '#eab308' : '#f87171';
+        return `<div style="text-align:center;background:var(--bg-card);border:1px solid var(--border);
+          border-radius:10px;padding:12px 6px">
+          <div style="font-size:11px;color:var(--txt-muted);margin-bottom:6px">${i + 1}주</div>
+          <div style="font-size:16px;font-weight:800;color:${color}">${grade}</div>
+          <div style="font-size:11px;color:var(--txt-muted);margin-top:4px">${s}점</div>
+        </div>`;
+      }).join('')}
+    </div>`;
+}
+
+/* ── Compatibility ── */
+function renderCompatibility(zodiacId, today) {
+  const el = document.getElementById('compatGrid');
+  if (!el) return;
+
+  // Best and caution zodiac pairs
+  const COMPAT = {
+    rat:    { best: ['dragon','monkey'], caution: ['horse','rabbit'] },
+    ox:     { best: ['snake','rooster'], caution: ['goat','horse'] },
+    tiger:  { best: ['horse','dog'],     caution: ['monkey','snake'] },
+    rabbit: { best: ['goat','pig'],      caution: ['rooster','rat'] },
+    dragon: { best: ['rat','monkey'],    caution: ['dog','rabbit'] },
+    snake:  { best: ['ox','rooster'],    caution: ['tiger','pig'] },
+    horse:  { best: ['tiger','dog'],     caution: ['rat','ox'] },
+    goat:   { best: ['rabbit','pig'],    caution: ['ox','dog'] },
+    monkey: { best: ['rat','dragon'],    caution: ['tiger','pig'] },
+    rooster:{ best: ['ox','snake'],      caution: ['rabbit','dog'] },
+    dog:    { best: ['tiger','horse'],   caution: ['dragon','goat'] },
+    pig:    { best: ['rabbit','goat'],   caution: ['snake','monkey'] },
+  };
+
+  const compat = COMPAT[zodiacId] || { best: ['rat', 'dragon'], caution: ['horse', 'snake'] };
+
+  const getZodiac = id => ZODIAC.find(z => z.id === id);
+
+  const best1 = getZodiac(compat.best[0]);
+  const best2 = getZodiac(compat.best[1]);
+  const cau1  = getZodiac(compat.caution[0]);
+  const cau2  = getZodiac(compat.caution[1]);
+
+  el.innerHTML = `
+    <div style="background:rgba(52,211,153,0.08);border:1px solid rgba(52,211,153,0.2);border-radius:10px;padding:14px;text-align:center">
+      <div style="font-size:11px;color:#34d399;font-weight:700;margin-bottom:8px">💚 오늘의 행운 띠</div>
+      <div style="font-size:24px">${best1?.emoji || ''} ${best2?.emoji || ''}</div>
+      <div style="font-size:12px;color:var(--txt-muted);margin-top:6px">
+        ${best1?.name || ''}띠, ${best2?.name || ''}띠와 함께하면 좋은 하루가 됩니다
+      </div>
+    </div>
+    <div style="background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.15);border-radius:10px;padding:14px;text-align:center">
+      <div style="font-size:11px;color:#f87171;font-weight:700;margin-bottom:8px">⚠️ 오늘 주의 띠</div>
+      <div style="font-size:24px">${cau1?.emoji || ''} ${cau2?.emoji || ''}</div>
+      <div style="font-size:12px;color:var(--txt-muted);margin-top:6px">
+        ${cau1?.name || ''}띠, ${cau2?.name || ''}띠와의 관계에서 배려가 필요합니다
+      </div>
+    </div>`;
+}
+
+/* ── Extended Lucky Items ── */
+function renderLuckyItemsFull(fortune, today) {
+  const el = document.getElementById('luckyItemsFull');
+  if (!el) return;
+
+  const LUCKY_FOODS = ['나물비빔밥', '두부찌개', '잡채', '삼겹살', '해산물', '국수', '떡국', '보쌈', '갈비탕', '순두부찌개', '청국장', '미역국'];
+  const LUCKY_TIMES = ['오전 7~9시', '오전 9~11시', '오후 1~3시', '오후 3~5시', '오후 5~7시', '저녁 7~9시'];
+  const LUCKY_GEMS  = ['자수정', '장미 수정', '청금석', '호랑이눈석', '터키석', '루비', '에메랄드', '문스톤', '오팔', '시트린', '로즈쿼츠', '흑요석'];
+  const LUCKY_PLACES= ['공원', '카페', '도서관', '절', '바닷가', '산', '친구 집', '시장', '미술관', '백화점'];
+
+  const rng = createRng(fortune.zodiac.offset + today.getDate() * 7);
+  const food  = LUCKY_FOODS[Math.floor(rng() * LUCKY_FOODS.length)];
+  const time  = LUCKY_TIMES[Math.floor(rng() * LUCKY_TIMES.length)];
+  const gem   = LUCKY_GEMS[Math.floor(rng() * LUCKY_GEMS.length)];
+  const place = LUCKY_PLACES[Math.floor(rng() * LUCKY_PLACES.length)];
+  const word  = ['감사합니다', '사랑해요', '잘 될 거야', '파이팅', '행복해'][Math.floor(rng() * 5)];
+
+  const items = [
+    { icon: '🍚', label: '행운의 음식', val: food },
+    { icon: '⏰', label: '행운의 시간', val: time },
+    { icon: '💎', label: '행운의 보석', val: gem },
+    { icon: '📍', label: '행운의 장소', val: place },
+    { icon: '💬', label: '행운의 말', val: word },
+    { icon: '🔢', label: '행운의 숫자', val: fortune.lucky_number },
+  ];
+
+  el.innerHTML = items.map(item => `
+    <div style="background:var(--bg-card);border:1px solid rgba(52,211,153,0.15);
+      border-radius:10px;padding:12px;text-align:center">
+      <div style="font-size:22px;margin-bottom:6px">${item.icon}</div>
+      <div style="font-size:11px;color:var(--txt-muted);margin-bottom:4px">${item.label}</div>
+      <div style="font-size:13px;font-weight:700;color:#34d399">${item.val}</div>
+    </div>`).join('');
 }
 
 function renderWeekly(zodiacId) {

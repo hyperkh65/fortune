@@ -252,19 +252,16 @@ function buildCard(pose) {
   ).join('');
 
   const videoId = pose.sanskrit.toLowerCase().replace(/\s+/g, '-');
-  const videoSection = pose.videoFile
-    ? `<div class="yoga-video-wrap">
-        <button class="yoga-video-toggle" onclick="toggleVideo(this, 'vid-${videoId}')">
-          ▶ 동영상 재생
-        </button>
-        <div class="yoga-video-box" id="vid-${videoId}" style="display:none">
-          <video class="yoga-video-player" controls preload="none">
-            <source src="videos/${pose.videoFile}" type="video/mp4">
-            <p class="yoga-no-video">📁 videos/${pose.videoFile} 파일을 업로드해주세요</p>
-          </video>
-        </div>
-      </div>`
-    : '';
+  const ytQuery = encodeURIComponent(pose.name + ' ' + pose.sanskrit + ' yoga tutorial 따라하기');
+  const videoSection = `
+    <div class="yoga-video-wrap">
+      <button class="yoga-video-toggle" onclick="toggleVideo(this, 'vid-${videoId}')">
+        ▶ YouTube 영상 보기
+      </button>
+      <div class="yoga-video-box" id="vid-${videoId}" style="display:none">
+        <div class="yoga-yt-embed" data-query="${ytQuery}" data-name="${pose.name}"></div>
+      </div>
+    </div>`;
 
   const card = document.createElement('div');
   card.className = 'yoga-pose-card';
@@ -310,15 +307,39 @@ function toggleVideo(btn, videoBoxId) {
   if (!box) return;
   const isHidden = box.style.display === 'none';
   box.style.display = isHidden ? 'block' : 'none';
-  btn.textContent = isHidden ? '✕ 동영상 닫기' : '▶ 동영상 재생';
-  const video = box.querySelector('video');
-  if (video) {
-    if (isHidden) {
-      video.play().catch(() => {});
-    } else {
-      video.pause();
-      video.currentTime = 0;
+  btn.textContent = isHidden ? '✕ 영상 닫기' : '▶ YouTube 영상 보기';
+
+  if (isHidden) {
+    const embedWrap = box.querySelector('.yoga-yt-embed');
+    if (embedWrap && !embedWrap.querySelector('iframe, a')) {
+      const query = embedWrap.dataset.query;
+      const name  = embedWrap.dataset.name;
+      // YouTube 검색 결과 페이지를 새 탭으로 여는 버튼 + 검색 링크
+      embedWrap.innerHTML = `
+        <div style="background:#111;border-radius:10px;overflow:hidden;position:relative">
+          <div style="padding:20px;text-align:center">
+            <div style="font-size:14px;color:#ccc;margin-bottom:12px">
+              <strong style="color:#fff">${name}</strong> 요가 자세 튜토리얼
+            </div>
+            <a href="https://www.youtube.com/results?search_query=${query}"
+               target="_blank" rel="noopener"
+               style="display:inline-flex;align-items:center;gap:8px;background:#ff0000;
+               color:#fff;padding:12px 20px;border-radius:8px;font-weight:700;
+               text-decoration:none;font-size:14px">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>
+              YouTube에서 영상 검색하기
+            </a>
+            <div style="margin-top:12px;font-size:12px;color:#888">
+              또는 아래 키워드로 검색하세요:<br>
+              <strong style="color:#aaa">${name} yoga tutorial</strong>
+            </div>
+          </div>
+        </div>`;
     }
+  } else {
+    // Remove embed when closing
+    const embedWrap = box.querySelector('.yoga-yt-embed');
+    if (embedWrap) embedWrap.innerHTML = '';
   }
 }
 

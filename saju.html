@@ -5,11 +5,149 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="정확한 사주팔자 계산으로 나만의 맞춤 운세를 확인하세요. 년주·월주·일주·시주 분석, 오행 분포, 용신 분석." />
   <meta name="theme-color" content="#07070f" />
-  <title>사주팔자 — AI Wellness</title>
+  <title>사주팔자 — 2days 웰니스</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&family=Noto+Serif+KR:wght@700;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
+  <style>
+    /* ── Saju Single-Page Layout ── */
+    .saju-scroll-page { display: none; padding-bottom: 80px; }
+    .saju-scroll-page.active { display: block; }
+
+    /* Sticky TOC */
+    .saju-sticky-toc {
+      position: sticky; top: 56px; z-index: 100;
+      background: rgba(7,7,15,0.92); backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(52,211,153,0.15);
+      padding: 0 16px;
+      overflow-x: auto; scrollbar-width: none;
+    }
+    .saju-sticky-toc::-webkit-scrollbar { display: none; }
+    .saju-toc-inner {
+      display: flex; gap: 0; min-width: max-content;
+      max-width: 860px; margin: 0 auto;
+    }
+    .saju-toc-btn {
+      background: none; border: none; cursor: pointer;
+      color: var(--txt-muted); font-size: 13px; font-weight: 500;
+      padding: 14px 16px; border-bottom: 2px solid transparent;
+      transition: all .2s; white-space: nowrap; font-family: 'Noto Sans KR', sans-serif;
+    }
+    .saju-toc-btn:hover { color: #34d399; }
+    .saju-toc-btn.active { color: #34d399; border-bottom-color: #34d399; }
+
+    /* Section dividers */
+    .saju-section {
+      max-width: 860px; margin: 0 auto;
+      padding: 40px 16px 0;
+      scroll-margin-top: 110px;
+    }
+    .saju-section-header {
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 24px; padding-bottom: 16px;
+      border-bottom: 1px solid rgba(52,211,153,0.15);
+    }
+    .saju-section-icon {
+      width: 40px; height: 40px; border-radius: 10px;
+      background: rgba(52,211,153,0.1); color: #34d399;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; flex-shrink: 0;
+    }
+    .saju-section-title { font-size: 20px; font-weight: 700; color: var(--txt); }
+    .saju-section-desc { font-size: 13px; color: var(--txt-muted); margin-top: 3px; }
+
+    /* Premium badge for deeper sections */
+    .premium-section { position: relative; }
+    .premium-section::before {
+      content: '✦ PREMIUM';
+      position: absolute; top: 44px; right: 16px;
+      font-size: 10px; font-weight: 700; letter-spacing: 1px;
+      color: #f4d03f; background: rgba(244,208,63,0.1);
+      border: 1px solid rgba(244,208,63,0.3); border-radius: 4px;
+      padding: 2px 8px;
+    }
+
+    /* Ohaeng expanded cards */
+    .ohaeng-detail-grid {
+      display: grid; grid-template-columns: repeat(5, 1fr);
+      gap: 10px; margin-top: 20px;
+    }
+    @media (max-width: 600px) { .ohaeng-detail-grid { grid-template-columns: repeat(3, 1fr); } }
+    .oh-detail-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 12px; padding: 14px 10px; text-align: center;
+    }
+    .oh-detail-elem { font-size: 22px; font-weight: 800; margin-bottom: 6px; }
+    .oh-detail-name { font-size: 11px; color: var(--txt-muted); margin-bottom: 8px; }
+    .oh-detail-list { font-size: 11px; line-height: 1.8; color: var(--txt-muted); text-align: left; }
+
+    /* Relationships table */
+    .rel-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 12px; margin-top: 16px;
+    }
+    @media (max-width: 500px) { .rel-grid { grid-template-columns: 1fr; } }
+    .rel-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 12px; padding: 16px;
+    }
+    .rel-card-title {
+      font-size: 13px; font-weight: 700; color: #34d399;
+      margin-bottom: 10px; display: flex; align-items: center; gap: 6px;
+    }
+    .rel-card-body { font-size: 13px; color: var(--txt-muted); line-height: 1.75; }
+
+    /* Health / career / love bullets */
+    .domain-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 14px; padding: 20px; margin-bottom: 14px;
+    }
+    .domain-card-head {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 15px; font-weight: 700; color: var(--txt);
+      margin-bottom: 12px;
+    }
+    .domain-card-icon {
+      width: 34px; height: 34px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px;
+    }
+    .domain-card-body { font-size: 13.5px; color: var(--txt-muted); line-height: 1.85; }
+    .domain-card-body strong { color: #34d399; }
+
+    /* Score bars */
+    .score-row {
+      display: flex; align-items: center; gap: 12px;
+      margin: 8px 0;
+    }
+    .score-label { font-size: 12px; color: var(--txt-muted); width: 60px; flex-shrink: 0; }
+    .score-track {
+      flex: 1; height: 6px; background: rgba(255,255,255,0.07);
+      border-radius: 3px; overflow: hidden;
+    }
+    .score-fill {
+      height: 100%; border-radius: 3px;
+      background: linear-gradient(90deg, #34d399, #60a5fa);
+      transition: width 1s ease;
+    }
+    .score-val { font-size: 12px; color: #34d399; width: 28px; text-align: right; }
+
+    /* Naming advice */
+    .naming-card {
+      background: linear-gradient(135deg, rgba(52,211,153,0.08), rgba(96,165,250,0.08));
+      border: 1px solid rgba(52,211,153,0.2); border-radius: 14px;
+      padding: 20px; margin-top: 16px;
+    }
+    .naming-title { font-size: 14px; font-weight: 700; color: #34d399; margin-bottom: 10px; }
+    .naming-body { font-size: 13px; color: var(--txt-muted); line-height: 1.8; }
+
+    /* Divider */
+    .section-divider {
+      max-width: 860px; margin: 40px auto 0;
+      height: 1px; background: rgba(255,255,255,0.04);
+    }
+  </style>
 </head>
 <body>
   <canvas id="starsBg"></canvas>
@@ -19,7 +157,7 @@
     <div class="header-inner">
       <a href="index.html" class="logo">
         <span class="logo-sym">◈</span>
-        <span class="logo-text">AI Wellness</span>
+        <span class="logo-text">2days 웰니스</span>
       </a>
       <nav class="page-nav">
         <a href="saju.html"       class="pn-link active">사주</a>
@@ -35,8 +173,11 @@
   <!-- ══════════════════ FORM SECTION ══════════════════ -->
   <section id="formSection">
     <div class="form-wrap">
-      <p class="form-eyebrow">✦ 사주팔자 분석</p>
+      <p class="form-eyebrow">✦ 사주팔자 정밀 분석</p>
       <h1 class="form-title">생년월일시를 입력해주세요</h1>
+      <p style="font-size:13px;color:var(--txt-muted);text-align:center;margin-bottom:24px">
+        사주총평부터 오행·용신·기질·연애·재물·건강까지 한 번에 분석합니다
+      </p>
 
       <div class="form-card">
 
@@ -100,11 +241,11 @@
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         </button>
 
-      </div><!-- /form-card -->
-    </div><!-- /form-wrap -->
+      </div>
+    </div>
   </section>
 
-  <!-- ══════════════════ RESULT SECTION ══════════════════ -->
+  <!-- ══════════════════ RESULT SECTION (Single Scroll) ══════════════════ -->
   <section id="resultSection" style="display:none">
 
     <!-- 결과 헤더 -->
@@ -116,102 +257,104 @@
       <div style="width:40px"></div>
     </div>
 
-    <!-- 목차 (Table of Contents) -->
-    <nav class="saju-toc" id="sajuToc">
-      <span class="saju-toc-label">목차</span>
-      <div class="saju-toc-links">
-        <a class="saju-toc-item active" data-tab="overview" href="#">📊 사주 총평</a>
-        <a class="saju-toc-item" data-tab="ohaeng" href="#">⚡ 오행 분포</a>
-        <a class="saju-toc-item" data-tab="flow" href="#">📈 운세 흐름</a>
-        <a class="saju-toc-item" data-tab="personality" href="#">🎭 기질·성격</a>
-        <a class="saju-toc-item" data-tab="detail" href="#">💫 세부 분석</a>
+    <!-- Sticky TOC -->
+    <nav class="saju-sticky-toc" id="sajuToc">
+      <div class="saju-toc-inner">
+        <button class="saju-toc-btn active" data-target="sec-overview">📊 사주총평</button>
+        <button class="saju-toc-btn" data-target="sec-ohaeng">⚡ 오행분석</button>
+        <button class="saju-toc-btn" data-target="sec-flow">📈 운세흐름</button>
+        <button class="saju-toc-btn" data-target="sec-personality">🎭 기질성격</button>
+        <button class="saju-toc-btn" data-target="sec-love">❤️ 연애결혼</button>
+        <button class="saju-toc-btn" data-target="sec-money">💰 재물직업</button>
+        <button class="saju-toc-btn" data-target="sec-health">🌿 건강관리</button>
+        <button class="saju-toc-btn" data-target="sec-relations">🤝 인간관계</button>
+        <button class="saju-toc-btn" data-target="sec-year">🗓 연도별운세</button>
       </div>
     </nav>
 
-    <!-- 탭 네비게이션 -->
-    <div class="tab-bar-wrap">
-      <nav class="tab-bar" id="tabBar">
-        <button class="tb active" data-tab="overview">사주 총평</button>
-        <button class="tb" data-tab="ohaeng">오행 분포</button>
-        <button class="tb" data-tab="flow">운세 흐름</button>
-        <button class="tb" data-tab="personality">기질 분석</button>
-        <button class="tb" data-tab="detail">세부 분석</button>
-      </nav>
-    </div>
-
-    <!-- ── TAB: 사주 총평 ── -->
-    <div id="tabOverview" class="tab-pane active">
-      <div class="cw">
-        <div class="sec-head">
-          <h2 class="sec-title">만세력 및 사주 총평</h2>
-          <p class="sec-desc">당신의 사주 팔자와 전체적인 기운의 흐름을 분석합니다.</p>
+    <!-- ① 사주총평 -->
+    <div class="saju-section" id="sec-overview">
+      <div class="saju-section-header">
+        <div class="saju-section-icon">📊</div>
+        <div>
+          <div class="saju-section-title">만세력 및 사주 총평</div>
+          <div class="saju-section-desc">당신의 사주 팔자와 전체적인 기운의 흐름을 분석합니다</div>
         </div>
-        <div class="pillars-scroller">
-          <div class="pillars-track" id="pillarsTrack"></div>
-        </div>
-        <div class="strength-row" id="strengthRow"></div>
-        <div class="ov-card" id="ovCard">
-          <h3 class="ov-headline" id="ovHeadline"></h3>
-          <ul class="ov-bullets" id="ovBullets"></ul>
-        </div>
-        <div class="yong-row" id="yongRow"></div>
-        <div class="sipsung-wrap" id="sipsungWrap">
-          <h3 class="sub-section-title">십성 분석</h3>
-          <div class="sipsung-grid" id="sipsungGrid"></div>
-        </div>
+      </div>
+      <div class="pillars-scroller">
+        <div class="pillars-track" id="pillarsTrack"></div>
+      </div>
+      <div class="strength-row" id="strengthRow"></div>
+      <div class="ov-card" id="ovCard">
+        <h3 class="ov-headline" id="ovHeadline"></h3>
+        <ul class="ov-bullets" id="ovBullets"></ul>
+      </div>
+      <div class="yong-row" id="yongRow"></div>
+      <div class="sipsung-wrap" id="sipsungWrap">
+        <h3 class="sub-section-title">십성 분석</h3>
+        <div class="sipsung-grid" id="sipsungGrid"></div>
       </div>
     </div>
 
-    <!-- ── TAB: 오행 분포 ── -->
-    <div id="tabOhaeng" class="tab-pane">
-      <div class="cw">
-        <div class="sec-head">
-          <h2 class="sec-title">오행 분포</h2>
-          <p class="sec-desc">나를 구성하는 5가지 원소(목·화·토·금·수)의 균형 상태를 시각화했습니다.</p>
+    <div class="section-divider"></div>
+
+    <!-- ② 오행 분포 (확장) -->
+    <div class="saju-section" id="sec-ohaeng">
+      <div class="saju-section-header">
+        <div class="saju-section-icon">⚡</div>
+        <div>
+          <div class="saju-section-title">오행 심층 분석</div>
+          <div class="saju-section-desc">木·火·土·金·水 다섯 기운의 균형과 삶에 미치는 영향</div>
         </div>
-        <div class="ohaeng-viz-row">
-          <div class="radar-container">
-            <svg id="radarSvg" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg"></svg>
-          </div>
-          <div class="ohaeng-bar-col" id="ohaengBarCol"></div>
-        </div>
-        <div class="ohaeng-desc-grid" id="ohaengDescGrid"></div>
       </div>
+      <div class="ohaeng-viz-row">
+        <div class="radar-container">
+          <svg id="radarSvg" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg"></svg>
+        </div>
+        <div class="ohaeng-bar-col" id="ohaengBarCol"></div>
+      </div>
+      <div class="ohaeng-desc-grid" id="ohaengDescGrid"></div>
+      <!-- 오행 상세 카드 -->
+      <div class="ohaeng-detail-grid" id="ohaengDetailGrid"></div>
+      <!-- 오행 상생상극 설명 -->
+      <div id="ohaengRelations" style="margin-top:20px"></div>
     </div>
 
-    <!-- ── TAB: 운세 흐름 ── -->
-    <div id="tabFlow" class="tab-pane">
-      <div class="cw">
-        <div class="sec-head">
-          <h2 class="sec-title">운세 흐름</h2>
-          <p class="sec-desc">인생의 기운 흐름을 한눈에 파악할 수 있는 그래프입니다.</p>
+    <div class="section-divider"></div>
+
+    <!-- ③ 운세 흐름 -->
+    <div class="saju-section" id="sec-flow">
+      <div class="saju-section-header">
+        <div class="saju-section-icon">📈</div>
+        <div>
+          <div class="saju-section-title">운세 흐름</div>
+          <div class="saju-section-desc">인생의 기운 흐름과 대운·세운·월운 심층 분석</div>
         </div>
-        <div class="flow-card">
-          <div class="flow-card-top">
-            <span class="flow-card-label">운세 그래프</span>
-            <nav class="flow-tabs" id="flowTabs">
-              <button class="ft active" data-p="today">오늘</button>
-              <button class="ft" data-p="week">일간</button>
-              <button class="ft" data-p="month">월간</button>
-              <button class="ft" data-p="year">연간</button>
-            </nav>
-          </div>
-          <div class="flow-chart-box">
-            <svg id="flowSvg" viewBox="0 0 600 220" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet"></svg>
-          </div>
-          <div class="flow-legend">
-            <span class="leg-item"><span class="leg-dot" style="background:var(--wood)"></span>木</span>
-            <span class="leg-item"><span class="leg-dot" style="background:var(--fire)"></span>火</span>
-            <span class="leg-item"><span class="leg-dot" style="background:var(--earth)"></span>土</span>
-            <span class="leg-item"><span class="leg-dot" style="background:var(--metal)"></span>金</span>
-            <span class="leg-item"><span class="leg-dot" style="background:var(--water)"></span>水</span>
-            <span class="leg-item"><span class="leg-star">★</span>용신운</span>
-            <span class="leg-item"><span class="leg-warn">！</span>기신운</span>
-          </div>
+      </div>
+      <div class="flow-card">
+        <div class="flow-card-top">
+          <span class="flow-card-label">운세 그래프</span>
+          <nav class="flow-tabs" id="flowTabs">
+            <button class="ft active" data-p="today">오늘</button>
+            <button class="ft" data-p="week">일간</button>
+            <button class="ft" data-p="month">월간</button>
+            <button class="ft" data-p="year">연간</button>
+          </nav>
         </div>
-        <div class="sec-head" style="margin-top:28px">
-          <h2 class="sec-title">심층 운세 분석</h2>
+        <div class="flow-chart-box">
+          <svg id="flowSvg" viewBox="0 0 600 220" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet"></svg>
         </div>
+        <div class="flow-legend">
+          <span class="leg-item"><span class="leg-dot" style="background:var(--wood)"></span>木</span>
+          <span class="leg-item"><span class="leg-dot" style="background:var(--fire)"></span>火</span>
+          <span class="leg-item"><span class="leg-dot" style="background:var(--earth)"></span>土</span>
+          <span class="leg-item"><span class="leg-dot" style="background:var(--metal)"></span>金</span>
+          <span class="leg-item"><span class="leg-dot" style="background:var(--water)"></span>水</span>
+          <span class="leg-item"><span class="leg-star">★</span>용신운</span>
+          <span class="leg-item"><span class="leg-warn">！</span>기신운</span>
+        </div>
+      </div>
+      <div style="margin-top:28px">
         <nav class="deep-tab-bar" id="deepTabBar">
           <button class="dtb" data-d="daeun">대운 (10년)</button>
           <button class="dtb active" data-d="seun">세운 (1년)</button>
@@ -223,30 +366,93 @@
       </div>
     </div>
 
-    <!-- ── TAB: 기질 분석 ── -->
-    <div id="tabPersonality" class="tab-pane">
-      <div class="cw">
-        <div class="sec-head">
-          <h2 class="sec-title">기질 분석</h2>
-          <p class="sec-desc">일간(日干)을 중심으로 당신의 타고난 기질과 성향을 분석합니다.</p>
+    <div class="section-divider"></div>
+
+    <!-- ④ 기질·성격 -->
+    <div class="saju-section" id="sec-personality">
+      <div class="saju-section-header">
+        <div class="saju-section-icon">🎭</div>
+        <div>
+          <div class="saju-section-title">기질 및 성격 분석</div>
+          <div class="saju-section-desc">일간(日干)을 중심으로 타고난 기질과 재능을 분석합니다</div>
         </div>
-        <div id="personalityContent"></div>
       </div>
+      <div id="personalityContent"></div>
+      <!-- 성격 점수 -->
+      <div id="personalityScores" style="margin-top:20px"></div>
     </div>
 
-    <!-- ── TAB: 세부 분석 ── -->
-    <div id="tabDetail" class="tab-pane">
-      <div class="cw">
-        <div class="sec-head">
-          <h2 class="sec-title">세부 분석</h2>
-          <p class="sec-desc">연애·결혼, 재물·직업, 건강, 인간관계 등 삶의 각 영역을 실제 사주 원리로 풀어드립니다.</p>
+    <div class="section-divider"></div>
+
+    <!-- ⑤ 연애·결혼 -->
+    <div class="saju-section premium-section" id="sec-love">
+      <div class="saju-section-header">
+        <div class="saju-section-icon">❤️</div>
+        <div>
+          <div class="saju-section-title">연애·결혼 분석</div>
+          <div class="saju-section-desc">배우자 인연, 이상형, 결혼 시기와 궁합을 풀어드립니다</div>
         </div>
-        <!-- Anchor-based sub-sections -->
-        <div id="detailSections"></div>
       </div>
+      <div id="loveSection"></div>
     </div>
 
-  </section><!-- /resultSection -->
+    <div class="section-divider"></div>
+
+    <!-- ⑥ 재물·직업 -->
+    <div class="saju-section premium-section" id="sec-money">
+      <div class="saju-section-header">
+        <div class="saju-section-icon">💰</div>
+        <div>
+          <div class="saju-section-title">재물·직업 분석</div>
+          <div class="saju-section-desc">재물운, 적성에 맞는 직업군과 재물 축적 시기를 분석합니다</div>
+        </div>
+      </div>
+      <div id="moneySection"></div>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <!-- ⑦ 건강·수명 -->
+    <div class="saju-section premium-section" id="sec-health">
+      <div class="saju-section-header">
+        <div class="saju-section-icon">🌿</div>
+        <div>
+          <div class="saju-section-title">건강·수명 분석</div>
+          <div class="saju-section-desc">오행으로 본 취약 장기, 건강 주의 시기와 관리 방법</div>
+        </div>
+      </div>
+      <div id="healthSection"></div>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <!-- ⑧ 인간관계·부모형제 -->
+    <div class="saju-section premium-section" id="sec-relations">
+      <div class="saju-section-header">
+        <div class="saju-section-icon">🤝</div>
+        <div>
+          <div class="saju-section-title">인간관계·부모형제</div>
+          <div class="saju-section-desc">부모·형제·친구·동료와의 관계 패턴과 귀인 분석</div>
+        </div>
+      </div>
+      <div id="relationsSection"></div>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <!-- ⑨ 연도별 운세 (10년) -->
+    <div class="saju-section premium-section" id="sec-year">
+      <div class="saju-section-header">
+        <div class="saju-section-icon">🗓</div>
+        <div>
+          <div class="saju-section-title">향후 10년 연도별 운세</div>
+          <div class="saju-section-desc">세운 기반의 연도별 주요 운세 흐름과 조언</div>
+        </div>
+      </div>
+      <div id="yearlySection"></div>
+    </div>
+
+  </section>
 
   <div class="toast" id="toast"></div>
   <div class="tooltip" id="tooltip"></div>

@@ -1026,15 +1026,14 @@ function runAnalysis() {
       renderLucky(analysis.yongsin);
 
       renderPersonality(pillars.day.s);
+      renderPersonalityScores(pillars, analysis);
       renderDetail(pillars, analysis);
+      renderOhaengDetail(ohaeng);
+      renderYearlySection(pillars, analysis, year);
 
-      // Switch sections
       document.getElementById('formSection').style.display = 'none';
       document.getElementById('resultSection').style.display = 'block';
-
-      // Reset tab to overview
-      switchTab('overview');
-
+      initSajuToc();
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } catch(e) {
       console.error(e);
@@ -1132,68 +1131,454 @@ const LOVE_DATA = [
   },
 ];
 
+
+/* ──────────────────────────────────────
+   DETAIL SECTIONS RENDERER (Scroll-based)
+────────────────────────────────────── */
 function renderDetail(pillars, analysis) {
-  const container = document.getElementById('detailSections');
-  if (!container) return;
   const dayS = pillars.day.s;
   const d    = LOVE_DATA[dayS];
   const ec   = ELEM_COLOR[STEM_ELEM[dayS]];
   const ilganName = STEMS[dayS] + '(' + STEMS_KOR[dayS] + ')';
+  const badge = `<div class="detail-ilgan-badge" style="color:${ec};border-color:${ec}44">${ilganName} 일간</div>`;
 
-  const sections = [
+  // Love Section
+  const loveEl = document.getElementById('loveSection');
+  if (loveEl) loveEl.innerHTML = `
+    ${badge}
+    <div class="domain-card">
+      <div class="domain-card-head"><div class="domain-card-icon" style="background:rgba(239,68,68,0.1)">💕</div>연애 스타일</div>
+      <div class="domain-card-body">${d.love}</div>
+    </div>
+    <div class="domain-card">
+      <div class="domain-card-head"><div class="domain-card-icon" style="background:rgba(239,68,68,0.1)">💍</div>결혼·부부생활</div>
+      <div class="domain-card-body">${d.marriage}</div>
+    </div>
+    <div class="domain-card" style="background:linear-gradient(135deg,rgba(239,68,68,0.06),rgba(168,85,247,0.06));border-color:rgba(239,68,68,0.2)">
+      <div class="domain-card-head" style="color:#f87171">⚡ 이상형 키워드</div>
+      <div class="domain-card-body">${getLoveIdeal(dayS, analysis)}</div>
+    </div>`;
+
+  // Money Section
+  const moneyEl = document.getElementById('moneySection');
+  if (moneyEl) moneyEl.innerHTML = `
+    ${badge}
+    <div class="domain-card">
+      <div class="domain-card-head"><div class="domain-card-icon" style="background:rgba(244,208,63,0.1)">💰</div>재물운 분석</div>
+      <div class="domain-card-body">${d.wealth}</div>
+    </div>
+    <div class="domain-card">
+      <div class="domain-card-head"><div class="domain-card-icon" style="background:rgba(244,208,63,0.1)">🏢</div>적합한 직업군</div>
+      <div class="domain-card-body">${d.career}</div>
+    </div>
+    <div class="domain-card" style="background:linear-gradient(135deg,rgba(244,208,63,0.06),rgba(52,211,153,0.06));border-color:rgba(244,208,63,0.2)">
+      <div class="domain-card-head" style="color:#fbbf24">📈 재물 운세 흐름</div>
+      <div class="domain-card-body">${getMoneyFlow(dayS, analysis)}</div>
+    </div>`;
+
+  // Health Section
+  const healthEl = document.getElementById('healthSection');
+  if (healthEl) healthEl.innerHTML = `
+    ${badge}
+    <div class="domain-card">
+      <div class="domain-card-head"><div class="domain-card-icon" style="background:rgba(52,211,153,0.1)">🫀</div>건강 취약 부위</div>
+      <div class="domain-card-body">${d.health}</div>
+    </div>
+    <div class="domain-card" style="background:linear-gradient(135deg,rgba(52,211,153,0.06),rgba(96,165,250,0.06));border-color:rgba(52,211,153,0.2)">
+      <div class="domain-card-head" style="color:#34d399">🌿 오행 건강 조언</div>
+      <div class="domain-card-body">${getHealthAdvice(dayS, analysis)}</div>
+    </div>
+    ${renderOhaengHealthGrid(analysis)}`;
+
+  // Relations Section
+  const relEl = document.getElementById('relationsSection');
+  if (relEl) relEl.innerHTML = `
+    ${badge}
+    <div class="domain-card">
+      <div class="domain-card-head"><div class="domain-card-icon" style="background:rgba(96,165,250,0.1)">🤝</div>대인관계 특성</div>
+      <div class="domain-card-body">${d.relation}</div>
+    </div>
+    <div class="rel-grid">
+      <div class="rel-card">
+        <div class="rel-card-title">👨‍👩‍👧 부모·가족 관계</div>
+        <div class="rel-card-body">${getFamilyRelation(dayS, analysis)}</div>
+      </div>
+      <div class="rel-card">
+        <div class="rel-card-title">👥 친구·동료 관계</div>
+        <div class="rel-card-body">${getFriendRelation(dayS, analysis)}</div>
+      </div>
+      <div class="rel-card">
+        <div class="rel-card-title">⭐ 귀인 방향</div>
+        <div class="rel-card-body">${getGuirenInfo(analysis)}</div>
+      </div>
+      <div class="rel-card">
+        <div class="rel-card-title">⚠️ 주의할 관계</div>
+        <div class="rel-card-body">${getWarningRelation(dayS, analysis)}</div>
+      </div>
+    </div>`;
+}
+
+/* ── 보조 함수들 ── */
+function getLoveIdeal(dayS, analysis) {
+  const elem = STEM_ELEM[dayS];
+  const gender = ''; // state.gender
+  const ideals = [
+    '지적이고 창의적이며 자신의 성장을 응원해주는 파트너. <strong>木·水 오행</strong> 기운을 가진 분과 잘 맞습니다. 동방(東方)이나 북방(北方) 출신과의 인연이 강합니다.',
+    '따뜻하고 감성적이며 정서적 지지를 아끼지 않는 파트너. <strong>火·木 오행</strong> 기운의 분과 궁합이 좋습니다. 연애보다 우정이 먼저인 관계에서 사랑이 피어납니다.',
+    '안정적이고 신뢰할 수 있으며 현실감각이 있는 파트너. <strong>土·火 오행</strong>이 강한 분과 잘 맞습니다. 비슷한 가치관과 생활방식을 가진 사람과의 인연이 오래갑니다.',
+    '원칙과 정의감이 있으며 자신을 믿어주는 파트너. <strong>金·土 오행</strong> 기운이 강한 분과 좋은 궁합을 보입니다. 이성적이고 성숙한 사람과의 만남이 오래 지속됩니다.',
+    '자유롭고 지적이며 넓은 시야를 가진 파트너. <strong>水·金 오행</strong>이 강한 분과 궁합이 맞습니다. 독립적인 개성을 인정해주는 사람과의 관계에서 사랑이 깊어집니다.',
+  ];
+  return ideals[elem];
+}
+
+function getMoneyFlow(dayS, analysis) {
+  const elem = STEM_ELEM[dayS];
+  const yong = analysis.yongsin;
+  const isShin = analysis.isBodyStrong;
+  const flows = [
+    `초년(20대)에는 도전과 시행착오가 있지만, <strong>중년(40대) 이후</strong> 본격적인 재물 운이 열립니다. 土·金 운이 오는 시기에 재물이 쌓입니다. 부동산·사업 투자에 유리합니다.`,
+    `재물을 쓰는 능력이 탁월하여 돈이 잘 돌고 다시 들어오는 순환형입니다. <strong>土·金 운</strong>에 수익이 증가합니다. 재물을 모으는 것보다 불리는 데 강점을 보입니다.`,
+    `꾸준하고 안정적인 재물 흐름입니다. <strong>木 운</strong>이 오면 소비가 늘고, <strong>金 운</strong>이 오면 수익이 좋아집니다. 부동산·토지 투자에 특히 유리한 사주입니다.`,
+    `40대 이후 대운이 강해지며 재물이 크게 쌓이는 구조입니다. <strong>木·水 운</strong>에 수익이 증가합니다. 원칙과 규율 있는 재정 관리로 큰 부를 이룰 수 있습니다.`,
+    `지식·기술·정보 분야에서 수익이 창출됩니다. <strong>木·火 운</strong>에 수입이 늘어납니다. 투자보다 자신의 전문성 향상이 재물 증가의 핵심입니다.`,
+  ];
+  return flows[elem];
+}
+
+function getHealthAdvice(dayS, analysis) {
+  const elem = STEM_ELEM[dayS];
+  const advices = [
+    `<strong>木 오행</strong>이 강한 분은 간·담·눈·근육·신경을 주의하세요. 신맛 음식(식초·레몬·사과)이 도움이 되며, 스트레칭과 유산소 운동이 필수입니다. 봄철(3~5월) 건강 변화에 주의하세요.`,
+    `<strong>火 오행</strong>이 강한 분은 심장·혈관·소장을 챙기세요. 쓴맛 음식(여주·쑥·커피)이 적당히 도움이 됩니다. 여름(6~8월)에 과로를 삼가고 규칙적인 유산소 운동을 하세요.`,
+    `<strong>土 오행</strong>이 강한 분은 비장·위장·소화기를 관리하세요. 단맛 음식은 적당히만 드세요. 불규칙한 식사와 과로가 건강의 최대 적입니다. 환절기 건강 관리에 특히 신경 쓰세요.`,
+    `<strong>金 오행</strong>이 강한 분은 폐·대장·피부·호흡기를 챙기세요. 매운맛 음식을 적당히 섭취하고 건조한 환경을 피하세요. 가을(9~11월)에 감기·피부 트러블에 주의하세요.`,
+    `<strong>水 오행</strong>이 강한 분은 신장·방광·생식기·뼈를 관리하세요. 짠맛 음식은 적당히, 충분한 수분 섭취가 중요합니다. 겨울(12~2월) 건강 변화를 주의하고 몸을 따뜻하게 유지하세요.`,
+  ];
+  return advices[elem];
+}
+
+function renderOhaengHealthGrid(analysis) {
+  // Simple table showing organ-element mapping
+  return `
+    <div class="domain-card" style="margin-top:12px">
+      <div class="domain-card-head" style="color:#60a5fa">🩺 오행별 주요 관장 부위</div>
+      <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:10px;text-align:center">
+        <div style="background:rgba(52,211,153,0.08);border-radius:8px;padding:10px 6px">
+          <div style="color:#34d399;font-weight:700;font-size:16px;margin-bottom:4px">木</div>
+          <div style="font-size:11px;color:#9ca3af">간·담·눈<br>근육·신경</div>
+        </div>
+        <div style="background:rgba(239,68,68,0.08);border-radius:8px;padding:10px 6px">
+          <div style="color:#ef4444;font-weight:700;font-size:16px;margin-bottom:4px">火</div>
+          <div style="font-size:11px;color:#9ca3af">심장·혈관<br>소장·혀</div>
+        </div>
+        <div style="background:rgba(234,179,8,0.08);border-radius:8px;padding:10px 6px">
+          <div style="color:#eab308;font-weight:700;font-size:16px;margin-bottom:4px">土</div>
+          <div style="font-size:11px;color:#9ca3af">비장·위장<br>소화기·입</div>
+        </div>
+        <div style="background:rgba(148,163,184,0.08);border-radius:8px;padding:10px 6px">
+          <div style="color:#94a3b8;font-weight:700;font-size:16px;margin-bottom:4px">金</div>
+          <div style="font-size:11px;color:#9ca3af">폐·대장<br>피부·코</div>
+        </div>
+        <div style="background:rgba(96,165,250,0.08);border-radius:8px;padding:10px 6px">
+          <div style="color:#60a5fa;font-weight:700;font-size:16px;margin-bottom:4px">水</div>
+          <div style="font-size:11px;color:#9ca3af">신장·방광<br>뼈·귀</div>
+        </div>
+      </div>
+    </div>`;
+}
+
+function getFamilyRelation(dayS, analysis) {
+  const elem = STEM_ELEM[dayS];
+  const data = [
+    '부모와의 관계는 良好하나 독립심이 강해 일찍 자신의 길을 개척합니다. 부모의 도움보다 스스로 이루는 것에 더 큰 보람을 느낍니다.',
+    '가족에 대한 애정이 깊고 부모와의 유대가 강합니다. 가족을 위해 자신을 희생하는 경향이 있으니 자신의 삶도 소중히 여기세요.',
+    '안정적인 가정환경에서 자라거나 그러한 환경을 만들려 합니다. 부모에게 효심이 깊으나 지나친 기대감이 스트레스가 될 수 있습니다.',
+    '부모와 원칙적인 관계를 유지합니다. 가족에게 엄격한 잣대를 적용하는 경향이 있으나 진심으로 아끼고 책임감이 강합니다.',
+    '가족 사이에서 정서적 지지자 역할을 합니다. 가족의 감정적 문제를 잘 파악하며, 때로는 감정의 무게가 부담이 될 수 있습니다.',
+  ];
+  return data[elem];
+}
+
+function getFriendRelation(dayS, analysis) {
+  const elem = STEM_ELEM[dayS];
+  const data = [
+    '의리 있고 진취적인 친구 관계. 경쟁 관계에서도 우정을 유지하는 능력이 있습니다. 주도적으로 모임을 이끌지만 독단적 결정을 주의하세요.',
+    '따뜻하고 포용력 있는 친구 관계. 친구들의 고민을 잘 들어주고 위로해줍니다. 에너지 소진에 주의하고 나를 위한 시간도 필요합니다.',
+    '신뢰할 수 있는 든든한 친구. 오래된 인연을 소중히 여기며 한번 맺은 우정은 깊고 오래갑니다. 새로운 만남에는 다소 느리게 마음을 엽니다.',
+    '정의롭고 공정한 친구 관계. 불의를 보면 나서는 타입으로 신뢰도가 높습니다. 비판적인 시각이 간혹 오해를 살 수 있으니 표현에 주의하세요.',
+    '지적 교류를 즐기는 넓은 인간관계. 다양한 분야의 사람들과 친분을 맺지만 깊은 관계는 소수로 유지합니다.',
+  ];
+  return data[elem];
+}
+
+function getGuirenInfo(analysis) {
+  const yong = analysis.yongsin;
+  const dirs = ['동쪽', '남쪽', '중앙', '서쪽', '북쪽'];
+  const colors = ['초록색', '붉은색', '황토색', '흰색', '검정·남색'];
+  const dir = dirs[yong] || '동쪽';
+  const col = colors[yong] || '초록색';
+  return `귀인의 방향은 <strong>${dir}</strong>입니다. <strong>${col}</strong> 계열 옷이나 소품이 귀인을 불러옵니다. 생기(生氣) 방향으로 중요한 약속이나 사업 미팅을 잡으면 좋은 결과가 따릅니다. 봄·여름 인연이 특히 강합니다.`;
+}
+
+function getWarningRelation(dayS, analysis) {
+  const elem = STEM_ELEM[dayS];
+  const data = [
+    '자신의 원칙을 강요하거나 상대의 자존심을 무시하는 사람과의 갈등이 생길 수 있습니다. 金(금) 기운이 강한 사람과의 관계에서 마찰이 잦습니다.',
+    '冷정하고 비판적인 사람, 혹은 지나치게 현실적인 사람과 충돌할 수 있습니다. 水(수) 기운이 강한 사람에게 상처받을 수 있으니 주의하세요.',
+    '변화를 강요하거나 기존 가치관을 흔드는 사람과 갈등이 생깁니다. 木(목) 기운이 강한 사람과의 관계에서 스트레스를 받을 수 있습니다.',
+    '규칙을 무시하거나 원칙 없이 행동하는 사람을 참기 어렵습니다. 火(화) 기운이 강한 즉흥적인 사람과의 관계에 주의가 필요합니다.',
+    '감정적으로 지나치게 의존하거나 집착하는 사람과의 관계가 부담이 됩니다. 土(토) 기운이 강한 고집스러운 사람과 갈등이 생길 수 있습니다.',
+  ];
+  return data[elem];
+}
+
+/* ── 오행 상세 카드 렌더 ── */
+function renderOhaengDetail(ohaeng) {
+  const container = document.getElementById('ohaengDetailGrid');
+  if (!container) return;
+
+  const OHAENG_FULL = [
     {
-      id: 'sec-love', icon: '💕', title: '연애·결혼운',
-      content: `<p>${d.love}</p><p class="detail-sub-head">💍 결혼 후</p><p>${d.marriage}</p>`,
+      elem: '木', color: 'var(--wood)', bgColor: 'rgba(52,211,153,0.08)',
+      kor: '목', season: '봄', dir: '동쪽', color_name: '초록색',
+      organ: '간(肝) · 담(膽)', sense: '눈 · 시각', flavor: '신맛',
+      trait: '인(仁) — 어짊, 성장, 발전, 창의',
+      job: '교육, 의료, 식물·농업, 문화예술',
+      personality: '진취적, 직관적, 이상주의적',
+      lucky_item: '나무 소품, 초록색 계열, 꽃',
     },
     {
-      id: 'sec-wealth', icon: '💰', title: '재물·직업운',
-      content: `<p>${d.wealth}</p><p class="detail-sub-head">🏢 적합한 직업</p><p>${d.career}</p>`,
+      elem: '火', color: 'var(--fire)', bgColor: 'rgba(239,68,68,0.08)',
+      kor: '화', season: '여름', dir: '남쪽', color_name: '붉은색',
+      organ: '심장(心) · 소장(小腸)', sense: '혀 · 미각', flavor: '쓴맛',
+      trait: '예(禮) — 예의, 명예, 열정, 표현',
+      job: '방송, 마케팅, 연예, 정치, 리더십',
+      personality: '열정적, 표현력, 카리스마',
+      lucky_item: '붉은색 계열, 촛불, 태양 이미지',
     },
     {
-      id: 'sec-health', icon: '💪', title: '건강·체질',
-      content: `<p>${d.health}</p>`,
+      elem: '土', color: 'var(--earth)', bgColor: 'rgba(234,179,8,0.08)',
+      kor: '토', season: '환절기', dir: '중앙', color_name: '황토색',
+      organ: '비장(脾) · 위장(胃)', sense: '입 · 미각', flavor: '단맛',
+      trait: '신(信) — 믿음, 안정, 중용, 포용',
+      job: '부동산, 금융, 농업, 공무원, 건축',
+      personality: '신중, 안정적, 책임감',
+      lucky_item: '황토·노란색, 도자기, 돌',
     },
     {
-      id: 'sec-relation', icon: '🤝', title: '인간관계',
-      content: `<p>${d.relation}</p>`,
+      elem: '金', color: 'var(--metal)', bgColor: 'rgba(148,163,184,0.08)',
+      kor: '금', season: '가을', dir: '서쪽', color_name: '흰색',
+      organ: '폐(肺) · 대장(大腸)', sense: '코 · 후각', flavor: '매운맛',
+      trait: '의(義) — 의리, 정의, 원칙, 결단',
+      job: '법조, 군경, 의학, 금속·제조, 금융',
+      personality: '결단력, 원칙적, 정의감',
+      lucky_item: '금·은색, 금속 소품, 흰색 계열',
+    },
+    {
+      elem: '水', color: 'var(--water)', bgColor: 'rgba(96,165,250,0.08)',
+      kor: '수', season: '겨울', dir: '북쪽', color_name: '검정·남색',
+      organ: '신장(腎) · 방광(膀胱)', sense: '귀 · 청각', flavor: '짠맛',
+      trait: '지(智) — 지혜, 통찰, 유연성, 적응',
+      job: '연구, IT, 철학, 금융, 외교',
+      personality: '직관적, 지혜롭, 유연성',
+      lucky_item: '검정·남색, 물 관련 소품, 원석',
     },
   ];
 
-  container.innerHTML = sections.map(s => `
-    <div class="detail-section" id="${s.id}">
-      <div class="detail-sec-head">
-        <span class="detail-sec-icon">${s.icon}</span>
-        <h3 class="detail-sec-title">${s.title}</h3>
-      </div>
-      <div class="detail-sec-body">
-        <div class="detail-ilgan-badge" style="color:${ec};border-color:${ec}44">${ilganName} 일간</div>
-        ${s.content}
+  container.innerHTML = OHAENG_FULL.map((o, i) => `
+    <div class="oh-detail-card" style="border-color:${o.color}33;background:${o.bgColor}">
+      <div class="oh-detail-elem" style="color:${o.color}">${o.elem}(${o.kor})</div>
+      <div class="oh-detail-name">내 사주에 ${ohaeng[i]}개</div>
+      <div class="oh-detail-list">
+        <div>🌸 <b>계절</b>: ${o.season}</div>
+        <div>🧭 <b>방향</b>: ${o.dir}</div>
+        <div>🎨 <b>색상</b>: ${o.color_name}</div>
+        <div>🫀 <b>장기</b>: ${o.organ}</div>
+        <div>👅 <b>맛</b>: ${o.flavor}</div>
+        <div>✨ <b>덕목</b>: ${o.trait.split('—')[0].trim()}</div>
+        <div>💼 <b>직업</b>: ${o.job}</div>
+        <div>🍀 <b>행운 아이템</b>: ${o.lucky_item}</div>
       </div>
     </div>`).join('');
 
-  // Quick jump anchors at top
-  const jumpNav = `
-    <div class="detail-jump-nav">
-      ${sections.map(s => `<a href="#${s.id}" class="detail-jump-item">${s.icon} ${s.title}</a>`).join('')}
-    </div>`;
-  container.insertAdjacentHTML('afterbegin', jumpNav);
+  // Ohaeng relations (상생상극)
+  const relEl = document.getElementById('ohaengRelations');
+  if (relEl) {
+    const weakElem = ohaeng.indexOf(Math.min(...ohaeng));
+    const strongElem = ohaeng.indexOf(Math.max(...ohaeng));
+    const weakName = ELEM_NAME[weakElem] + '(' + ELEM_KOR[weakElem].split('(')[0] + ')';
+    const strongName = ELEM_NAME[strongElem] + '(' + ELEM_KOR[strongElem].split('(')[0] + ')';
+    relEl.innerHTML = `
+      <div class="domain-card" style="background:linear-gradient(135deg,rgba(52,211,153,0.05),rgba(96,165,250,0.05));border-color:rgba(52,211,153,0.2)">
+        <div class="domain-card-head" style="color:#34d399">🔄 오행 상생상극 관계</div>
+        <div class="domain-card-body">
+          <p>당신의 사주에서 <strong style="color:${ELEM_COLOR[strongElem]}">${strongName}</strong>이 가장 강하고,
+          <strong style="color:${ELEM_COLOR[weakElem]}">${weakName}</strong>이 가장 부족합니다.</p>
+          <p style="margin-top:8px"><b>상생(相生) — 서로를 돕는 관계</b><br>
+          木→火→土→金→水→木 (나무는 불을 낳고, 불은 흙을 만들고, 흙은 금을 품고, 금은 물을 낳고, 물은 나무를 키운다)</p>
+          <p style="margin-top:8px"><b>상극(相剋) — 서로를 견제하는 관계</b><br>
+          木→土, 土→水, 水→火, 火→金, 金→木 (나무는 흙을 제압하고, 흙은 물을 막고...)</p>
+          <p style="margin-top:8px">부족한 <strong style="color:${ELEM_COLOR[weakElem]}">${weakName}</strong>을 보완하는 음식·색상·방향을 생활에 활용하면 균형 잡힌 삶에 도움이 됩니다.</p>
+        </div>
+      </div>`;
+  }
 }
 
-function switchTab(tabId) {
-  document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.tb').forEach(b => b.classList.remove('active'));
-  document.querySelectorAll('.saju-toc-item').forEach(a => a.classList.remove('active'));
+/* ── 성격 점수 렌더 ── */
+function renderPersonalityScores(pillars, analysis) {
+  const container = document.getElementById('personalityScores');
+  if (!container) return;
+  const dayS = pillars.day.s;
+  const elem = STEM_ELEM[dayS];
+  const isShin = analysis.isBodyStrong;
 
-  const pane = document.getElementById('tab' + tabId.charAt(0).toUpperCase() + tabId.slice(1));
-  if (pane) pane.classList.add('active');
-  document.querySelector(`.tb[data-tab="${tabId}"]`)?.classList.add('active');
-  document.querySelector(`.saju-toc-item[data-tab="${tabId}"]`)?.classList.add('active');
+  // Scores based on element + body strength
+  const scoreMap = [
+    { label:'리더십',  scores:[85,60,70,90,65] },
+    { label:'창의성',  scores:[80,70,60,55,85] },
+    { label:'사교성',  scores:[70,85,60,65,75] },
+    { label:'인내력',  scores:[65,55,85,80,70] },
+    { label:'직관력',  scores:[60,75,55,65,90] },
+    { label:'실행력',  scores:[90,80,65,75,60] },
+  ];
 
-  // Re-render flow chart if switching to flow
-  if (tabId === 'flow' && state.pillars) {
-    const activePeriod = document.querySelector('.ft.active')?.dataset.p || 'today';
-    renderFlowTab(activePeriod);
-  }
+  const html = scoreMap.map(s => {
+    let val = s.scores[elem];
+    if (isShin) val = Math.min(100, val + 8);
+    return `
+      <div class="score-row">
+        <span class="score-label">${s.label}</span>
+        <div class="score-track"><div class="score-fill" style="width:0%" data-val="${val}"></div></div>
+        <span class="score-val">${val}</span>
+      </div>`;
+  }).join('');
+
+  container.innerHTML = `
+    <div class="domain-card">
+      <div class="domain-card-head" style="color:#60a5fa">🎯 기질 점수</div>
+      ${html}
+    </div>`;
+
+  // Animate bars
+  requestAnimationFrame(() => {
+    container.querySelectorAll('.score-fill').forEach(el => {
+      setTimeout(() => { el.style.width = el.dataset.val + '%'; }, 100);
+    });
+  });
+}
+
+/* ── 연도별 운세 렌더 ── */
+function renderYearlySection(pillars, analysis, birthYear) {
+  const container = document.getElementById('yearlySection');
+  if (!container) return;
+
+  const curYear = new Date().getFullYear();
+  const years = [];
+  for (let y = curYear; y < curYear + 10; y++) years.push(y);
+
+  const dayMasterElem = STEM_ELEM[pillars.day.s];
+  const yong = analysis.yongsin;
+
+  const YEAR_STEMS  = ['甲','乙','丙','丁','戊','己','庚','辛','壬','癸'];
+  const YEAR_BRANCHES = ['子','丑','寅','卯','辰','巳','午','未','申','酉','戌','亥'];
+  const YEAR_THEMES = [
+    '새로운 시작, 도전의 해',
+    '안정 속 성장의 해',
+    '변화와 발전의 해',
+    '관계와 협력의 해',
+    '토대를 다지는 해',
+    '내면 성찰의 해',
+    '결실과 수확의 해',
+    '정리와 마무리의 해',
+    '지식과 탐구의 해',
+    '창의와 표현의 해',
+  ];
+
+  const html = years.map((y, idx) => {
+    const stemIdx  = ((y - 1984) % 10 + 10) % 10;
+    const branchIdx= ((y - 1984) % 12 + 12) % 12;
+    const yearElem = STEM_ELEM[stemIdx];
+    const score    = FORTUNE_MATRIX[dayMasterElem][yearElem];
+    const isGood   = yearElem === yong;
+    const isBad    = yearElem === CONTROLS[yong];
+    const grade    = score >= 75 ? '대길' : score >= 60 ? '길' : score >= 45 ? '중' : score >= 30 ? '흉' : '대흉';
+    const gradeColor = score >= 75 ? '#34d399' : score >= 60 ? '#60a5fa' : score >= 45 ? '#eab308' : '#f87171';
+    const age = y - birthYear;
+
+    return `
+      <div style="display:flex;align-items:center;gap:12px;padding:14px 16px;
+        background:${isGood ? 'rgba(52,211,153,0.07)' : isBad ? 'rgba(239,68,68,0.05)' : 'var(--bg-card)'};
+        border:1px solid ${isGood ? 'rgba(52,211,153,0.25)' : isBad ? 'rgba(239,68,68,0.2)' : 'var(--border)'};
+        border-radius:12px;margin-bottom:10px">
+        <div style="text-align:center;min-width:64px">
+          <div style="font-size:18px;font-weight:800;color:var(--txt)">${y}</div>
+          <div style="font-size:11px;color:var(--txt-muted)">${YEAR_STEMS[stemIdx]}${YEAR_BRANCHES[branchIdx]}년 · ${age}세</div>
+        </div>
+        <div style="flex:1">
+          <div style="font-size:13px;font-weight:600;color:var(--txt);margin-bottom:4px">
+            ${YEAR_THEMES[idx % 10]}
+            ${isGood ? ' ⭐ 용신운' : isBad ? ' ⚠️ 기신운' : ''}
+          </div>
+          <div style="font-size:12px;color:var(--txt-muted)">${getYearlyAdvice(dayMasterElem, yearElem, isGood, isBad)}</div>
+        </div>
+        <div style="text-align:center;min-width:44px">
+          <div style="font-size:13px;font-weight:800;color:${gradeColor}">${grade}</div>
+          <div style="font-size:11px;color:var(--txt-muted)">${score}점</div>
+        </div>
+      </div>`;
+  }).join('');
+
+  container.innerHTML = html;
+}
+
+function getYearlyAdvice(dayElem, yearElem, isGood, isBad) {
+  if (isGood) return '귀인의 도움과 좋은 기회가 따르는 해입니다. 중요한 결정과 투자, 새로운 시작에 좋은 시기입니다.';
+  if (isBad)  return '신중한 결정이 필요한 해입니다. 무리한 투자와 모험은 자제하고 현상 유지에 집중하세요.';
+  const combos = {
+    '00': '내적 성장에 집중하는 해. 자기계발과 관계 개선에 좋습니다.',
+    '01': '창의적 표현과 소통이 활발한 해입니다.',
+    '10': '새로운 인연과 기회가 찾아오는 해입니다.',
+    '11': '안정적인 발전이 가능한 해입니다.',
+    '20': '재물 관리와 건강에 집중해야 할 해입니다.',
+    '22': '인내와 노력이 결실을 맺는 해입니다.',
+  };
+  return combos[`${dayElem}${yearElem}`] || '균형 잡힌 전진이 필요한 해입니다. 작은 성취를 쌓아가세요.';
+}
+
+/* ──────────────────────────────────────
+   SCROLL-BASED TOC
+────────────────────────────────────── */
+function initSajuToc() {
+  const toc = document.getElementById('sajuToc');
+  if (!toc) return;
+
+  // Click → scroll to section
+  toc.addEventListener('click', e => {
+    const btn = e.target.closest('.saju-toc-btn');
+    if (!btn) return;
+    const target = document.getElementById(btn.dataset.target);
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+
+  // IntersectionObserver to highlight active TOC button
+  const sections = document.querySelectorAll('.saju-section');
+  if (!sections.length) return;
+
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.id;
+        document.querySelectorAll('.saju-toc-btn').forEach(b => {
+          b.classList.toggle('active', b.dataset.target === id);
+        });
+      }
+    });
+  }, { rootMargin: '-20% 0px -60% 0px', threshold: 0 });
+
+  sections.forEach(s => obs.observe(s));
 }
 
 /* ──────────────────────────────────────
@@ -1212,12 +1597,6 @@ document.addEventListener('DOMContentLoaded', () => {
     window.scrollTo({ top: 0 });
   });
 
-  // Main tabs
-  document.getElementById('tabBar')?.addEventListener('click', e => {
-    const btn = e.target.closest('.tb');
-    if (btn) switchTab(btn.dataset.tab);
-  });
-
   // Flow sub-tabs
   document.getElementById('flowTabs')?.addEventListener('click', e => {
     const btn = e.target.closest('.ft');
@@ -1234,14 +1613,5 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.dtb').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     if (state.pillars) renderDeepCard(btn.dataset.d);
-  });
-
-  // ToC navigation
-  document.getElementById('sajuToc')?.addEventListener('click', e => {
-    const link = e.target.closest('.saju-toc-item');
-    if (!link) return;
-    e.preventDefault();
-    switchTab(link.dataset.tab);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 });

@@ -61,14 +61,15 @@ document.addEventListener('DOMContentLoaded', function() {
   if (analyzeBtn) {
     var _sajuAdShown = false;
     analyzeBtn.addEventListener('click', function sajuCapture(e) {
-      if (_sajuAdShown) return;          // let through on second fire
+      if (_sajuAdShown) return;          // flag=true → returns early → bubble runs
       e.stopImmediatePropagation();
       _sajuAdShown = true;
       showPreResultAd(function() {
-        _sajuAdShown = false;
-        analyzeBtn.click();              // re-click (bubble handler runs)
+        // Keep flag=true so capture returns early on the re-click below
+        analyzeBtn.click();              // bubble handler runs (capture skipped)
+        setTimeout(function() { _sajuAdShown = false; }, 100); // reset for next analyze
       }, 5);
-    }, true);                            // true = capture phase
+    }, true);
   }
 
   /* === 타로 카드 뽑기 버튼 === */
@@ -80,8 +81,8 @@ document.addEventListener('DOMContentLoaded', function() {
       e.stopImmediatePropagation();
       _tarotAdShown = true;
       showPreResultAd(function() {
-        _tarotAdShown = false;
         drawBtn.click();
+        setTimeout(function() { _tarotAdShown = false; }, 100);
       }, 5);
     }, true);
   }
@@ -117,8 +118,8 @@ document.addEventListener('DOMContentLoaded', function() {
       e.stopImmediatePropagation();
       _dreamAdShown = true;
       showPreResultAd(function() {
-        _dreamAdShown = false;
         dreamSearchBtn.click();
+        setTimeout(function() { _dreamAdShown = false; }, 100);
       }, 4);
     }, true);
   }

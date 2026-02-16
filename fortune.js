@@ -815,15 +815,54 @@ function showToast(msg, duration) {
 }
 
 /* ================================================================
+   BIRTH YEAR → ZODIAC
+================================================================ */
+function yearToZodiacId(year) {
+  // Chinese/Korean zodiac: index = ((year - 4) % 12 + 12) % 12
+  const idx = ((year - 4) % 12 + 12) % 12;
+  return ZODIAC[idx] ? ZODIAC[idx].id : null;
+}
+
+function handleBirthYear() {
+  const input = document.getElementById('birthYearInput');
+  const resultEl = document.getElementById('birthYearResult');
+  const resultText = document.getElementById('birthYearResultText');
+  if (!input) return;
+  const year = parseInt(input.value, 10);
+  if (!year || year < 1924 || year > 2024) {
+    input.style.borderColor = '#ef4444';
+    showToast('1924년 ~ 2024년 사이의 년도를 입력하세요', 2200);
+    return;
+  }
+  input.style.borderColor = 'var(--border-hi)';
+  const zodiacId = yearToZodiacId(year);
+  const zodiac   = ZODIAC.find(z => z.id === zodiacId);
+  if (zodiac && resultEl && resultText) {
+    resultText.textContent = `${year}년생은 ${zodiac.emoji} ${zodiac.name}띠 입니다`;
+    resultEl.style.display = 'block';
+    selectZodiac(zodiacId);
+    setTimeout(() => {
+      const firstCard = document.getElementById('fortuneResult');
+      if (firstCard) firstCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }, 300);
+  }
+}
+
+/* ================================================================
    INIT
 ================================================================ */
 document.addEventListener('DOMContentLoaded', function () {
   renderDateDisplay();
   renderZodiacGrid();
 
+  // Birth year button
+  const byBtn = document.getElementById('birthYearBtn');
+  if (byBtn) byBtn.addEventListener('click', handleBirthYear);
+  const byInput = document.getElementById('birthYearInput');
+  if (byInput) byInput.addEventListener('keydown', e => { if (e.key === 'Enter') handleBirthYear(); });
+
   const saved = loadSavedZodiac();
   if (saved) {
-    // Restore last selection
     selectZodiac(saved);
     showToast(ZODIAC.find(z => z.id === saved).name + '띠 운세를 불러왔습니다 ✨');
   }

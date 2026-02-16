@@ -8,14 +8,218 @@
   <title>2days 웰니스 — 사주·타로·명상·요가·꿈해몽·운세</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&family=Noto+Serif+KR:wght@700;900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&family=Noto+Serif+KR:wght@700;900&family=Playfair+Display:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
+  <style>
+    /* ── Index-specific overrides ── */
+    .hub-hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 80px 24px 60px;
+      text-align: center;
+      overflow: hidden;
+    }
+    .hub-hero-bg {
+      position: absolute; inset: 0;
+      background: url('https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?w=1400&q=85') center/cover no-repeat;
+      filter: brightness(0.22) saturate(0.8);
+    }
+    .hub-hero-overlay {
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 50% 40%, rgba(139,92,246,0.18) 0%, transparent 70%),
+                  linear-gradient(to bottom, rgba(7,7,15,0.3) 0%, rgba(7,7,15,0.75) 70%, rgba(7,7,15,1) 100%);
+    }
+    .hub-hero-content { position: relative; z-index: 2; max-width: 600px; }
+
+    .hub-eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
+      color: #f4d03f; font-weight: 600;
+      background: rgba(244,208,63,0.1); border: 1px solid rgba(244,208,63,0.25);
+      padding: 6px 18px; border-radius: 999px;
+      margin-bottom: 24px;
+    }
+
+    .hub-title {
+      font-family: 'Noto Serif KR', serif;
+      font-size: clamp(36px, 8vw, 64px);
+      font-weight: 900;
+      line-height: 1.15;
+      letter-spacing: -0.01em;
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, #fff 0%, #e8e0ff 40%, #f4d03f 80%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hub-title em {
+      font-style: italic;
+      font-family: 'Playfair Display', serif;
+    }
+
+    .hub-sub {
+      font-size: clamp(14px, 2.5vw, 17px);
+      color: rgba(255,255,255,0.58);
+      line-height: 1.9;
+      margin-bottom: 36px;
+    }
+
+    .hub-cta-row {
+      display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
+      margin-bottom: 48px;
+    }
+    .hub-cta-primary {
+      background: linear-gradient(135deg, #7c3aed, #a855f7);
+      color: #fff; border: none; border-radius: 14px;
+      padding: 15px 28px; font-size: 15px; font-weight: 700;
+      font-family: 'Noto Sans KR', sans-serif;
+      cursor: pointer; text-decoration: none;
+      box-shadow: 0 8px 30px rgba(139,92,246,0.4);
+      transition: all .2s;
+    }
+    .hub-cta-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(139,92,246,0.5); }
+    .hub-cta-secondary {
+      background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.15);
+      color: rgba(255,255,255,0.8); border-radius: 14px;
+      padding: 15px 28px; font-size: 15px; font-weight: 600;
+      font-family: 'Noto Sans KR', sans-serif;
+      cursor: pointer; text-decoration: none;
+      transition: all .2s;
+    }
+    .hub-cta-secondary:hover { background: rgba(255,255,255,0.12); }
+
+    /* Floating stat chips */
+    .hub-stats-row {
+      display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;
+    }
+    .hub-stat-chip {
+      display: flex; align-items: center; gap: 7px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 999px; padding: 8px 16px;
+      font-size: 12px; color: rgba(255,255,255,0.65);
+      font-weight: 500;
+    }
+    .hub-stat-chip-icon { font-size: 16px; }
+
+    /* Services section */
+    .hub-section {
+      position: relative; z-index: 1;
+      padding: 72px 20px 40px;
+      max-width: 860px; margin: 0 auto;
+    }
+    .hub-section-header {
+      text-align: center; margin-bottom: 48px;
+    }
+    .hub-section-badge {
+      display: inline-block;
+      font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+      color: var(--accent); font-weight: 700;
+      background: rgba(139,92,246,0.1); border: 1px solid rgba(139,92,246,0.2);
+      padding: 5px 14px; border-radius: 999px; margin-bottom: 14px;
+    }
+    .hub-section-title {
+      font-family: 'Noto Serif KR', serif;
+      font-size: clamp(22px, 4vw, 30px); font-weight: 900;
+      color: var(--txt); line-height: 1.4;
+    }
+
+    /* Service cards grid */
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+    @media(min-width:640px){ .services-grid { grid-template-columns: repeat(3, 1fr); } }
+    @media(min-width:860px){ .services-grid { grid-template-columns: repeat(3, 1fr); gap: 18px; } }
+
+    .svc-card {
+      position: relative;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 22px 18px 20px;
+      text-decoration: none;
+      display: block;
+      overflow: hidden;
+      transition: transform .22s var(--ease), border-color .22s, box-shadow .22s;
+    }
+    .svc-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--svc-c, var(--border-hi));
+      box-shadow: 0 12px 40px var(--svc-glow, rgba(139,92,246,0.15));
+    }
+    .svc-card-img {
+      width: 100%; height: 100px; object-fit: cover;
+      border-radius: 12px; margin-bottom: 14px;
+      display: block;
+    }
+    .svc-shimmer {
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.025) 50%, transparent 100%);
+      opacity: 0; transition: opacity .3s;
+    }
+    .svc-card:hover .svc-shimmer { opacity: 1; }
+
+    .svc-icon-wrap {
+      width: 44px; height: 44px;
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px;
+      margin-bottom: 12px;
+    }
+    .svc-name {
+      font-size: 16px; font-weight: 800;
+      color: var(--txt); margin-bottom: 7px;
+      font-family: 'Noto Serif KR', serif;
+    }
+    .svc-desc {
+      font-size: 12px; color: var(--txt-muted);
+      line-height: 1.75; margin-bottom: 14px;
+    }
+    .svc-cta-row {
+      display: flex; align-items: center; gap: 6px;
+    }
+    .svc-cta { font-size: 13px; font-weight: 700; }
+    .svc-arrow { font-size: 16px; transition: transform .2s; }
+    .svc-card:hover .svc-arrow { transform: translateX(4px); }
+
+    /* Why section */
+    .hub-why-section {
+      padding: 0 20px 100px;
+      max-width: 860px; margin: 0 auto;
+    }
+    .hub-why-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    @media(min-width:640px){ .hub-why-grid { grid-template-columns: repeat(4,1fr); } }
+    .hub-why-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px; padding: 20px 16px;
+    }
+    .hub-why-icon { font-size: 26px; margin-bottom: 10px; }
+    .hub-why-title { font-size: 14px; font-weight: 700; color: var(--txt); margin-bottom: 8px; }
+    .hub-why-desc { font-size: 12px; color: var(--txt-muted); line-height: 1.7; }
+
+    /* Scroll hint */
+    .hub-scroll-hint {
+      position: absolute; bottom: 28px; left: 50%; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 6px;
+      color: rgba(255,255,255,0.35); font-size: 11px;
+      animation: scrollPulse 2s ease-in-out infinite;
+      z-index: 2;
+    }
+    @keyframes scrollPulse { 0%,100%{opacity:0.4;transform:translateX(-50%) translateY(0)} 50%{opacity:0.8;transform:translateX(-50%) translateY(6px)} }
+  </style>
 </head>
 <body>
   <canvas id="starsBg"></canvas>
-  <div class="orb orb-1"></div>
-  <div class="orb orb-2"></div>
-  <div class="orb orb-3"></div>
 
   <header class="site-header">
     <div class="header-inner hub-header-inner">
@@ -34,153 +238,174 @@
     </div>
   </header>
 
-  <main class="hub-main">
+  <main>
 
-    <!-- Hero -->
+    <!-- ── Hero ── -->
     <section class="hub-hero">
-      <div class="hub-version">✦ v2.0 — 6 Services</div>
-      <div class="hub-badge">✦ 2days 웰니스 Platform</div>
-      <h1 class="hub-title">당신의 내면을<br/>탐구하세요</h1>
-      <p class="hub-sub">사주팔자 · 타로 · 명상 · 요가 · 꿈해몽 · 운세<br/>삶의 모든 순간, 당신 곁에 있습니다</p>
+      <div class="hub-hero-bg"></div>
+      <div class="hub-hero-overlay"></div>
 
-      <!-- Feature chips -->
-      <div class="hub-features-row">
-        <span class="hub-feat-chip"><span class="chip-icon">🔮</span> AI 기반 사주 분석</span>
-        <span class="hub-feat-chip"><span class="chip-icon">🃏</span> 타로 4가지 스프레드</span>
-        <span class="hub-feat-chip"><span class="chip-icon">🎵</span> 실시간 명상 음향</span>
-        <span class="hub-feat-chip"><span class="chip-icon">🎬</span> 요가 동영상 가이드</span>
-        <span class="hub-feat-chip"><span class="chip-icon">🌙</span> 꿈 상징 해석</span>
-        <span class="hub-feat-chip"><span class="chip-icon">⭐</span> 오늘의 운세</span>
+      <div class="hub-hero-content">
+        <div class="hub-eyebrow">✦ 2days 웰니스 Platform</div>
+        <h1 class="hub-title">당신의 내면을<br/><em>탐구</em>하세요</h1>
+        <p class="hub-sub">
+          사주팔자 · 타로 · 명상 · 요가 · 꿈해몽 · 운세<br/>
+          삶의 모든 순간, 당신의 여정을 함께합니다
+        </p>
+        <div class="hub-cta-row">
+          <a href="fortune.html" class="hub-cta-primary">오늘의 운세 보기 →</a>
+          <a href="saju.html"    class="hub-cta-secondary">사주 분석 시작</a>
+        </div>
+        <div class="hub-stats-row">
+          <span class="hub-stat-chip"><span class="hub-stat-chip-icon">🔮</span> AI 사주 분석</span>
+          <span class="hub-stat-chip"><span class="hub-stat-chip-icon">🃏</span> RWS 타로 22장</span>
+          <span class="hub-stat-chip"><span class="hub-stat-chip-icon">🎵</span> 8가지 명상 음향</span>
+          <span class="hub-stat-chip"><span class="hub-stat-chip-icon">🧘</span> 16가지 요가 포즈</span>
+        </div>
       </div>
 
       <div class="hub-scroll-hint">
         <span>서비스 둘러보기</span>
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
       </div>
     </section>
 
-    <!-- Section label -->
-    <div class="hub-section-label">서비스</div>
-
-    <!-- Services Grid -->
-    <div class="services-grid">
-
-      <a href="saju.html" class="svc-card" style="--svc-c:#34d399;--svc-glow:rgba(52,211,153,0.2)">
-        <div class="svc-shimmer"></div>
-        <div class="svc-icon-wrap" style="background:rgba(52,211,153,0.1);color:#34d399;box-shadow:0 0 24px rgba(52,211,153,0.25)">☯</div>
-        <div class="svc-body">
-          <h2 class="svc-name">사주팔자</h2>
-          <p class="svc-desc">생년월일시로 타고난 기운과 운명을 분석합니다. 오행·용신·성격·운세 흐름까지 정밀하게 풀이합니다.</p>
-          <div class="svc-cta-row">
-            <span class="svc-cta" style="color:#34d399">분석 시작</span>
-            <span class="svc-arrow" style="color:#34d399">→</span>
-          </div>
-        </div>
-      </a>
-
-      <a href="tarot.html" class="svc-card" style="--svc-c:#a855f7;--svc-glow:rgba(168,85,247,0.2)">
-        <div class="svc-shimmer"></div>
-        <div class="svc-icon-wrap" style="background:rgba(168,85,247,0.1);color:#a855f7;box-shadow:0 0 24px rgba(168,85,247,0.25)">🃏</div>
-        <div class="svc-body">
-          <h2 class="svc-name">타로 리딩</h2>
-          <p class="svc-desc">22장 메이저 아르카나 카드로 질문에 답합니다. 1·3·7·10장 스프레드와 종합 해석을 지원합니다.</p>
-          <div class="svc-cta-row">
-            <span class="svc-cta" style="color:#a855f7">카드 뽑기</span>
-            <span class="svc-arrow" style="color:#a855f7">→</span>
-          </div>
-        </div>
-      </a>
-
-      <a href="meditation.html" class="svc-card" style="--svc-c:#60a5fa;--svc-glow:rgba(96,165,250,0.2)">
-        <div class="svc-shimmer"></div>
-        <div class="svc-icon-wrap" style="background:rgba(96,165,250,0.1);color:#60a5fa;box-shadow:0 0 24px rgba(96,165,250,0.25)">🧘</div>
-        <div class="svc-body">
-          <h2 class="svc-name">명상</h2>
-          <p class="svc-desc">Web Audio로 실시간 생성되는 8가지 자연 음향. 바다·숲·빗소리·432Hz 치유음으로 깊은 이완을 경험하세요.</p>
-          <div class="svc-cta-row">
-            <span class="svc-cta" style="color:#60a5fa">명상 시작</span>
-            <span class="svc-arrow" style="color:#60a5fa">→</span>
-          </div>
-        </div>
-      </a>
-
-      <a href="yoga.html" class="svc-card" style="--svc-c:#fb923c;--svc-glow:rgba(251,146,60,0.2)">
-        <div class="svc-shimmer"></div>
-        <div class="svc-icon-wrap" style="background:rgba(251,146,60,0.1);color:#fb923c;box-shadow:0 0 24px rgba(251,146,60,0.25)">🌿</div>
-        <div class="svc-body">
-          <h2 class="svc-name">요가</h2>
-          <p class="svc-desc">16가지 포즈 동영상 가이드. 초·중·고급 수준별, 유연성·근력·균형 효과별 필터로 나에게 맞는 요가를 찾으세요.</p>
-          <div class="svc-cta-row">
-            <span class="svc-cta" style="color:#fb923c">포즈 보기</span>
-            <span class="svc-arrow" style="color:#fb923c">→</span>
-          </div>
-        </div>
-      </a>
-
-      <a href="dream.html" class="svc-card" style="--svc-c:#818cf8;--svc-glow:rgba(129,140,248,0.2)">
-        <div class="svc-shimmer"></div>
-        <div class="svc-icon-wrap" style="background:rgba(129,140,248,0.1);color:#818cf8;box-shadow:0 0 24px rgba(129,140,248,0.25)">🌙</div>
-        <div class="svc-body">
-          <h2 class="svc-name">꿈해몽</h2>
-          <p class="svc-desc">80가지 이상의 꿈 상징 데이터베이스. 꿈속 이미지의 의미와 행운 정보를 풀이합니다.</p>
-          <div class="svc-cta-row">
-            <span class="svc-cta" style="color:#818cf8">꿈 해석</span>
-            <span class="svc-arrow" style="color:#818cf8">→</span>
-          </div>
-        </div>
-      </a>
-
-      <a href="fortune.html" class="svc-card" style="--svc-c:#f4d03f;--svc-glow:rgba(244,208,63,0.2)">
-        <div class="svc-shimmer"></div>
-        <div class="svc-icon-wrap" style="background:rgba(244,208,63,0.1);color:#f4d03f;box-shadow:0 0 24px rgba(244,208,63,0.25)">⭐</div>
-        <div class="svc-body">
-          <h2 class="svc-name">오늘의 운세</h2>
-          <p class="svc-desc">12띠 기반 오늘의 운세. 애정·재물·건강·직업·학업 5개 영역의 상세한 오늘 운을 확인하세요.</p>
-          <div class="svc-cta-row">
-            <span class="svc-cta" style="color:#f4d03f">운세 확인</span>
-            <span class="svc-arrow" style="color:#f4d03f">→</span>
-          </div>
-        </div>
-      </a>
-
-    </div>
-
-    <!-- Why section -->
-    <div class="hub-section-label">왜 2days 웰니스인가</div>
-    <div class="hub-why-grid">
-      <div class="hub-why-card">
-        <div class="hub-why-icon">🔮</div>
-        <div class="hub-why-title">정교한 알고리즘</div>
-        <p class="hub-why-desc">실제 명리학 원리를 코드로 구현한 사주 엔진. 절기 기반 월주 계산, 용신·기신 분석, 운세 점수까지 수백 년의 지혜를 담았습니다.</p>
+    <!-- ── Services ── -->
+    <section class="hub-section">
+      <div class="hub-section-header">
+        <div class="hub-section-badge">OUR SERVICES</div>
+        <h2 class="hub-section-title">6가지 웰니스 서비스</h2>
       </div>
-      <div class="hub-why-card">
-        <div class="hub-why-icon">🎵</div>
-        <div class="hub-why-title">실시간 음향 합성</div>
-        <p class="hub-why-desc">사전 녹음 파일이 아닌 Web Audio API로 실시간 생성되는 자연음. 바다 파도, 빗소리, 432Hz 치유음을 언제든 즐기세요.</p>
+
+      <div class="services-grid">
+
+        <a href="saju.html" class="svc-card" style="--svc-c:#34d399;--svc-glow:rgba(52,211,153,0.15)">
+          <div class="svc-shimmer"></div>
+          <img class="svc-card-img" src="https://images.unsplash.com/photo-1614850523296-d8c1af93d400?w=600&q=70" alt="사주" loading="lazy" />
+          <div class="svc-icon-wrap" style="background:rgba(52,211,153,0.1);color:#34d399;box-shadow:0 0 20px rgba(52,211,153,0.2)">☯</div>
+          <div class="svc-body">
+            <h2 class="svc-name">사주팔자</h2>
+            <p class="svc-desc">생년월일시로 오행·용신·성격·운세 흐름을 정밀 분석합니다.</p>
+            <div class="svc-cta-row">
+              <span class="svc-cta" style="color:#34d399">분석 시작</span>
+              <span class="svc-arrow" style="color:#34d399">→</span>
+            </div>
+          </div>
+        </a>
+
+        <a href="tarot.html" class="svc-card" style="--svc-c:#a855f7;--svc-glow:rgba(168,85,247,0.15)">
+          <div class="svc-shimmer"></div>
+          <img class="svc-card-img" src="https://images.unsplash.com/photo-1572466673851-3d77a0c61b0c?w=600&q=70" alt="타로" loading="lazy" />
+          <div class="svc-icon-wrap" style="background:rgba(168,85,247,0.1);color:#a855f7;box-shadow:0 0 20px rgba(168,85,247,0.2)">🃏</div>
+          <div class="svc-body">
+            <h2 class="svc-name">타로 리딩</h2>
+            <p class="svc-desc">22장 RWS 아르카나. 1·3·7·10장 스프레드와 종합 해석.</p>
+            <div class="svc-cta-row">
+              <span class="svc-cta" style="color:#a855f7">카드 뽑기</span>
+              <span class="svc-arrow" style="color:#a855f7">→</span>
+            </div>
+          </div>
+        </a>
+
+        <a href="meditation.html" class="svc-card" style="--svc-c:#60a5fa;--svc-glow:rgba(96,165,250,0.15)">
+          <div class="svc-shimmer"></div>
+          <img class="svc-card-img" src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=600&q=70" alt="명상" loading="lazy" />
+          <div class="svc-icon-wrap" style="background:rgba(96,165,250,0.1);color:#60a5fa;box-shadow:0 0 20px rgba(96,165,250,0.2)">🧘</div>
+          <div class="svc-body">
+            <h2 class="svc-name">명상 타이머</h2>
+            <p class="svc-desc">8가지 치유 음향으로 깊은 이완. 4가지 호흡 패턴 지원.</p>
+            <div class="svc-cta-row">
+              <span class="svc-cta" style="color:#60a5fa">명상 시작</span>
+              <span class="svc-arrow" style="color:#60a5fa">→</span>
+            </div>
+          </div>
+        </a>
+
+        <a href="yoga.html" class="svc-card" style="--svc-c:#fb923c;--svc-glow:rgba(251,146,60,0.15)">
+          <div class="svc-shimmer"></div>
+          <img class="svc-card-img" src="https://images.unsplash.com/photo-1545389336-cf090694435e?w=600&q=70" alt="요가" loading="lazy" />
+          <div class="svc-icon-wrap" style="background:rgba(251,146,60,0.1);color:#fb923c;box-shadow:0 0 20px rgba(251,146,60,0.2)">🌿</div>
+          <div class="svc-body">
+            <h2 class="svc-name">요가 가이드</h2>
+            <p class="svc-desc">16가지 포즈 단계별 지침. YouTube 영상 링크 제공.</p>
+            <div class="svc-cta-row">
+              <span class="svc-cta" style="color:#fb923c">포즈 보기</span>
+              <span class="svc-arrow" style="color:#fb923c">→</span>
+            </div>
+          </div>
+        </a>
+
+        <a href="dream.html" class="svc-card" style="--svc-c:#818cf8;--svc-glow:rgba(129,140,248,0.15)">
+          <div class="svc-shimmer"></div>
+          <img class="svc-card-img" src="https://images.unsplash.com/photo-1531353826977-0941b4779a1c?w=600&q=70" alt="꿈해몽" loading="lazy" />
+          <div class="svc-icon-wrap" style="background:rgba(129,140,248,0.1);color:#818cf8;box-shadow:0 0 20px rgba(129,140,248,0.2)">🌙</div>
+          <div class="svc-body">
+            <h2 class="svc-name">꿈해몽</h2>
+            <p class="svc-desc">80가지 이상 꿈 상징 해석. 꿈속 이미지의 숨겨진 의미.</p>
+            <div class="svc-cta-row">
+              <span class="svc-cta" style="color:#818cf8">꿈 해석</span>
+              <span class="svc-arrow" style="color:#818cf8">→</span>
+            </div>
+          </div>
+        </a>
+
+        <a href="fortune.html" class="svc-card" style="--svc-c:#f4d03f;--svc-glow:rgba(244,208,63,0.15)">
+          <div class="svc-shimmer"></div>
+          <img class="svc-card-img" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=70" alt="운세" loading="lazy" />
+          <div class="svc-icon-wrap" style="background:rgba(244,208,63,0.1);color:#f4d03f;box-shadow:0 0 20px rgba(244,208,63,0.2)">⭐</div>
+          <div class="svc-body">
+            <h2 class="svc-name">오늘의 운세</h2>
+            <p class="svc-desc">12띠 기반 일일 운세. 애정·재물·건강·직업 5영역 분석.</p>
+            <div class="svc-cta-row">
+              <span class="svc-cta" style="color:#f4d03f">운세 확인</span>
+              <span class="svc-arrow" style="color:#f4d03f">→</span>
+            </div>
+          </div>
+        </a>
+
       </div>
-      <div class="hub-why-card">
-        <div class="hub-why-icon">📱</div>
-        <div class="hub-why-title">모바일 완전 지원</div>
-        <p class="hub-why-desc">어떤 기기에서도 완벽하게 동작하는 반응형 UI. 스마트폰 하단 네비게이션부터 터치 최적화 인터랙션까지.</p>
+    </section>
+
+    <!-- ── Why ── -->
+    <section class="hub-why-section">
+      <div class="hub-section-header">
+        <div class="hub-section-badge">WHY 2DAYS</div>
+        <h2 class="hub-section-title">왜 2days 웰니스인가요</h2>
       </div>
-      <div class="hub-why-card">
-        <div class="hub-why-icon">🔒</div>
-        <div class="hub-why-title">프라이버시 보호</div>
-        <p class="hub-why-desc">서버에 개인정보를 전송하지 않습니다. 모든 분석이 브라우저 내에서 처리되므로 당신의 데이터는 당신의 것입니다.</p>
+      <div class="hub-why-grid">
+        <div class="hub-why-card">
+          <div class="hub-why-icon">🔮</div>
+          <div class="hub-why-title">정교한 알고리즘</div>
+          <p class="hub-why-desc">실제 명리학 원리를 구현한 사주 엔진. 절기 기반 월주 계산, 용신 분석까지.</p>
+        </div>
+        <div class="hub-why-card">
+          <div class="hub-why-icon">🎵</div>
+          <div class="hub-why-title">실시간 음향 합성</div>
+          <p class="hub-why-desc">사전 녹음 파일 없이 Web Audio API로 실시간 생성하는 8가지 자연음.</p>
+        </div>
+        <div class="hub-why-card">
+          <div class="hub-why-icon">📱</div>
+          <div class="hub-why-title">모바일 완전 지원</div>
+          <p class="hub-why-desc">어떤 기기에서도 완벽히 동작하는 반응형 UI. 터치 최적화 인터랙션.</p>
+        </div>
+        <div class="hub-why-card">
+          <div class="hub-why-icon">🔒</div>
+          <div class="hub-why-title">프라이버시 보호</div>
+          <p class="hub-why-desc">모든 분석이 브라우저 내에서 처리. 서버에 개인정보를 전송하지 않습니다.</p>
+        </div>
       </div>
-    </div>
+    </section>
 
   </main>
 
-  <!-- Bottom Navigation (mobile) -->
   <nav class="bottom-nav">
     <a href="index.html" class="bn-item active"><span class="bn-icon">◈</span><span class="bn-label">홈</span></a>
-    <a href="saju.html" class="bn-item"><span class="bn-icon">☯</span><span class="bn-label">사주</span></a>
-    <a href="tarot.html" class="bn-item"><span class="bn-icon">🃏</span><span class="bn-label">타로</span></a>
+    <a href="saju.html"       class="bn-item"><span class="bn-icon">☯</span><span class="bn-label">사주</span></a>
+    <a href="tarot.html"      class="bn-item"><span class="bn-icon">🃏</span><span class="bn-label">타로</span></a>
     <a href="meditation.html" class="bn-item"><span class="bn-icon">🧘</span><span class="bn-label">명상</span></a>
-    <a href="yoga.html" class="bn-item"><span class="bn-icon">🌿</span><span class="bn-label">요가</span></a>
-    <a href="dream.html" class="bn-item"><span class="bn-icon">🌙</span><span class="bn-label">꿈해몽</span></a>
-    <a href="fortune.html" class="bn-item"><span class="bn-icon">⭐</span><span class="bn-label">운세</span></a>
+    <a href="yoga.html"       class="bn-item"><span class="bn-icon">🌿</span><span class="bn-label">요가</span></a>
+    <a href="dream.html"      class="bn-item"><span class="bn-icon">🌙</span><span class="bn-label">꿈해몽</span></a>
+    <a href="fortune.html"    class="bn-item"><span class="bn-icon">⭐</span><span class="bn-label">운세</span></a>
   </nav>
 
   <script src="stars.js"></script>

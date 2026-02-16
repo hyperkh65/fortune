@@ -811,6 +811,29 @@
       </div>
     </div>
 
+    <!-- Birth year input -->
+    <div class="section-label">태어난 년도로 띠 찾기</div>
+    <div style="display:flex;gap:10px;margin-bottom:20px;align-items:center">
+      <input type="number" id="birthYearInput" placeholder="출생연도 입력 (예: 1990)"
+        min="1924" max="2024"
+        style="flex:1;background:var(--bg-card);border:1px solid var(--border);
+               border-radius:12px;color:var(--txt);font-size:15px;padding:13px 16px;
+               font-family:inherit;outline:none;-moz-appearance:textfield"
+        oninput="this.style.borderColor='var(--border-hi)'" />
+      <button id="birthYearBtn"
+        style="background:linear-gradient(135deg,var(--accent),var(--fortune-accent));
+               color:#fff;border:none;border-radius:12px;padding:13px 18px;
+               font-size:14px;font-weight:700;font-family:inherit;cursor:pointer;
+               white-space:nowrap;flex-shrink:0">
+        내 띠 찾기
+      </button>
+    </div>
+    <div id="birthYearResult" style="display:none;background:var(--bg-card);border:1px solid var(--border-hi);
+         border-radius:14px;padding:14px 16px;margin-bottom:18px;text-align:center;
+         animation:fadeUp 0.3s ease both">
+      <span id="birthYearResultText" style="font-size:15px;font-weight:700;color:var(--fortune-accent)"></span>
+    </div>
+
     <!-- Zodiac selector -->
     <div class="section-label">나의 띠를 선택하세요</div>
     <div class="zodiac-grid" id="zodiacGrid">

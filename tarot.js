@@ -188,43 +188,45 @@ function buildFan(needed) {
   wrap.innerHTML = '';
 
   const TOTAL_CARDS = 22;
-  const fanCards    = Math.min(TOTAL_CARDS, Math.max(needed * 3, 14));
-  const angleRange  = Math.min(100, fanCards * 5.5); // total degrees spread
-  const startAngle  = -angleRange / 2;
-  const step        = angleRange / (fanCards - 1);
+  const fanCards   = Math.min(TOTAL_CARDS, Math.max(needed * 3, 14));
+  const angleRange = Math.min(130, fanCards * 6);
+  const startAngle = -angleRange / 2;
+  const step       = fanCards > 1 ? angleRange / (fanCards - 1) : 0;
 
-  // Shuffle deck
   state.deck = shuffle([...Array(TOTAL_CARDS).keys()]);
 
   for (let i = 0; i < fanCards; i++) {
     const angle = startAngle + step * i;
     const card  = document.createElement('div');
     card.className = 'fan-card';
-    card.dataset.idx = i;
-    card.dataset.cardIdx = state.deck[i];
+    card.dataset.idx    = i;
+    card.dataset.cardIdx= state.deck[i];
+    card.dataset.angle  = angle;
 
-    // Center offset for fan spread
-    const centerX = Math.sin((angle * Math.PI) / 180) * 100;
-    card.style.cssText = `
-      --fan-rotate: rotate(${angle}deg);
-      transform: rotate(${angle}deg);
-      left: calc(50% + ${centerX}px - 35px);
-      z-index: ${i + 1};
-    `;
+    // All cards centered; rotation alone creates the fan spread
+    card.style.left     = 'calc(50% - 35px)';
+    card.style.zIndex   = i + 1;
+    card.style.setProperty('--fan-rotate', `rotate(${angle}deg)`);
+
+    // Start below the stage (fly-in animation)
+    card.style.transform = 'translateY(140px) rotate(0deg)';
+    card.style.opacity   = '0';
+
     card.addEventListener('click', () => onCardClick(card, i));
     wrap.appendChild(card);
   }
 
-  // Animate cards flying in
-  const cards = wrap.querySelectorAll('.fan-card');
-  cards.forEach((c, i) => {
-    c.style.opacity = '0';
-    c.style.transform = `rotate(0deg) translateY(60px)`;
-    setTimeout(() => {
-      c.style.transition = 'all 0.4s ease';
-      c.style.opacity = '1';
-      c.style.transform = `rotate(${startAngle + step * i}deg)`;
-    }, i * 30 + 100);
+  // Staggered fly-in
+  requestAnimationFrame(() => {
+    const cards = wrap.querySelectorAll('.fan-card');
+    cards.forEach((c, i) => {
+      const angle = startAngle + step * i;
+      setTimeout(() => {
+        c.style.transition = 'transform 0.55s cubic-bezier(0.34,1.56,0.64,1), opacity 0.35s ease';
+        c.style.opacity   = '1';
+        c.style.transform = `rotate(${angle}deg)`;
+      }, i * 35 + 80);
+    });
   });
 
   updateCounts();

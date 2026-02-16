@@ -34,38 +34,60 @@ class SoundEngine {
     this.theme       = null;
   }
 
-  /* Resume/create AudioContext */
-  async _boot() {
-    if (!this.ctx) {
-      this.ctx = new (window.AudioContext || window.webkitAudioContext)();
-    }
-    if (this.ctx.state === 'suspended') await this.ctx.resume();
-    // Only create masterGain if we don't have one (prevents accumulation)
-    if (!this.masterGain) {
-      this.masterGain = this.ctx.createGain();
-      this.masterGain.gain.value = 0;
-      this.masterGain.connect(this.ctx.destination);
-    }
-    // Resume on visibility change (prevents sound cutting out in background)
+  /* Create AudioContext synchronously (call from user-gesture handler) */
+  initCtx() {
+    if (this.ctx) return;
+    this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+    this.masterGain = this.ctx.createGain();
+    this.masterGain.gain.value = 0;
+    this.masterGain.connect(this.ctx.destination);
+    // Auto-resume if browser suspends (important for iOS)
+    this.ctx.onstatechange = () => {
+      if (this.ctx.state === 'suspended' && this.theme) {
+        this.ctx.resume();
+      }
+    };
     if (!this._visibilityBound) {
       this._visibilityBound = true;
       document.addEventListener('visibilitychange', () => {
         if (!document.hidden && this.ctx && this.ctx.state === 'suspended') {
-          this.ctx.resume();
+          this.ctx.resume().catch(() => {});
         }
       });
     }
   }
 
+  /* Resume/create AudioContext — also call synchronously in gesture */
+  async _boot() {
+    this.initCtx();
+    if (this.ctx.state === 'suspended') {
+      try { await this.ctx.resume(); } catch (_) {}
+    }
+  }
+
   async start(theme, volume) {
-    this.stop();
-    if (theme === 'none') return;
+    if (theme === 'none') { this.stop(); return; }
     await this._boot();
+    // Stop previous nodes smoothly
+    this._timers.forEach(t => clearTimeout(t));
+    this._timers = [];
+    const oldNodes = [...this.activeNodes];
+    this.activeNodes = [];
+    // Fade master to 0, start new sound, then fade up
+    const now = this.ctx.currentTime;
+    this.masterGain.gain.cancelScheduledValues(now);
+    this.masterGain.gain.setTargetAtTime(0, now, 0.15);
+    setTimeout(() => {
+      oldNodes.forEach(n => { try { n.stop(); } catch (_) {} try { n.disconnect(); } catch (_) {} });
+      if (!this.ctx || this.theme === null) return;
+      const fn = this[`_play_${theme}`];
+      if (fn) fn.call(this);
+      const t = this.ctx.currentTime;
+      this.masterGain.gain.cancelScheduledValues(t);
+      this.masterGain.gain.setValueAtTime(0, t);
+      this.masterGain.gain.setTargetAtTime(volume, t, 0.5);
+    }, 200);
     this.theme = theme;
-    const fn = this[`_play_${theme}`];
-    if (fn) fn.call(this);
-    // Fade in
-    this.masterGain.gain.setTargetAtTime(volume, this.ctx.currentTime, 0.4);
   }
 
   setVolume(vol) {
@@ -585,10 +607,14 @@ document.addEventListener('DOMContentLoaded', () => {
     updateRing();
   });
 
-  // Sound theme
+  // Sound theme — play immediately on click (preview mode)
   $('soundGrid').addEventListener('click', e => {
     const btn = e.target.closest('.med-sound-btn');
     if (!btn) return;
+    // Init AudioContext synchronously in user gesture (critical for iOS)
+    soundEngine.initCtx();
+    if (soundEngine.ctx.state === 'suspended') soundEngine.ctx.resume().catch(() => {});
+
     document.querySelectorAll('.med-sound-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     currentSound = btn.dataset.sound;
@@ -598,10 +624,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (currentSound !== 'none') {
       document.body.classList.add('sound-' + currentSound);
     }
-    if (state.running) {
-      const vol = parseFloat($('volumeSlider').value);
-      soundEngine.start(currentSound, vol);
-    }
+    // Always start/stop sound on button click for immediate feedback
+    const vol = parseFloat($('volumeSlider').value);
+    soundEngine.start(currentSound, vol);
   });
 
   // Volume — update track fill and percentage
@@ -619,8 +644,10 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   updateVolSliderUI(); // initial
 
-  // Start / pause
+  // Start / pause — init AudioContext synchronously in gesture
   $('startBtn').addEventListener('click', () => {
+    soundEngine.initCtx();
+    if (soundEngine.ctx.state === 'suspended') soundEngine.ctx.resume().catch(() => {});
     if (state.remainSec <= 0) { resetTimer(); return; }
     if (state.running) pauseTimer();
     else startTimer();

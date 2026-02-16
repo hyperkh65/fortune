@@ -311,33 +311,32 @@ function toggleVideo(btn, videoBoxId) {
 
   if (isHidden) {
     const embedWrap = box.querySelector('.yoga-yt-embed');
-    if (embedWrap && !embedWrap.querySelector('iframe, a')) {
+    if (embedWrap && !embedWrap.querySelector('a')) {
       const query = embedWrap.dataset.query;
       const name  = embedWrap.dataset.name;
-      // YouTube 검색 결과 페이지를 새 탭으로 여는 버튼 + 검색 링크
       embedWrap.innerHTML = `
-        <div style="background:#111;border-radius:10px;overflow:hidden;position:relative">
-          <div style="padding:20px;text-align:center">
-            <div style="font-size:14px;color:#ccc;margin-bottom:12px">
-              <strong style="color:#fff">${name}</strong> 요가 자세 튜토리얼
-            </div>
-            <a href="https://www.youtube.com/results?search_query=${query}"
-               target="_blank" rel="noopener"
-               style="display:inline-flex;align-items:center;gap:8px;background:#ff0000;
-               color:#fff;padding:12px 20px;border-radius:8px;font-weight:700;
-               text-decoration:none;font-size:14px">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>
-              YouTube에서 영상 검색하기
-            </a>
-            <div style="margin-top:12px;font-size:12px;color:#888">
-              또는 아래 키워드로 검색하세요:<br>
-              <strong style="color:#aaa">${name} yoga tutorial</strong>
-            </div>
+        <div style="border-radius:12px;overflow:hidden;background:rgba(251,146,60,0.06);
+             border:1px solid rgba(251,146,60,0.18);padding:20px 16px;text-align:center">
+          <div style="font-size:13px;color:rgba(255,255,255,0.6);margin-bottom:4px">▸ YouTube 영상 가이드</div>
+          <div style="font-size:16px;font-weight:700;color:#fff;margin-bottom:16px">${name}</div>
+          <a href="https://www.youtube.com/results?search_query=${query}"
+             target="_blank" rel="noopener"
+             style="display:inline-flex;align-items:center;gap:10px;
+                    background:linear-gradient(135deg,#ff4444,#cc0000);
+                    color:#fff;padding:13px 24px;border-radius:10px;font-weight:700;
+                    text-decoration:none;font-size:14px;
+                    box-shadow:0 4px 20px rgba(255,0,0,0.35)">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="white">
+              <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/>
+            </svg>
+            YouTube에서 영상 보기
+          </a>
+          <div style="margin-top:12px;font-size:11px;color:rgba(255,255,255,0.35)">
+            새 탭에서 관련 요가 영상을 검색합니다
           </div>
         </div>`;
     }
   } else {
-    // Remove embed when closing
     const embedWrap = box.querySelector('.yoga-yt-embed');
     if (embedWrap) embedWrap.innerHTML = '';
   }
